@@ -1,10 +1,10 @@
-package inmueble;
+package ubicacion;
 
 import java.util.List;
 
 import resenia.Resenia;
 
-public class Inmueble {
+public class Ubicacion {
 	private String tipoDeInmbueble;
 	private String superficie;
 	private int capacidad;
@@ -12,7 +12,7 @@ public class Inmueble {
 	private List<String> fotos;
 	private List<Resenia> resenias;
 	
-	public Inmueble(String tipoDeInmbueble, String superficie, int capacidad, List<String> servicios,
+	public Ubicacion(String tipoDeInmbueble, String superficie, int capacidad, List<String> servicios,
 			List<String> fotos, List<Resenia> resenias) {
 		super();
 		this.tipoDeInmbueble = tipoDeInmbueble;
@@ -56,4 +56,5 @@ public class Inmueble {
 		//TODO: Ver como calcular el promedio por categoria
 		return 0; 
 	}
+	
 }
