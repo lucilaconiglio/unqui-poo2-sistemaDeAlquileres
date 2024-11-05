@@ -74,5 +74,3 @@ public class Publicacion {
 		this.precioBase=nuevoPrecio;
 	}
 	
-
-}
