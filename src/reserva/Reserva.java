@@ -2,8 +2,8 @@ package reserva;
 
 import java.time.LocalDate;
 
-import estadoReserva.EstadoPendienteDeAprobacion;
-import estadoReserva.EstadoReserva;
+import reserva.estadoReserva.EstadoPendienteDeAprobacion;
+import reserva.estadoReserva.EstadoReserva;
 
 public class Reserva {
 

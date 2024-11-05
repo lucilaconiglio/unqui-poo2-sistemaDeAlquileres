@@ -1,4 +1,4 @@
-package estadoReserva;
+package reserva.estadoReserva;
 
 import reserva.Reserva;
 
