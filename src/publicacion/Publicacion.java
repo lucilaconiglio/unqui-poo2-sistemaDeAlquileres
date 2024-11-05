@@ -9,6 +9,7 @@ import inmueble.Inmueble;
 import periodo.Periodo;
 import reserva.Reserva;
 import user.User;
+import observer.Observer;
 
 
 public class Publicacion {
@@ -34,7 +35,7 @@ public class Publicacion {
 		this.propietario = propietario;
 		this.inmueble = inmueble;
 		this.periodos = new ArrayList<Periodo>();
-		this.suscriptores = new Arraylist<Observer>();
+		this.suscriptores = new ArrayList<Observer>();
 		this.reservas = new ArrayList<Reserva>();
 		
 	}
