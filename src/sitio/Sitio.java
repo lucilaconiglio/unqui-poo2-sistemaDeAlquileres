@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
 
+import publicacion.Publicacion;
+
 public class Sitio {
 	
 	private List<Publicacion> publicaciones;
