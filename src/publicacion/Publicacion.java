@@ -2,8 +2,13 @@ package publicacion;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 
 import formaDePago.FormaDePago;
+import inmueble.Inmueble;
+import periodo.Periodo;
+import reserva.Reserva;
+import user.User;
 
 
 public class Publicacion {
@@ -73,4 +78,5 @@ public class Publicacion {
 	public void cambiarPrecioBase(double nuevoPrecio){
 		this.precioBase=nuevoPrecio;
 	}
+}
 	
