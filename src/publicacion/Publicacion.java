@@ -35,7 +35,6 @@ public class Publicacion {
 	}
 	
 	public LocalDateTime getCheckIn(){
-		
 		return this.checkIn;
 	}
 	
