@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Map;
 
 import publicacion.Publicacion;
+import search.Search;
+import user.User;
 
 public class Sitio {
 	
