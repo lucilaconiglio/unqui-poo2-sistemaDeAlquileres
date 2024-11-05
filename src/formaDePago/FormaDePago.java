@@ -8,6 +8,7 @@ public enum FormaDePago {
     private final String descripcion;
 
     FormaDePago(String descripcion) {
+    	
         this.descripcion = descripcion;
     }
 
