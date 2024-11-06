@@ -11,5 +11,6 @@
 	<classpathentry kind="lib" path="C:/Users/lucil/Downloads/objenesis-3.3.jar"/>
 	<classpathentry kind="lib" path="C:/Users/lucil/Downloads/byte-buddy-agent-1.14.12.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/5"/>
+	<classpathentry kind="lib" path="C:/Users/lucil/Downloads/lombok.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
