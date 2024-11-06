@@ -4,9 +4,11 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
 
+import inmueble.Inmueble;
 import publicacion.Publicacion;
 import search.Search;
 import user.User;
+import user.inquilino.Inquilino;
 
 public class Sitio {
 	
@@ -17,7 +19,8 @@ public class Sitio {
 	private List<String> categoriasPropietario;
 	private List<String> categoriasInquilino;
 	private List<String> categoriaInmueble;
-	private Map<Rankeable, List<String>> categorias;
+	// TODO DESCOMENTAR CUANDO ESTE RANKEABLE
+	//private Map<Rankeable, List<String>> categorias; 
 	private Search search;
 	private List<User> users; 
 	
@@ -29,13 +32,13 @@ public class Sitio {
 		this.categoriasPropietario= new ArrayList<String>();
 		this.categoriasInquilino= new ArrayList<String>();
 		this.categoriaInmueble= new ArrayList<String>();
-		this.categorias = new Map<Rankeable, List<String>>();
-		this.search = new Search();
+		// TODO DESCOMENTAR CUANDO ESTE RANKEABLE
+		//this.categorias = new Map<Rankeable, List<String>>();
 		this.users = new ArrayList<User>();
 	}
 	
 	public List<Publicacion> buscarPublicaciones(Search search) {
-		
+		return null;
 	}//ver como lo implementamos 
 	
 	public List<Publicacion> getPublicaciones(){
@@ -124,15 +127,15 @@ public class Sitio {
 	}
 	
 	public List<Inquilino> topTenInquilinos(){
-		
+		return null;
 	}//implementar
 	
 	public List<Inmueble> inmueblesLibres(){
-		
+		return null;
 	}//implementar
 	
 	public double tasaOcupacion() {
-		
+		return 0;
 	}//implementar
 	
 }
