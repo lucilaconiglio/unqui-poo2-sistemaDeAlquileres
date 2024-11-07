@@ -1,4 +1,4 @@
-package publicacion;
+package politicaCancelacion;
 
 public interface PoliticaDeCancelacion {
 	

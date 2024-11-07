@@ -9,6 +9,7 @@ import formaDePago.FormaDePago;
 import inmueble.Inmueble;
 import lombok.Getter;
 import periodo.Periodo;
+import politicaCancelacion.PoliticaDeCancelacion;
 import reserva.Reserva;
 import user.User;
 import observer.Observer;
