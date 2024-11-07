@@ -23,8 +23,9 @@ public class FiltroCantidadDeHuespedes implements Filtro {
 
 	@Override
 	public List<Publicacion> filterPublicaciones(List<Publicacion> publicaciones) {
-		// TODO Auto-generated method stub
-		return null;
+		return publicaciones.stream()
+				            .filter(p->p.getInmueble().getCapacidad() >= cantidad)
+				            .toList();
 	}
 
 }

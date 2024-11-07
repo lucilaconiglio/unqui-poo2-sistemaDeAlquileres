@@ -2,8 +2,11 @@ package inmueble;
 
 import java.util.List;
 
+import lombok.Getter;
 import resenia.Resenia;
+import ubicacion.Ubicacion;
 
+@Getter
 public class Inmueble {
 	private String tipoDeInmbueble;
 	private String superficie;
@@ -11,9 +14,10 @@ public class Inmueble {
 	private List<String> servicios;
 	private List<String> fotos;
 	private List<Resenia> resenias;
+	private Ubicacion ubicacion;
 	
 	public Inmueble(String tipoDeInmbueble, String superficie, int capacidad, List<String> servicios,
-			List<String> fotos, List<Resenia> resenias) {
+			List<String> fotos, List<Resenia> resenias, Ubicacion ubicacion) {
 		super();
 		this.tipoDeInmbueble = tipoDeInmbueble;
 		this.superficie = superficie;
@@ -21,6 +25,7 @@ public class Inmueble {
 		this.servicios = servicios;
 		this.fotos = fotos;
 		this.resenias = resenias;
+		this.ubicacion = ubicacion;
 	}
 	
 	public void addFoto(String foto) {
@@ -56,4 +61,5 @@ public class Inmueble {
 		//TODO: Ver como calcular el promedio por categoria
 		return 0; 
 	}
+		
 }

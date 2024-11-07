@@ -1,11 +1,14 @@
 package search.operadorBinario;
 
 import java.util.List;
-
+import lombok.Getter;
+import lombok.Setter;
 import publicacion.Publicacion;
 import search.Search;
 
-public class OperadorBinario implements Search{
+@Getter
+@Setter
+public abstract class OperadorBinario implements Search{
 
 	private Search clausulaDerecha;
 	private Search clausulaIzquierda;
@@ -18,31 +21,5 @@ public class OperadorBinario implements Search{
 
 
 	@Override
-	public List<Publicacion> filterPublicaciones(List<Publicacion> publicaciones) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-
-	public Search getClausulaDerecha() {
-		return clausulaDerecha;
-	}
-
-
-	public void setClausulaDerecha(Search clausulaDerecha) {
-		this.clausulaDerecha = clausulaDerecha;
-	}
-
-
-	public Search getClausulaIzquierda() {
-		return clausulaIzquierda;
-	}
-
-
-	public void setClausulaIzquierda(Search clausulaIzquierda) {
-		this.clausulaIzquierda = clausulaIzquierda;
-	}
-	
-	
-
+	public abstract List<Publicacion> filterPublicaciones(List<Publicacion> publicaciones);
 }

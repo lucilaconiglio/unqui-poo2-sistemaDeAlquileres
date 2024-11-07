@@ -13,7 +13,6 @@ public class FiltroFechaEntrada extends FiltroFecha{
 
 	@Override
 	public List<Publicacion> filterPublicaciones(List<Publicacion> publicaciones) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

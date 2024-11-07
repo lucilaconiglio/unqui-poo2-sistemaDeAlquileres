@@ -4,18 +4,18 @@ import java.time.LocalDate;
 import java.util.List;
 
 import publicacion.Publicacion;
-import search.filtro.filtroFecha.FiltroFecha;
 
-public class FiltroPrecioMax extends FiltroFecha{
+public class FiltroPrecioMax extends FiltroPrecio {
 
-	public FiltroPrecioMax(LocalDate fecha) {
-		super(fecha);
+	public FiltroPrecioMax(Double precio, LocalDate fechaEntrada, LocalDate fechaSalida) {
+		super(precio, fechaEntrada, fechaSalida);
 	}
 
 	@Override
 	public List<Publicacion> filterPublicaciones(List<Publicacion> publicaciones) {
-		// TODO Auto-generated method stub
-		return null;
+		return publicaciones.stream()
+				.filter(p -> p.precioEntreFechas(this.getFechaEntrada(), this.getFechaSalida()) > this.getPrecio())
+				.toList();
 	}
 
 }

@@ -1,30 +1,25 @@
 package periodo;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 public class Periodo {
 	
-	private LocalDateTime inicio;
-	private LocalDateTime fin; 
+	private String concepto;
+	private LocalDate inicio;
+	private LocalDate fin; 
 	private double precio;
 	
-	public Periodo(LocalDateTime inicio, LocalDateTime fin, double precio) {
+	
+	public Periodo(String concepto, LocalDate inicio, LocalDate fin, double precio) {
+		this.concepto = concepto;
 		this.inicio = inicio;
 		this.fin = fin;
 		this.precio = precio;
 		
-	}
-	
-	public LocalDateTime getIncio() {
-		return this.inicio;
-	}
-	
-	public LocalDateTime getFinal() {
-		return this.fin;
-	}
-	
-	public double getPrecio() {
-		return this.precio;
 	}
 	
 
