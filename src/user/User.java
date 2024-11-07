@@ -1,10 +1,12 @@
 package user;
 
-public abstract class User {
+import rankeable.Rankeable;
+
+public abstract class User implements Rankeable {
 	private String nombreCompleto;
 	private String mail;
 	private int numeroDeTelefono;
-	
+
 	public User(String nombreCompleto, String mail, int numeroDeTelefono) {
 		this.nombreCompleto = nombreCompleto;
 		this.mail = mail;
@@ -34,11 +36,6 @@ public abstract class User {
 	public void setNumeroDeTelefono(int numeroDeTelefono) {
 		this.numeroDeTelefono = numeroDeTelefono;
 	}
-	
-	public void rankearUsuario(User user /* Resenia resenia */) {
-		// user.addResena(resenia)
-	}
-	
-	// faltan los metodos de la reseña / rankeable
-	
+
+
 }
