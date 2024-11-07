@@ -12,5 +12,9 @@
 	<classpathentry kind="lib" path="C:/Users/lucil/Downloads/byte-buddy-agent-1.14.12.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/5"/>
 	<classpathentry kind="lib" path="C:/Users/lucil/Downloads/lombok.jar" sourcepath=""/>
+	<classpathentry kind="lib" path="/Users/vgianfranco/Downloads/Lombok (1).jar"/>
+	<classpathentry kind="lib" path="/Users/vgianfranco/Downloads/Byte Buddy 1.15.7.jar"/>
+	<classpathentry kind="lib" path="/Users/vgianfranco/Downloads/Byte Buddy Agent 1.15.7.jar"/>
+	<classpathentry kind="lib" path="/Users/vgianfranco/Downloads/Mockito 5.14.2.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
