@@ -1,13 +1,13 @@
 package inmueble;
 
 import java.util.List;
-
 import lombok.Getter;
+import rankeable.Rankeable;
 import resenia.Resenia;
 import ubicacion.Ubicacion;
 
 @Getter
-public class Inmueble {
+public class Inmueble implements Rankeable {
 	private String tipoDeInmbueble;
 	private String superficie;
 	private int capacidad;
@@ -18,7 +18,6 @@ public class Inmueble {
 	
 	public Inmueble(String tipoDeInmbueble, String superficie, int capacidad, List<String> servicios,
 			List<String> fotos, List<Resenia> resenias, Ubicacion ubicacion) {
-		super();
 		this.tipoDeInmbueble = tipoDeInmbueble;
 		this.superficie = superficie;
 		this.capacidad = capacidad;
@@ -48,18 +47,23 @@ public class Inmueble {
 		return resenias;
 	}
 	
-	public List<Resenia> getResenias(String resenia){
-		return 	resenias.stream().filter(el-> el.equals(resenia)).toList();
+	public List<Resenia> getReseniasPorCategoria(String categoria){
+		return 	resenias.stream().filter(res-> res.getCategoria().equals(categoria)).toList();
+	}
+
+	@Override
+	public void agregarResenia(Resenia res) {
+		this.resenias.add(res);
+	}
+
+	@Override
+	public double obtenerPromedioGeneral() {
+		return resenias.stream().mapToDouble(res->res.getPuntaje()).sum();
 	}
 	
-	public int getPromedioPuntaje() {
-		//TODO: Ver como calcular el promedio
-		return 0; 
-	}
-	
-	public int getPromedioPuntaje(String categoria) {
-		//TODO: Ver como calcular el promedio por categoria
-		return 0; 
+	@Override
+	public double obtenerPromedioCategoria(String cat) {
+		return getReseniasPorCategoria(cat).stream().mapToDouble(res->res.getPuntaje()).sum();
 	}
 		
 }
