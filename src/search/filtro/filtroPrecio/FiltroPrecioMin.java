@@ -14,7 +14,7 @@ public class FiltroPrecioMin extends FiltroPrecio {
 	@Override
 	public List<Publicacion> filterPublicaciones(List<Publicacion> publicaciones) {
 		return publicaciones.stream()
-				.filter(p -> p.precioEntreFechas(this.getFechaEntrada(), this.getFechaSalida()) < this.getPrecio())
+				.filter(p -> p.precioEntreFechas(this.getFechaEntrada(), this.getFechaSalida()) >= this.getPrecio())
 				.toList();
 	}
 

@@ -21,7 +21,7 @@ public class FiltroCantidadDeHuespedes extends Filtro {
 	@Override
 	public List<Publicacion> filterPublicaciones(List<Publicacion> publicaciones) {
 		return publicaciones.stream()
-							.filter(p-> p.getInmueble().getCapacidad() <= cantidad)
+							.filter(p-> p.getCapacidad() <= cantidad)
 							.toList();
 	}
 

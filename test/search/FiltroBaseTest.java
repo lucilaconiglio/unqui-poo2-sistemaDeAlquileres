@@ -13,7 +13,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import publicacion.Publicacion;
-import inmueble.Inmueble;
 import ubicacion.Ubicacion;
 import search.FiltroBase;
 import search.filtro.Filtro;
@@ -38,14 +37,12 @@ public class FiltroBaseTest {
 
     private Publicacion crearMockPublicacion(String ciudad, int capacidad) {
         Publicacion publicacion = mock(Publicacion.class);
-        Inmueble inmueble = mock(Inmueble.class);
         Ubicacion ubicacion = mock(Ubicacion.class);
 
         // Configuramos los valores de retorno de los mocks
-        when(publicacion.getInmueble()).thenReturn(inmueble);
-        when(inmueble.getUbicacion()).thenReturn(ubicacion);
+        when(publicacion.getCapacidad()).thenReturn(capacidad);
+        when(publicacion.getUbicacion()).thenReturn(ubicacion);
         when(ubicacion.getCiudad()).thenReturn(ciudad);
-        when(inmueble.getCapacidad()).thenReturn(capacidad);
 
         return publicacion;
     }
