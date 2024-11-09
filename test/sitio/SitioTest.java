@@ -5,34 +5,45 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import publicacion.Publicacion;
 
+import categoria.Categoria;
+import publicacion.Publicacion;
+import rankeable.Rankeable;
+import search.Search;
+import servicio.Servicio;
+import tipoDeInmueble.TipoDeInmueble;
+import user.User;
+
+import java.util.ArrayList;
 import java.util.List;
 
 class SitioTest {
 
-    private Sitio sitio;
-    private Publicacion publicacion;
+    Sitio sitio;
+    Publicacion publicacion;
+    Servicio servicio;
+    TipoDeInmueble tipoDeInmueble;
+    Categoria categoria;
 
     @BeforeEach
     public void setUp() {
+        // Inicializa el objeto Sitio y otros objetos necesarios
         sitio = new Sitio();
-        publicacion = mock(Publicacion.class); 
-        
-      
+        publicacion = mock(Publicacion.class);
+        servicio = mock(Servicio.class);
+        tipoDeInmueble = mock(TipoDeInmueble.class);
+        categoria = mock(Categoria.class);
     }
 
     @Test
-    public void testAgregarPublicacion() {
+    void testAgregarPublicacion() {
         sitio.addPublicacion(publicacion);
-        
-        List<Publicacion> publicaciones = sitio.getPublicaciones();
-        assertEquals(1, publicaciones.size());
-        assertEquals(publicacion, publicaciones.get(0));
+        assertEquals(1, sitio.getPublicaciones().size());
+        assertEquals(publicacion, sitio.getPublicaciones().get(0));
     }
 
     @Test
-    public void testEliminarPublicacion() {
+    void testEliminarPublicacion() {
         sitio.addPublicacion(publicacion);
         assertEquals(1, sitio.getPublicaciones().size());
 
@@ -41,18 +52,14 @@ class SitioTest {
     }
 
     @Test
-    public void testAgregarServicio() {
-        String servicio = "Wi-Fi";
+    void testAgregarServicio() {
         sitio.addServicio(servicio);
-        
-        List<String> servicios = sitio.getServicios();
-        assertEquals(1, servicios.size());
-        assertEquals(servicio, servicios.get(0));
+        assertEquals(1, sitio.getServicios().size());
+        assertEquals(servicio, sitio.getServicios().get(0));
     }
 
     @Test
-    public void testEliminarServicio() {
-        String servicio = "Wi-Fi";
+    void testEliminarServicio() {
         sitio.addServicio(servicio);
         assertEquals(1, sitio.getServicios().size());
 
@@ -60,21 +67,15 @@ class SitioTest {
         assertTrue(sitio.getServicios().isEmpty());
     }
 
-  
-
     @Test
-    public void testAgregarTipoDeInmueble() {
-        String tipoDeInmueble = "Apartamento";
+    void testAgregarTipoDeInmueble() {
         sitio.addTipoDeInmueble(tipoDeInmueble);
-        
-        List<String> tiposDeInmueble = sitio.getTiposDeInmueble();
-        assertEquals(1, tiposDeInmueble.size());
-        assertEquals(tipoDeInmueble, tiposDeInmueble.get(0));
+        assertEquals(1, sitio.getTiposDeInmueble().size());
+        assertEquals(tipoDeInmueble, sitio.getTiposDeInmueble().get(0));
     }
 
     @Test
-    public void testEliminarTipoDeInmueble() {
-        String tipoDeInmueble = "Apartamento";
+    void testEliminarTipoDeInmueble() {
         sitio.addTipoDeInmueble(tipoDeInmueble);
         assertEquals(1, sitio.getTiposDeInmueble().size());
 
@@ -83,23 +84,52 @@ class SitioTest {
     }
 
     @Test
-    public void testAgregarCategoriaComun() {
-        String categoria = "Familia";
-        sitio.addCategoriaComun(categoria);
-        
-        List<String> categoriasComunes = sitio.getCategoriasComunes();
-        assertEquals(1, categoriasComunes.size());
-        assertEquals(categoria, categoriasComunes.get(0));
+    void testAgregarCategoriaPropietario() {
+        sitio.addCategoriaPropietario(categoria);
+        assertEquals(1, sitio.getCategoriaPropietario().size());
+        assertEquals(categoria, sitio.getCategoriaPropietario().get(0));
     }
 
     @Test
-    public void testEliminarCategoriaComun() {
-        String categoria = "Familia";
-        sitio.addCategoriaComun(categoria);
-        assertEquals(1, sitio.getCategoriasComunes().size());
+    void testEliminarCategoriaPropietario() {
+        sitio.addCategoriaPropietario(categoria);
+        assertEquals(1, sitio.getCategoriaPropietario().size());
 
-        sitio.removeCategoriaComun(categoria);
-        assertTrue(sitio.getCategoriasComunes().isEmpty());
+        sitio.removeCategoriaPropietario(categoria);
+        assertTrue(sitio.getCategoriaPropietario().isEmpty());
     }
-    
+
+    @Test
+    void testAgregarCategoriaInquilino() {
+        sitio.addCategoriaInquilino(categoria);
+        assertEquals(1, sitio.getCategoriasInquilino().size());
+        assertEquals(categoria, sitio.getCategoriasInquilino().get(0));
+    }
+
+    @Test
+    void testEliminarCategoriaInquilino() {
+        sitio.addCategoriaInquilino(categoria);
+        assertEquals(1, sitio.getCategoriasInquilino().size());
+
+        sitio.removeCategoriaInquilino(categoria);
+        assertTrue(sitio.getCategoriasInquilino().isEmpty());
+    }
+
+    @Test
+    void testAgregarCategoriaInmueble() {
+        sitio.addCategoriaInmueble(categoria);
+        assertEquals(1, sitio.getCategoriasInmueble().size());
+        assertEquals(categoria, sitio.getCategoriasInmueble().get(0));
+    }
+
+    @Test
+    void testEliminarCategoriaInmueble() {
+        sitio.addCategoriaInmueble(categoria);
+        assertEquals(1, sitio.getCategoriasInmueble().size());
+
+        sitio.removeCategoriaInmueble(categoria);
+        assertTrue(sitio.getCategoriasInmueble().isEmpty());
+    }
+
+
 }

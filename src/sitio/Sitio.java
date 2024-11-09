@@ -2,13 +2,10 @@ package sitio;
 
 import java.util.List;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+
 
 import categoria.Categoria;
-import inmueble.Inmueble;
 import publicacion.Publicacion;
-import rankeable.Rankeable;
 import search.Search;
 import servicio.Servicio;
 import tipoDeInmueble.TipoDeInmueble;
@@ -128,9 +125,6 @@ public class Sitio {
 		return null;
 	}// implementar y revisar tipado
 
-	public List<Inmueble> inmueblesLibres() {
-		return null;
-	}// implementar y revisar tipado
 
 	public double tasaOcupacion() {
 		return 0;
