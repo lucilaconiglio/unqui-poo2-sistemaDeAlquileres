@@ -24,7 +24,7 @@ public class Publicacion implements Rankeable{
 	private double precioBase;
 	private FormaDePago formaDePago;
 	private PoliticaDeCancelacion politicaDeCancelacion;
-	private User propietario;//tipar con Propietario
+	//private User propietario;//tipar con Propietario
 	private String superficie;
 	private int capacidad;
 	private List<String> fotos;
@@ -42,7 +42,7 @@ public class Publicacion implements Rankeable{
 		this.precioBase = precioBase;
 		this.formaDePago = formaDePago;
 		this.politicaDeCancelacion = politicaDeCancelacion;
-		this.propietario = propietario;
+		//this.propietario = propietario;
 		this.superficie = superficie;
 		this.capacidad = capacidad;
 		this.fotos = new ArrayList<String>();
