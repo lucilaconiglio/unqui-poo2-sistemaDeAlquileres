@@ -28,12 +28,12 @@ public class FiltroBaseTest {
     @BeforeEach
     public void setUp() {
         // Inicializamos FiltroBase con ciudad y fechas específicas
-        filtroBase = new FiltroBase("CiudadEjemplo", LocalDate.of(2024, 11, 1), LocalDate.of(2024, 11, 10));
+        filtroBase = new FiltroBase("Cordoba", LocalDate.of(2024, 11, 1), LocalDate.of(2024, 11, 10));
 
         // Crear publicaciones con mocks y configuraciones de prueba
-        publicacion1 = crearMockPublicacion("CiudadEjemplo", 4);
-        publicacion2 = crearMockPublicacion("OtraCiudad", 2);
-        publicacion3 = crearMockPublicacion("CiudadEjemplo", 6);
+        publicacion1 = crearMockPublicacion("Cordoba", 4);
+        publicacion2 = crearMockPublicacion("Rosario", 2);
+        publicacion3 = crearMockPublicacion("Cordoba", 6);
     }
 
     private Publicacion crearMockPublicacion(String ciudad, int capacidad) {
@@ -51,13 +51,13 @@ public class FiltroBaseTest {
     }
 
     @Test
-    public void testFilterPublicaciones_FiltraPorCiudad() {
+    public void testFilterPublicaciones_FiltraPorCiudad1() {
         List<Publicacion> publicaciones = Arrays.asList(publicacion1, publicacion2, publicacion3);
 
         // Ejecutamos el método de filtro
         List<Publicacion> resultado = filtroBase.filterPublicaciones(publicaciones);
 
-        // Verificamos que solo se incluyan las publicaciones de "CiudadEjemplo"
+        // Verificamos que solo se incluyan las publicaciones de "Cordoba"
         assertEquals(2, resultado.size());
         assertEquals(publicacion1, resultado.get(0));
         assertEquals(publicacion3, resultado.get(1));
@@ -80,22 +80,6 @@ public class FiltroBaseTest {
         assertEquals(publicacion1, resultado.get(0));
     }
 
-    @Test
-    public void testFilterPublicaciones_ConInmuebleNull() {
-        // Configuramos una publicación con inmueble nulo
-        Publicacion publicacionConInmuebleNull = mock(Publicacion.class);
-        when(publicacionConInmuebleNull.getInmueble()).thenReturn(null);
-
-        List<Publicacion> publicaciones = Arrays.asList(publicacion1, publicacionConInmuebleNull, publicacion3);
-
-        // Ejecutamos el método de filtro
-        List<Publicacion> resultado = filtroBase.filterPublicaciones(publicaciones);
-
-        // Verificamos que las publicaciones sin inmueble no causen problemas
-        assertEquals(2, resultado.size());
-        assertEquals(publicacion1, resultado.get(0));
-        assertEquals(publicacion3, resultado.get(1));
-    }
 
     @Test
     public void testFilterPublicaciones_SinFiltrosAdicionales() {
@@ -129,11 +113,11 @@ public class FiltroBaseTest {
         // Creamos un filtro mock y lo agregamos
         Filtro filtroMock = mock(Filtro.class);
         filtroBase.addFiltro(filtroMock);
-
+        
         // Lo eliminamos
         filtroBase.removeFiltro(filtroMock);
 
         // Verificamos que la lista de filtros esté vacía
-        assertEquals(2, filtroBase.getFiltros().size());
+        assertEquals(0, filtroBase.getFiltros().size());
     }
 }

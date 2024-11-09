@@ -49,7 +49,7 @@ public class FiltroBase implements Search {
 	}
 
 	public void removeFiltro(Filtro filtro) {
-		filtros.add(filtro);
+		filtros.remove(filtro);
 	}
 	
 
