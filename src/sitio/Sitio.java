@@ -10,7 +10,7 @@ import search.Search;
 import servicio.Servicio;
 import tipoDeInmueble.TipoDeInmueble;
 import user.User;
-import user.inquilino.Inquilino;
+import user.inquilino.Inquilino_LEGACY;
 
 public class Sitio {
 
@@ -121,7 +121,7 @@ public class Sitio {
 		categoriaInmueble.remove(ci);
 	}
 
-	public List<Inquilino> topTenInquilinos() {
+	public List<User> topTenInquilinos() {
 		return null;
 	}// implementar y revisar tipado
 
