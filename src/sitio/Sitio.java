@@ -10,7 +10,7 @@ import publicacion.Publicacion;
 import rankeable.Rankeable;
 import search.Search;
 import user.User;
-import user.inquilino.Inquilino;
+import user.inquilino.Inquilino_LEGACY;
 
 public class Sitio {
 
@@ -136,7 +136,7 @@ public class Sitio {
 		categoriaInmueble.remove(ci);
 	}
 
-	public List<Inquilino> topTenInquilinos() {
+	public List<User> topTenInquilinos() {
 		return null;
 	}// implementar
 
