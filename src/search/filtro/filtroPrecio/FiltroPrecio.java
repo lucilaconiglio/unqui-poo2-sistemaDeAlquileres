@@ -8,15 +8,14 @@ import search.filtro.Filtro;
 
 @Getter
 @Setter
-public abstract class FiltroPrecio implements Filtro {
+public abstract class FiltroPrecio extends Filtro {
 	
 	private LocalDate fechaEntrada;
 	private LocalDate fechaSalida;
 	private Double precio;
 
-	public FiltroPrecio(Double precio, LocalDate fechaEntrada, LocalDate fechaSalida) {
+	public FiltroPrecio(LocalDate fechaEntrada, LocalDate fechaSalida, Double precio) {
+		super(fechaEntrada, fechaSalida);
 		this.precio = precio;
-		this.fechaEntrada = fechaEntrada;
-		this.fechaSalida = fechaSalida;
 	}
 }

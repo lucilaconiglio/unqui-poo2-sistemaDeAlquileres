@@ -1,6 +1,5 @@
 package observer;
 
-import inmueble.Inmueble;
 import publicacion.Publicacion;
 
 public class UsuarioMovil implements Observer{
@@ -12,13 +11,13 @@ public class UsuarioMovil implements Observer{
 	}
 
 	@Override
-	public void notificarCancelacionInmueble(Publicacion publicacion, Inmueble inmueble) {
+	public void notificarCancelacionInmueble(Publicacion publicacion) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void notificarReservaInmueble(Publicacion publicacion, Inmueble inmueble) {
+	public void notificarReservaInmueble(Publicacion publicacion) {
 		// TODO Auto-generated method stub
 		
 	}
