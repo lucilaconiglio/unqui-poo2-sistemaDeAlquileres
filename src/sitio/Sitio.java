@@ -127,7 +127,7 @@ public class Sitio {
 
 
 	public double tasaOcupacion() {
-		return 0;
+		return 0.0;
 	}// implementar y revisar tipado
 
 }
