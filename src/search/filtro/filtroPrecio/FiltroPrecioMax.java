@@ -8,7 +8,7 @@ import publicacion.Publicacion;
 public class FiltroPrecioMax extends FiltroPrecio {
 
 	public FiltroPrecioMax(Double precio, LocalDate fechaEntrada, LocalDate fechaSalida) {
-		super(precio, fechaEntrada, fechaSalida);
+		super(fechaSalida, fechaEntrada, precio);
 	}
 
 	@Override
