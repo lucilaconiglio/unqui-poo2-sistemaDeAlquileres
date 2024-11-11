@@ -1,33 +1,20 @@
 package user.inquilino;
 
-import user.User;
-
+import java.time.LocalDate;
 import java.util.List;
 
-import inmueble.Inmueble;
+import publicacion.Publicacion;
+import resenia.Resenia;
 import reserva.Reserva;
+import user.propietario.Propietario;
 
-public class Inquilino extends User{
+public interface Inquilino {
 
-	public Inquilino(String nombreCompleto, String mail, int numeroDeTelefono) {
-		super(nombreCompleto, mail, numeroDeTelefono);
-	}
+	public void rankearInmueble(Resenia resenia, Publicacion publicacion);
+	public List<Reserva> getReservasFuturas();
+	public List<Reserva> getReservasDeCiudad(String ciudad);
+	public List<String> getCiudadesDondeHayReserva();
+	public void reservar(Publicacion publicacion, LocalDate fechaEntrada, LocalDate fechaSalida);
+	public void cancelar(Reserva reserva);
 
-	public List<Reserva> getReservasFuturas(){
-		return null;
-	}
-	
-	public List<Reserva> getReservasDeCiudad(String ciudad){
-		return null;
-	}
-	
-	public List<String> getCiudadesDondeHayReserva(){
-		return null;
-	}
-	
-	public void rankeatInmueble(Inmueble inmueble /*Resenia resenia*/) {
-		// inmueble.agregarResenia(resenia)
-	}
-	
-	//  faltan metodos del ranking
 }

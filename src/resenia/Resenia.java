@@ -1,25 +1,23 @@
 package resenia;
 
+import categoria.Categoria;
+
 public class Resenia {
 	
-	private String categoria;
+	private Categoria categoria;
 	private int puntaje;
 	private String comentario;
 	
-	public Resenia(String categoria, int puntaje, String comentario) {
-		super();
+	public Resenia(Categoria categoria, int puntaje, String comentario) {
 		this.categoria = categoria;
 		this.puntaje = puntaje;
 		this.comentario = comentario;
 	}
 
-	public String getCategoria() {
+	public Categoria getCategoria() {
 		return categoria;
 	}
 
-	public void setCategoria(String categoria) {
-		this.categoria = categoria;
-	}
 
 	public int getPuntaje() {
 		return puntaje;

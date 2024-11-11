@@ -2,137 +2,123 @@ package sitio;
 
 import java.util.List;
 import java.util.ArrayList;
-import java.util.Map;
+import java.util.HashMap;
 
+import categoria.Categoria;
 import publicacion.Publicacion;
+import rankeable.Rankeable;
 import search.Search;
+import servicio.Servicio;
+import tipoDeInmueble.TipoDeInmueble;
 import user.User;
 
 public class Sitio {
-	
+
 	private List<Publicacion> publicaciones;
-	private List<String> servicios; 
-	private List<String> tiposDeInmueble; 
-	private List<String> categoriasComunes;
-	private List<String> categoriasPropietario;
-	private List<String> categoriasInquilino;
-	private List<String> categoriaInmueble;
-	private Map<Rankeable, List<String>> categorias;
-	private Search search;
-	private List<User> users; 
-	
+	private List<Servicio> servicios;
+	private List<TipoDeInmueble> tiposDeInmueble;
+	private List<Categoria> categoriasPropietario;
+	private List<Categoria> categoriasInquilino;
+	private List<Categoria> categoriaInmueble;
+	private List<User> users;
+
 	public Sitio() {
-		this.publicaciones= new ArrayList<Publicacion>();
-		this.servicios= new ArrayList<String>();
-		this.tiposDeInmueble= new ArrayList<String>();
-		this.categoriasComunes= new ArrayList<String>();
-		this.categoriasPropietario= new ArrayList<String>();
-		this.categoriasInquilino= new ArrayList<String>();
-		this.categoriaInmueble= new ArrayList<String>();
-		this.categorias = new Map<Rankeable, List<String>>();
-		this.search = new Search();
-		this.users = new ArrayList<User>();
+		this.publicaciones = new ArrayList<>();
+		this.servicios = new ArrayList<>();
+		this.tiposDeInmueble = new ArrayList<>();
+		this.categoriasPropietario = new ArrayList<>();
+		this.categoriasInquilino = new ArrayList<>();
+		this.categoriaInmueble = new ArrayList<>();
+		this.users = new ArrayList<>();
 	}
-	
+
+
 	public List<Publicacion> buscarPublicaciones(Search search) {
-		
-	}//ver como lo implementamos 
-	
-	public List<Publicacion> getPublicaciones(){
+		// Se filtran las publicaciones según los criterios de búsqueda.
+		return search.filterPublicaciones(publicaciones);
+	}
+
+	public List<Publicacion> getPublicaciones() {
 		return this.publicaciones;
 	}
-	
+
 	public void addPublicacion(Publicacion publicacion) {
 		this.publicaciones.add(publicacion);
-		
+
 	}
-	
+
 	public void removePublicacion(Publicacion publicacion) {
 		publicaciones.remove(publicacion);
 	}
-	
-	public List<String> getServicios(){
+
+	public List<Servicio> getServicios() {
 		return this.servicios;
 	}
-	
-	public void addServicio(String servicio) {
-		this.servicios.add(servicio);	
+
+	public void addServicio(Servicio servicio) {
+		this.servicios.add(servicio);
 	}
-	
-	public void removeServicio(String servicio) {
+
+	public void removeServicio(Servicio servicio) {
 		servicios.remove(servicio);
 	}
-	
-	public List<String> getTiposDeInmueble(){
+
+	public List<TipoDeInmueble> getTiposDeInmueble() {
 		return this.tiposDeInmueble;
 	}
-	
-	public void addTipoDeInmueble(String tiposDeInmueble) {
-		this.tiposDeInmueble.add(tiposDeInmueble);	
+
+	public void addTipoDeInmueble(TipoDeInmueble tiposDeInmueble) {
+		this.tiposDeInmueble.add(tiposDeInmueble);
 	}
-	
-	public void removeTipoDeInmeble(String _tiposDeInmueble) {
+
+	public void removeTipoDeInmeble(TipoDeInmueble _tiposDeInmueble) {
 		tiposDeInmueble.remove(_tiposDeInmueble);
 	}
-	
-	public List<String> getCategoriasComunes(){
-		return this.categoriasComunes;
-	}
-	
-	public void addCategoriaComun(String categoriaComun){
-		this.categoriasComunes.add(categoriaComun);
-	}
-	
-	public void removeCategoriaComun(String categoriaComun) {
-		categoriasComunes.remove(categoriaComun);
-	}
-	
-	public List<String> getCategoriaPropietario(){
+
+
+	public List<Categoria> getCategoriaPropietario() {
 		return this.categoriasPropietario;
 	}
-	
-	public void addCategoriaPropietario(String cp){
+
+	public void addCategoriaPropietario(Categoria cp) {
 		this.categoriasPropietario.add(cp);
 	}
-	
-	public void removeCategoriaPropietario(String cp){
+
+	public void removeCategoriaPropietario(Categoria cp) {
 		categoriasPropietario.remove(cp);
 	}
-	
-	public List<String> getCategoriasInquilino(){
+
+	public List<Categoria> getCategoriasInquilino() {
 		return this.categoriasInquilino;
 	}
-	
-	public void addCategoriaInquilino(String ci){
+
+	public void addCategoriaInquilino(Categoria ci) {
 		this.categoriasInquilino.add(ci);
 	}
-	
-	public void removeCategoriaInquilino(String ci) {
+
+	public void removeCategoriaInquilino(Categoria ci) {
 		categoriasInquilino.remove(ci);
 	}
-	
-	public List<String> getCategoriasInmueble(){
+
+	public List<Categoria> getCategoriasInmueble() {
 		return this.categoriaInmueble;
 	}
-	
-	public void addCategoriaInmueble(String ci) {
+
+	public void addCategoriaInmueble(Categoria ci) {
 		this.categoriaInmueble.add(ci);
 	}
-	
-	public void removeCategoriaInmueble(String ci) {
+
+	public void removeCategoriaInmueble(Categoria ci) {
 		categoriaInmueble.remove(ci);
 	}
-	
-	public List<Inquilino> topTenInquilinos(){
-		
-	}//implementar
-	
-	public List<Inmueble> inmueblesLibres(){
-		
-	}//implementar
-	
+
+	public List<User> topTenInquilinos() {
+		return null;
+	}// implementar y revisar tipado
+
+
 	public double tasaOcupacion() {
-		
-	}//implementar
-	
+		return 0.0;
+	}// implementar y revisar tipado
+
 }

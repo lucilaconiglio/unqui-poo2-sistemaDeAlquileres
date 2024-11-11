@@ -1,22 +1,28 @@
 package user.propietario;
 
-import java.time.LocalDate;
-import java.time.Period;
 
+import java.time.LocalDate;
+
+import politicaCancelacion.PoliticaDeCancelacion;
+import publicacion.Publicacion;
+import resenia.Resenia;
+import reserva.Reserva;
+import sitio.Sitio;
+import tipoDeInmueble.TipoDeInmueble;
+import ubicacion.Ubicacion;
 import user.User;
 
-public class Propietario extends User{
 
-	private LocalDate fechaRegistro;
-	
-	public Propietario(String nombreCompleto, String mail, int numeroDeTelefono, LocalDate fechaRegistro) {
-		super(nombreCompleto, mail, numeroDeTelefono);
-		this.fechaRegistro = fechaRegistro;
-	}
 
-	public int getAntiguedad() {
-		return Period.between(fechaRegistro, LocalDate.now()).getYears();
-	}
+public interface Propietario {
 	
-	//  faltan metodos del ranking
+	public int getAngiguedad();
+	public void aceptar(Reserva reserva);
+	public void rechazar(Reserva reserva);
+	public int vecesQueAlquiloInmueble(Publicacion publicacion);
+	public int obtenerTotalAlquileres();
+	public void darDeAltaPublicacion(Sitio sitio, LocalDate checkIn, LocalDate checkOut, double precioBase,
+			PoliticaDeCancelacion politicaDeCancelacion, Propietario propietario, String superficie, int capacidad,
+			Ubicacion ubicacion,TipoDeInmueble tipoDeInmueble);
+	//obtenerHistorialAlquileres --> devuelve lista de reservas historico
 }
