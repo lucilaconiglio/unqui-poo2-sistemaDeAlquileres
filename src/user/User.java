@@ -5,66 +5,134 @@ import java.time.Period;
 import java.util.List;
 
 import categoria.Categoria;
+import lombok.Getter;
+import politicaCancelacion.PoliticaDeCancelacion;
 import publicacion.Publicacion;
 import rankeable.Rankeable;
+import ranking.Ranking;
 import resenia.Resenia;
 import reserva.Reserva;
 import sitio.Sitio;
+import tipoDeInmueble.TipoDeInmueble;
+import ubicacion.Ubicacion;
 import user.inquilino.Inquilino;
 import user.propietario.Propietario;
-
+@Getter 
 public  class User implements Rankeable,Propietario,Inquilino {
 	private String nombreCompleto;
 	private String mail;
 	private LocalDate fechaRegistro;
 	private int numeroDeTelefono;
-	private List<Resenia> resenias;
 	private List<Reserva> reservas;
 	private Sitio sitio;
+	private Ranking ranking;
 
 	public User(String nombreCompleto, String mail, int numeroDeTelefono, Sitio sitio) {
 		this.nombreCompleto = nombreCompleto;
 		this.mail = mail;
 		this.numeroDeTelefono = numeroDeTelefono;
 		this.sitio = sitio;
+		this.ranking = new Ranking();
 	}
 
-	public String getNombreCompleto() {
-		return nombreCompleto;
-	}
-
-	public void setNombreCompleto(String nombreCompleto) {
-		this.nombreCompleto = nombreCompleto;
-	}
-
-	public String getMail() {
-		return mail;
-	}
-
-	public void setMail(String mail) {
-		this.mail = mail;
-	}
-
-	public int getNumeroDeTelefono() {
-		return numeroDeTelefono;
-	}
-
-	public void setNumeroDeTelefono(int numeroDeTelefono) {
-		this.numeroDeTelefono = numeroDeTelefono;
-	}
-
-	public List<Resenia> getResenias(){
-		return resenias;
-	};
 	
-	public List<Resenia> getResenia(Resenia reseniaBuscada){
-		return (List<Resenia>) resenias.stream().filter(resenia-> resenia.equals(reseniaBuscada));//Rearmar esto para que devuelve una única resenia
+	@Override
+	public int getAngiguedad() {
+		return Period.between(fechaRegistro, LocalDate.now()).getYears();
 	}
 
 	@Override
-	public void rankearInmueble(Resenia resenia) {
+	public void darDeAltaPublicacion(Sitio sitio, LocalDate checkIn, LocalDate checkOut, double precioBase,
+			PoliticaDeCancelacion politicaDeCancelacion, Propietario propietario, String superficie, int capacidad,
+			Ubicacion ubicacion,TipoDeInmueble tipoInmueble) {
+		sitio.addPublicacion(
+				new Publicacion(
+					checkIn,
+	                checkOut,
+	                precioBase,
+	                politicaDeCancelacion,
+	                this,
+	                superficie,
+	                capacidad,
+	                ubicacion, 
+	                tipoInmueble
+				));
+		
+	}
+	// RANKING
+	
+	@Override
+	public double obtenerPromedioCategoria(Categoria cat) {
+		return ranking.obtenerPromedioPorCategoria(cat);
+	}
+	
+	@Override
+	public List<String> obternerComentarios() {
+		return ranking.obtenerComentarios();
+	}
+	
+	@Override
+	public List<String> obetenerComentariosPorCategoria(Categoria cat) {
+		return ranking.obtenerCometariosPorCategoria(cat);
+	}
+	
+	@Override
+	public void rankearInmueble(Resenia resenia, Publicacion publicacion) {
+		publicacion.agregarResenia(resenia);
+	}
+	
+	
+	public void rankearUsuario(User user, Resenia resenia) {
+		user.agregarResenia(resenia);
+	}
+	
+	@Override
+	public int vecesQueAlquiloInmueble(Publicacion publicacion) {
+		// TODO: agregar contador de veces alquilado en la publi 
+		return 0;
+	}
+	
+	@Override
+	public int obtenerTotalAlquileres() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	
+	
+	@Override
+	public void agregarResenia(Resenia res) {
+		ranking.agregarResenia(res);
+		
+	}
+	
+	@Override
+	public double obtenerPromedioGeneral() {
+		return ranking.obtenerPromedioGeneral();
+	};
+	
+	// RESERVA
+	
+	@Override
+	public void reservar(Publicacion publicacion, LocalDate fechaEntrada, LocalDate fechaSalida) {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	@Override
+	public void cancelar(Reserva reserva) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	
+	@Override
+	public void aceptar(Reserva reserva) {
+		// TODO Auto-generated method stub
+	}
+	
+	@Override
+	public void rechazar(Reserva reserva) {
+		// TODO Auto-generated method stub
 	}
 
 	@Override
@@ -78,7 +146,7 @@ public  class User implements Rankeable,Propietario,Inquilino {
 	
 	@Override
 	public List<Reserva> getReservasDeCiudad(String ciudad) {
-		// TODO Auto-generated method stub
+		// TODO resolver mas tarde
 		return null;
 	}
 
@@ -88,56 +156,10 @@ public  class User implements Rankeable,Propietario,Inquilino {
 		return null;
 	}
 
-	@Override
-	public void reservar(Reserva reserva) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void cancelar(Reserva reserva) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void rankearInquilino(User usuario, Publicacion publicacion, Resenia resenia) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public int getAngiguedad() {
-		return Period.between(fechaRegistro, LocalDate.now()).getYears();
-	}
-
-	@Override
-	public void aceptar(Reserva reserva) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void agregarResenia(Resenia res) {
-		// TODO Auto-generated method stub
-		this.resenias.add(res);
-	}
-
-	@Override
-	public double obtenerPromedioGeneral() {
-		// TODO Auto-generated method stub
-		return resenias.stream().mapToDouble(res->res.getPuntaje()).sum();
-	}
-
-	public List<Resenia> getReseniasPorCategoria(String categoria){
-		return 	resenias.stream().filter(res-> res.getCategoria().equals(categoria)).toList();
-	}
 
 
-	@Override
-	public double obtenerPromedioCategoria(Categoria cat) {
-		// TODO Auto-generated method stub
-		return 0;
-	};
+
+
+
 
 }
