@@ -10,6 +10,7 @@ import lombok.Getter;
 import periodo.Periodo;
 import politicaCancelacion.PoliticaDeCancelacion;
 import rankeable.Rankeable;
+import ranking.Ranking;
 import resenia.Resenia;
 import reserva.Reserva;
 import servicio.Servicio;
@@ -38,6 +39,7 @@ public class Publicacion implements Rankeable{
 	private List<Reserva> reservas;
 	private List<Servicio> servicios;
 	private TipoDeInmueble tipoDeInmueble;
+	private Ranking ranking;
 
 	public Publicacion(LocalDate checkIn, LocalDate checkOut, double precioBase,
 			PoliticaDeCancelacion politicaDeCancelacion, Propietario propietario, String superficie,int capacidad,Ubicacion ubicacion
@@ -58,6 +60,7 @@ public class Publicacion implements Rankeable{
 		this.reservas = new ArrayList<>();
 		this.servicios = new ArrayList<>();
 		this.tipoDeInmueble = tipoDeInmueble;
+		this.ranking = new Ranking();
 	}
 	
 	public void addPediodo(Periodo periodo) {
@@ -90,24 +93,6 @@ public class Publicacion implements Rankeable{
 	
 	public List<Resenia> getReseniasPorCategoria(Categoria categoria){
 		return 	resenias.stream().filter(res-> res.getCategoria().getConcepto().equals(categoria.getConcepto())).toList();
-	}
-
-	@Override
-	public void agregarResenia(Resenia res) {
-		this.resenias.add(res);
-	}
-
-	@Override
-	public double obtenerPromedioGeneral() {
-		return resenias.stream().mapToDouble(res->res.getPuntaje()).sum();
-	}
-	@Override
-	public double obtenerPromedioCategoria(Categoria cat) {
-		List<Resenia> reseniasPorCategoria = getReseniasPorCategoria(cat);
-	    double sumaPuntajes = reseniasPorCategoria.stream()
-	        .mapToDouble(res->res.getPuntaje()).sum();
-	    
-	    return reseniasPorCategoria.isEmpty() ? 0.0 : sumaPuntajes / reseniasPorCategoria.size();
 	}
 
 	public double precioPorDia(LocalDate fecha) {
@@ -163,5 +148,33 @@ public class Publicacion implements Rankeable{
 					.forEach(s -> s.notificarReservaInmueble(tipoDeInmueble));
 	}
 
+	
+	// Ranking
+	@Override
+	public void agregarResenia(Resenia res) {
+		ranking.agregarResenia(res);
+		
+	}
+	
+	@Override
+	public double obtenerPromedioGeneral() {
+		return ranking.obtenerPromedioGeneral();
+	};
+	
+	@Override
+	public double obtenerPromedioCategoria(Categoria cat) {
+		return ranking.obtenerPromedioPorCategoria(cat);
+	}
+	
+	@Override
+	public List<String> obternerComentarios() {
+		return ranking.obtenerComentarios();
+	}
+	
+	@Override
+	public List<String> obetenerComentariosPorCategoria(Categoria cat) {
+		return ranking.obtenerCometariosPorCategoria(cat);
+	}
+	
 	
 }

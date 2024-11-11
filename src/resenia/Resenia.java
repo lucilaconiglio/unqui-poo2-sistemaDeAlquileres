@@ -9,7 +9,6 @@ public class Resenia {
 	private String comentario;
 	
 	public Resenia(Categoria categoria, int puntaje, String comentario) {
-		super();
 		this.categoria = categoria;
 		this.puntaje = puntaje;
 		this.comentario = comentario;
