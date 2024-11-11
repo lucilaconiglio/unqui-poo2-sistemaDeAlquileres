@@ -10,7 +10,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import categoria.Categoria;
-import formaDePago.FormaDePago;
 import observer.EventListener;
 import periodo.Periodo;
 import politicaCancelacion.PoliticaDeCancelacion;
@@ -34,7 +33,7 @@ class PublicacionTest {
     @BeforeEach
     public void setUp() {
         // Crea mocks de las clases necesarias
-        mockPropietario = mock(Propietario.class);
+        mockPropietario = mock(User.class);
         mockTipoDeInmueble = mock(TipoDeInmueble.class);
         mockPolitica = mock(PoliticaDeCancelacion.class);
         mockUbicacion = mock(Ubicacion.class);
