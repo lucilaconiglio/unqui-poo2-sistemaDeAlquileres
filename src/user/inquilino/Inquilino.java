@@ -2,13 +2,13 @@ package user.inquilino;
 
 import java.util.List;
 
-import inmueble.Inmueble;
+import publicacion.Publicacion;
 import resenia.Resenia;
 import reserva.Reserva;
 
 public interface Inquilino {
 
-	public void rankearInmueble(Inmueble inmueble, Resenia resenia);
+	public void rankearInmueble(Publicacion publicacion, Resenia resenia);
 	public List<Reserva> getReservasFuturas();
 	public List<Reserva> getReservasDeCiudad(String ciudad);
 	public List<String> getCiudadesDondeHayReserva();

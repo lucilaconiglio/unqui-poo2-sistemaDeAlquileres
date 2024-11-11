@@ -1,9 +1,11 @@
 package formaDePago;
 
 import static org.junit.jupiter.api.Assertions.*;
+
 import org.junit.jupiter.api.Test;
 
 class FormaDePagoTest {
+
 
     @Test
     void testNumeroDeFormasDePago() {

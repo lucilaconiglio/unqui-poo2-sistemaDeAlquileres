@@ -10,10 +10,10 @@ import search.Search;
 import servicio.Servicio;
 import tipoDeInmueble.TipoDeInmueble;
 import user.User;
-import user.inquilino.Inquilino_LEGACY;
+
 
 public class Sitio {
-
+	private List<User> usuarios;
 	private List<Publicacion> publicaciones;
 	private List<Servicio> servicios;
 	private List<TipoDeInmueble> tiposDeInmueble;
@@ -41,6 +41,18 @@ public class Sitio {
 	 *               las publicaciones.
 	 * @return Lista de publicaciones filtradas según los criterios de búsqueda.
 	 */
+	
+	public List<User> getUsuarios(){
+		return usuarios;
+	}
+	
+	public void addUsuario(User usuario){
+		usuarios.add(usuario);
+	}
+	
+	public void removeUsuario(User usuario){
+		usuarios.remove(usuario);
+	}
 	
 	public List<Publicacion> buscarPublicaciones(Search search) {
 		// Se filtran las publicaciones según los criterios de búsqueda.

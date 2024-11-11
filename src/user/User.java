@@ -4,12 +4,15 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.util.List;
 
-import inmueble.Inmueble;
+import categoria.Categoria;
+import formaDePago.FormaDePago;
+import politicaCancelacion.PoliticaDeCancelacion;
 import publicacion.Publicacion;
 import rankeable.Rankeable;
 import resenia.Resenia;
 import reserva.Reserva;
 import sitio.Sitio;
+import ubicacion.Ubicacion;
 import user.inquilino.Inquilino;
 import user.propietario.Propietario;
 
@@ -62,7 +65,7 @@ public  class User implements Rankeable,Propietario,Inquilino {
 	}
 
 	@Override
-	public void rankearInmueble(Inmueble inmueble, Resenia resenia) {
+	public void rankearInmueble(Publicacion publicacion, Resenia resenia) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -133,10 +136,35 @@ public  class User implements Rankeable,Propietario,Inquilino {
 		return 	resenias.stream().filter(res-> res.getCategoria().equals(categoria)).toList();
 	}
 
-	@Override
+
 	public double obtenerPromedioCategoria(String cat) {
 		// TODO Auto-generated method stub
 		return getReseniasPorCategoria(cat).stream().mapToDouble(res->res.getPuntaje()).sum();
+	}
+
+	@Override
+	public double obtenerPromedioCategoria(Categoria cat) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void crearPublicacion(LocalDate checkIn, LocalDate checkOut, double precioBase, FormaDePago formaDePago,
+			PoliticaDeCancelacion politicaDeCancelacion, Propietario propietario, String superficie, int capacidad,
+			Ubicacion ubicacion) {
+		
+		sitio.addPublicacion(
+				new Publicacion(
+					checkIn,
+	                checkOut,
+	                precioBase,
+	                formaDePago,
+	                politicaDeCancelacion,
+	                this,
+	                superficie,
+	                capacidad,
+	                ubicacion
+				));
 	};
 
 }

@@ -1,4 +1,4 @@
-package user.propietario;
+/*package user.propietario;
 
 import java.time.LocalDate;
 import java.time.Period;
@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import resenia.Resenia;
+import sitio.Sitio;
 import user.User;
 
 public class Propietario_LEGACY extends User{
@@ -15,7 +16,7 @@ public class Propietario_LEGACY extends User{
 	private LocalDate fechaRegistro;
 	
 	public Propietario_LEGACY(String nombreCompleto, String mail, int numeroDeTelefono, LocalDate fechaRegistro) {
-		super(nombreCompleto, mail, numeroDeTelefono);
+		super(nombreCompleto, mail, numeroDeTelefono, new Sitio());
 		this.fechaRegistro = fechaRegistro;
 		this.resenias=new ArrayList<Resenia>();
 	}
@@ -44,3 +45,4 @@ public class Propietario_LEGACY extends User{
 	}
 	
 }
+*/

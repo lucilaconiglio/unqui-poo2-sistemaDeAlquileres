@@ -1,4 +1,4 @@
-package user.inquilino;
+/*package user.inquilino;
 
 import user.User;
 
@@ -6,9 +6,9 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import inmueble.Inmueble;
 import resenia.Resenia;
 import reserva.Reserva;
+import sitio.Sitio;
 
 public class Inquilino_LEGACY extends User{
 	private List<Resenia> resenias;
@@ -16,9 +16,10 @@ public class Inquilino_LEGACY extends User{
 
 
 	public Inquilino_LEGACY(String nombreCompleto, String mail, int numeroDeTelefono) {
-		super(nombreCompleto, mail, numeroDeTelefono);
+		super(nombreCompleto, mail, numeroDeTelefono, new Sitio());
 		this.resenias=new ArrayList<Resenia>();
 		this.reservas=new ArrayList<Reserva>();
+		//this.sitio = sitio;
 
 	}
 
@@ -38,7 +39,7 @@ public class Inquilino_LEGACY extends User{
 		return null;
 	}
 	
-	public void rankeatInmueble(Inmueble inmueble /*Resenia resenia*/) {
+	public void rankeatInmueble(Inmueble inmueble ) {
 		// inmueble.agregarResenia(resenia)
 	}
 
@@ -61,3 +62,4 @@ public class Inquilino_LEGACY extends User{
 		return getReseniasPorCategoria(cat).stream().mapToDouble(res->res.getPuntaje()).sum();
 	}
 }
+*/

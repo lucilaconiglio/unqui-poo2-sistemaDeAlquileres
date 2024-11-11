@@ -1,11 +1,14 @@
 package sitio;
 
-import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
+
+import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+<<<<<<< Updated upstream
 import categoria.Categoria;
 import publicacion.Publicacion;
 import rankeable.Rankeable;
@@ -13,9 +16,10 @@ import search.Search;
 import servicio.Servicio;
 import tipoDeInmueble.TipoDeInmueble;
 import user.User;
-
 import java.util.ArrayList;
 import java.util.List;
+import publicacion.Publicacion;
+
 
 class SitioTest {
 
