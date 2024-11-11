@@ -2,15 +2,15 @@ package sitio;
 
 import java.util.List;
 import java.util.ArrayList;
-
+import java.util.HashMap;
 
 import categoria.Categoria;
 import publicacion.Publicacion;
+import rankeable.Rankeable;
 import search.Search;
 import servicio.Servicio;
 import tipoDeInmueble.TipoDeInmueble;
 import user.User;
-import user.inquilino.Inquilino_LEGACY;
 
 public class Sitio {
 
@@ -20,28 +20,19 @@ public class Sitio {
 	private List<Categoria> categoriasPropietario;
 	private List<Categoria> categoriasInquilino;
 	private List<Categoria> categoriaInmueble;
-	private Search search;
 	private List<User> users;
 
 	public Sitio() {
-		this.publicaciones = new ArrayList<Publicacion>();
-		this.servicios = new ArrayList<Servicio>();
-		this.tiposDeInmueble = new ArrayList<TipoDeInmueble>();
-		this.categoriasPropietario = new ArrayList<Categoria>();
-		this.categoriasInquilino = new ArrayList<Categoria>();
-		this.categoriaInmueble = new ArrayList<Categoria>();
-		this.users = new ArrayList<User>();
+		this.publicaciones = new ArrayList<>();
+		this.servicios = new ArrayList<>();
+		this.tiposDeInmueble = new ArrayList<>();
+		this.categoriasPropietario = new ArrayList<>();
+		this.categoriasInquilino = new ArrayList<>();
+		this.categoriaInmueble = new ArrayList<>();
+		this.users = new ArrayList<>();
 	}
 
-	/**
-	 * Busca y filtra las publicaciones disponibles según los criterios
-	 * proporcionados en el objeto de búsqueda.
-	 *
-	 * @param search Objeto de búsqueda que contiene los criterios de búsqueda para
-	 *               las publicaciones.
-	 * @return Lista de publicaciones filtradas según los criterios de búsqueda.
-	 */
-	
+
 	public List<Publicacion> buscarPublicaciones(Search search) {
 		// Se filtran las publicaciones según los criterios de búsqueda.
 		return search.filterPublicaciones(publicaciones);

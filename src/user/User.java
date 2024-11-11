@@ -4,7 +4,7 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.util.List;
 
-import inmueble.Inmueble;
+import categoria.Categoria;
 import publicacion.Publicacion;
 import rankeable.Rankeable;
 import resenia.Resenia;
@@ -62,7 +62,7 @@ public  class User implements Rankeable,Propietario,Inquilino {
 	}
 
 	@Override
-	public void rankearInmueble(Inmueble inmueble, Resenia resenia) {
+	public void rankearInmueble(Resenia resenia) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -133,10 +133,11 @@ public  class User implements Rankeable,Propietario,Inquilino {
 		return 	resenias.stream().filter(res-> res.getCategoria().equals(categoria)).toList();
 	}
 
+
 	@Override
-	public double obtenerPromedioCategoria(String cat) {
+	public double obtenerPromedioCategoria(Categoria cat) {
 		// TODO Auto-generated method stub
-		return getReseniasPorCategoria(cat).stream().mapToDouble(res->res.getPuntaje()).sum();
+		return 0;
 	};
 
 }

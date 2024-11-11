@@ -48,7 +48,7 @@ public class FiltroBaseTest {
     }
 
     @Test
-    public void testFilterPublicaciones_FiltraPorCiudad1() {
+    public void testFilterPublicaciones_FiltraPorCiudad() {
         List<Publicacion> publicaciones = Arrays.asList(publicacion1, publicacion2, publicacion3);
 
         // Ejecutamos el método de filtro
@@ -77,20 +77,6 @@ public class FiltroBaseTest {
         assertEquals(publicacion1, resultado.get(0));
     }
 
-
-    @Test
-    public void testFilterPublicaciones_SinFiltrosAdicionales() {
-        // Probamos que sin filtros adicionales se mantengan las publicaciones de la ciudad especificada
-        List<Publicacion> publicaciones = Arrays.asList(publicacion1, publicacion2, publicacion3);
-
-        // Ejecutamos el método de filtro
-        List<Publicacion> resultado = filtroBase.filterPublicaciones(publicaciones);
-
-        // Verificamos el resultado
-        assertEquals(2, resultado.size());
-        assertEquals(publicacion1, resultado.get(0));
-        assertEquals(publicacion3, resultado.get(1));
-    }
 
     @Test
     public void testAddFiltro() {

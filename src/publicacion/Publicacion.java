@@ -15,6 +15,7 @@ import reserva.Reserva;
 import servicio.Servicio;
 import ubicacion.Ubicacion;
 import user.User;
+import user.propietario.Propietario;
 
 @Getter
 public class Publicacion implements Rankeable{
@@ -24,7 +25,7 @@ public class Publicacion implements Rankeable{
 	private double precioBase;
 	private FormaDePago formaDePago;
 	private PoliticaDeCancelacion politicaDeCancelacion;
-	//private User propietario;//tipar con Propietario
+	private Propietario propietario;
 	private String superficie;
 	private int capacidad;
 	private List<String> fotos;
@@ -36,13 +37,13 @@ public class Publicacion implements Rankeable{
 	private List<Servicio> servicios;
 
 	public Publicacion(LocalDate checkIn, LocalDate checkOut, double precioBase, FormaDePago formaDePago,
-			PoliticaDeCancelacion politicaDeCancelacion, User propietario/*tipar con propietario*/, String superficie,int capacidad,Ubicacion ubicacion) {
+			PoliticaDeCancelacion politicaDeCancelacion, Propietario propietario, String superficie,int capacidad,Ubicacion ubicacion) {
 		this.checkIn = checkIn;
 		this.checkOut = checkOut;
 		this.precioBase = precioBase;
 		this.formaDePago = formaDePago;
 		this.politicaDeCancelacion = politicaDeCancelacion;
-		//this.propietario = propietario;
+		this.propietario = propietario;
 		this.superficie = superficie;
 		this.capacidad = capacidad;
 		this.fotos = new ArrayList<String>();

@@ -31,8 +31,7 @@ public class FiltroBase implements Search {
 
 	    // Filtrar primero por ciudad
 	    List<Publicacion> result = publicaciones.stream()
-	            .filter(p -> p.getUbicacion().getCiudad().equals(ciudad))
-	            .collect(Collectors.toList());  // Coleccionamos las publicaciones filtradas por ciudad
+	            .filter(p -> p.getUbicacion().getCiudad().equals(ciudad)).toList();
 	    
 	    // Aplicar los filtros adicionales
 	    for (Search filtro : filtros) {
