@@ -1,16 +1,11 @@
 package politicaCancelacion;
 
+import publicacion.Publicacion;
+import reserva.Reserva;
+
 public interface PoliticaDeCancelacion {
 	
-	
-	
-	/*
-	 new()
-	+ calcularResarcimiento(): double
+	public double calcularResarcimiento(Publicacion publi, Reserva reserva);
 
-
-
-
-	 */
 
 }
