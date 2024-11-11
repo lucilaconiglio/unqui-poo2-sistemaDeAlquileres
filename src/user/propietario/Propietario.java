@@ -1,11 +1,11 @@
 package user.propietario;
 
-import java.util.List;
 
 import publicacion.Publicacion;
 import resenia.Resenia;
 import reserva.Reserva;
 import user.User;
+
 
 
 public interface Propietario {

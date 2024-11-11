@@ -8,14 +8,9 @@ import org.junit.jupiter.api.Test;
 
 import categoria.Categoria;
 import publicacion.Publicacion;
-import rankeable.Rankeable;
-import search.Search;
 import servicio.Servicio;
 import tipoDeInmueble.TipoDeInmueble;
-import user.User;
 
-import java.util.ArrayList;
-import java.util.List;
 
 class SitioTest {
 
