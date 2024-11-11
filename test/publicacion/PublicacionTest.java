@@ -11,33 +11,41 @@ import org.junit.jupiter.api.Test;
 
 import categoria.Categoria;
 import formaDePago.FormaDePago;
+import observer.EventListener;
 import periodo.Periodo;
 import politicaCancelacion.PoliticaDeCancelacion;
 import servicio.Servicio;
+import tipoDeInmueble.TipoDeInmueble;
 import ubicacion.Ubicacion;
 import user.User;
+import user.propietario.Propietario;
 import resenia.Resenia;
+import reserva.Reserva;
 
 class PublicacionTest {
 
-    Publicacion publicacion;
-    User mockPropietario;
-    FormaDePago mockFormaDePago;
-    PoliticaDeCancelacion mockPolitica;
-    Ubicacion mockUbicacion;
+    private Publicacion publicacion;
+    private Propietario mockPropietario;
+    private PoliticaDeCancelacion mockPolitica;
+    private TipoDeInmueble mockTipoDeInmueble;
+    private Ubicacion mockUbicacion;
+    private EventListener suscriptorMock;
 
     @BeforeEach
     public void setUp() {
         // Crea mocks de las clases necesarias
-        mockPropietario = mock(User.class);
-        mockFormaDePago = mock(FormaDePago.class);
+        mockPropietario = mock(Propietario.class);
+        mockTipoDeInmueble = mock(TipoDeInmueble.class);
         mockPolitica = mock(PoliticaDeCancelacion.class);
         mockUbicacion = mock(Ubicacion.class);
+        suscriptorMock = mock(EventListener.class);
 
         // Instancia de Publicacion usando los mocks
         publicacion = new Publicacion(LocalDate.now(), LocalDate.now().plusDays(1), 
-                                      100.0, mockFormaDePago, mockPolitica,
-                                      mockPropietario, "50m²", 4, mockUbicacion);
+                                      100.0, mockPolitica,
+                                      mockPropietario, "50m²", 4, mockUbicacion, mockTipoDeInmueble);
+        
+        publicacion.addSuscriptor(suscriptorMock);
     }
 
     @Test
@@ -226,12 +234,45 @@ class PublicacionTest {
 
 
     @Test
-    void testCambiarPrecioBase() {
-        double nuevoPrecio = 200.0;
-        publicacion.cambiarPrecioBase(nuevoPrecio);
+    void testBajarPrecio() {
+        double descuento = 20.0;
+        publicacion.bajarPrecioInmueble(descuento);
         
         // Verificamos que el precio base ha cambiado correctamente
-        assertEquals(nuevoPrecio, publicacion.getPrecioBase()); // Asegúrate de tener un método getPrecioBase()
+        assertEquals(80.0, publicacion.getPrecioBase());  // 100 - 20 = 80
+    }
+    
+    @Test
+    public void testCancelarReserva_NotificaCancelacionInmueble() {
+        // Crea un mock de Reserva si es necesario
+        Reserva reserva = mock(Reserva.class);
+
+        // Llama al método cancelarReserva en Publicacion
+        publicacion.cancelarReserva(reserva);
+
+        // Verifica que el método notificarCancelacionInmueble fue llamado en el suscriptor
+        verify(suscriptorMock).notificarCancelacionInmueble(mockTipoDeInmueble);
+    }
+
+    @Test
+    public void testBajarPrecioInmueble_NotificaBajaDePrecio() {
+        // Define un nuevo precio para reducir el precio base
+        double descuento = 20.0;
+
+        // Llama a bajarPrecioInmueble
+        publicacion.bajarPrecioInmueble(descuento);
+
+        // Verifica que el método notificarBajaDePrecioInmbueble fue llamado en el suscriptor con el nuevo precio
+        verify(suscriptorMock).notificarBajaDePrecioInmbueble(mockTipoDeInmueble, 80.0); // 100 - 20 = 80
+    }
+
+    @Test
+    public void testReservaInmueble_NotificaReservaInmueble() {
+        // Llama al método reservaInmueble
+        publicacion.reservaInmueble();
+
+        // Verifica que el método notificarReservaInmueble fue llamado en el suscriptor
+        verify(suscriptorMock).notificarReservaInmueble(mockTipoDeInmueble);
     }
     
 }
