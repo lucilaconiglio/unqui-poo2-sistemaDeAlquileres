@@ -1,8 +1,5 @@
 package ubicacion;
 
-import java.util.List;
-
-import resenia.Resenia;
 
 public class Ubicacion {
    private String pais;
