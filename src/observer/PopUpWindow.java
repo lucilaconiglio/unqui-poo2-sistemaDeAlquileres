@@ -1,5 +1,5 @@
 package observer;
 
 public interface PopUpWindow {
-	public void publish(String msg);
+	public void popUp(String message, String color, int fontSize);
 }

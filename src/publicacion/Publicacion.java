@@ -13,9 +13,11 @@ import rankeable.Rankeable;
 import resenia.Resenia;
 import reserva.Reserva;
 import servicio.Servicio;
+import tipoDeInmueble.TipoDeInmueble;
 import ubicacion.Ubicacion;
 import user.User;
 import user.propietario.Propietario;
+import observer.EventListener;
 
 @Getter
 public class Publicacion implements Rankeable{
@@ -23,7 +25,7 @@ public class Publicacion implements Rankeable{
 	private LocalDate checkIn;
 	private LocalDate checkOut;
 	private double precioBase;
-	private FormaDePago formaDePago;
+	private List<FormaDePago> formaDePago;
 	private PoliticaDeCancelacion politicaDeCancelacion;
 	private Propietario propietario;
 	private String superficie;
@@ -32,28 +34,30 @@ public class Publicacion implements Rankeable{
 	private List<Resenia> resenias;
 	private Ubicacion ubicacion;
 	private List<Periodo> periodos;
-	//private List<Observer> suscriptores;
+	private List<EventListener> suscriptores;
 	private List<Reserva> reservas;
 	private List<Servicio> servicios;
+	private TipoDeInmueble tipoDeInmueble;
 
-	public Publicacion(LocalDate checkIn, LocalDate checkOut, double precioBase, FormaDePago formaDePago,
-			PoliticaDeCancelacion politicaDeCancelacion, Propietario propietario, String superficie,int capacidad,Ubicacion ubicacion) {
+	public Publicacion(LocalDate checkIn, LocalDate checkOut, double precioBase,
+			PoliticaDeCancelacion politicaDeCancelacion, Propietario propietario, String superficie,int capacidad,Ubicacion ubicacion
+			, TipoDeInmueble tipoDeInmueble) {
 		this.checkIn = checkIn;
 		this.checkOut = checkOut;
 		this.precioBase = precioBase;
-		this.formaDePago = formaDePago;
+		this.formaDePago = new ArrayList<>();
 		this.politicaDeCancelacion = politicaDeCancelacion;
 		this.propietario = propietario;
 		this.superficie = superficie;
 		this.capacidad = capacidad;
-		this.fotos = new ArrayList<String>();
-		this.resenias = new ArrayList<Resenia>();
+		this.fotos = new ArrayList<>();
+		this.resenias = new ArrayList<>();
 		this.ubicacion = ubicacion;
-		this.periodos = new ArrayList<Periodo>();
-		//this.suscriptores = new ArrayList<Observer>();
-		this.reservas = new ArrayList<Reserva>();
-		this.servicios = new ArrayList<Servicio>();
-
+		this.periodos = new ArrayList<>();
+		this.suscriptores = new ArrayList<>();
+		this.reservas = new ArrayList<>();
+		this.servicios = new ArrayList<>();
+		this.tipoDeInmueble = tipoDeInmueble;
 	}
 	
 	public void addPediodo(Periodo periodo) {
@@ -118,30 +122,46 @@ public class Publicacion implements Rankeable{
 				.sum(); // Suma todos los precios diarios
 	}
 
-	/*
-	public void addObserver(Observer ob) {
-	 
-		this.suscriptores.add(ob);
+	
+	public void addSuscriptor(EventListener suscriptor) {
+		suscriptores.add(suscriptor);
 	}
 
-	public void removeObserver(Observer ob) {
-		suscriptores.remove(ob);
+	public void removeSuscriptor(EventListener suscriptor) {
+		suscriptores.remove(suscriptor);
 	}
 	
-	
-	public void cancelarReserva() {
-		// implementar
+	public void cancelarReserva(Reserva reserva) {
+		//reserva.cancelar();
+		notificarCancelacionInmueble();
 	}
+	
 
 	public void reservaInmueble() {
-		// implementar
+		// new Reserva()
+		notificarReservaInmueble();
 	}
-	*/
+	
 
-	public void cambiarPrecioBase(double nuevoPrecio) {
-		this.precioBase = nuevoPrecio;
+	public void bajarPrecioInmueble(double precioBase) {
+		this.precioBase -= precioBase;
+		notificarBajaDePrecioInmbueble();
 	}
 
+	private void notificarCancelacionInmueble() {
+		suscriptores.stream()
+					.forEach(s -> s.notificarCancelacionInmueble(tipoDeInmueble));
+	}
+
+	private void notificarBajaDePrecioInmbueble() {
+		suscriptores.stream()
+					.forEach(s -> s.notificarBajaDePrecioInmbueble(tipoDeInmueble, precioBase));
+	}
+
+	private void notificarReservaInmueble() {
+		suscriptores.stream()
+					.forEach(s -> s.notificarReservaInmueble(tipoDeInmueble));
+	}
 
 	
 }
