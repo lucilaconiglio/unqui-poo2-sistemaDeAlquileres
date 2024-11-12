@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import publicacion.Publicacion;
+import ranking.Ranking;
 import resenia.Resenia;
 import reserva.Reserva;
 import user.propietario.Propietario;
@@ -16,5 +17,7 @@ public interface Inquilino {
 	public List<String> getCiudadesDondeHayReserva();
 	public void reservar(Publicacion publicacion, LocalDate fechaEntrada, LocalDate fechaSalida);
 	public void cancelar(Reserva reserva);
+	public void rankearPropietario(Resenia resenia, Propietario propietario);
+	public Ranking getRanking();
 
 }

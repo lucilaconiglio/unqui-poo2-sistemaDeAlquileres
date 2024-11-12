@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import categoria.Categoria;
+import categoriasManager.CategoriasManager;
 import lombok.Getter;
 import publicacion.Publicacion;
 import rankeable.Rankeable;
@@ -18,18 +19,12 @@ public class Sitio {
 	private List<Publicacion> publicaciones;
 	private List<Servicio> servicios;
 	private List<TipoDeInmueble> tiposDeInmueble;
-	private List<Categoria> categoriasPropietario;
-	private List<Categoria> categoriasInquilino;
-	private List<Categoria> categoriaInmueble;
 	private List<User> users;
 
 	public Sitio() {
 		this.publicaciones = new ArrayList<>();
 		this.servicios = new ArrayList<>();
 		this.tiposDeInmueble = new ArrayList<>();
-		this.categoriasPropietario = new ArrayList<>();
-		this.categoriasInquilino = new ArrayList<>();
-		this.categoriaInmueble = new ArrayList<>();
 		this.users = new ArrayList<>();
 	}
 
@@ -64,34 +59,6 @@ public class Sitio {
 		tiposDeInmueble.remove(_tiposDeInmueble);
 	}
 
-
-	public List<Categoria> getCategoriaPropietario() {
-		return this.categoriasPropietario;
-	}
-
-	public void addCategoriaPropietario(Categoria cp) {
-		this.categoriasPropietario.add(cp);
-	}
-
-	public void removeCategoriaPropietario(Categoria cp) {
-		categoriasPropietario.remove(cp);
-	}
-
-	public void addCategoriaInquilino(Categoria ci) {
-		this.categoriasInquilino.add(ci);
-	}
-
-	public void removeCategoriaInquilino(Categoria ci) {
-		categoriasInquilino.remove(ci);
-	}
-
-	public void addCategoriaInmueble(Categoria ci) {
-		this.categoriaInmueble.add(ci);
-	}
-
-	public void removeCategoriaInmueble(Categoria ci) {
-		categoriaInmueble.remove(ci);
-	}
 
 	public List<User> topTenInquilinos() {
 		return null;
