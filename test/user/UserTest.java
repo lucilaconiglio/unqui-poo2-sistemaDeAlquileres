@@ -96,7 +96,7 @@ class UserTest {
 
 	@Test
 	void elPropietarioPuedeRealizarUnaPublicacion() {
-		propietario.darDeAltaPublicacion(sitioSpy, checkIn, checkOut, precioBase, politicaDeCancelacionMock, propietario, superficie, capacidad, ubicacionMock, tipoInmuebleMock);
+		propietario.darDeAltaPublicacion(publicacionMock);
 		
 		assertEquals(1, sitioSpy.getPublicaciones().size() );
 	}

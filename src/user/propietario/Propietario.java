@@ -27,8 +27,10 @@ public interface Propietario extends Rankeable{
 	public int obtenerTotalAlquileres();
 	
 	// TODO> PASARLE UNA ISNTANCIA DE PUBLICACION.
-	public void darDeAltaPublicacion(Sitio sitio, LocalDate checkIn, LocalDate checkOut, double precioBase,
+	/*public void darDeAltaPublicacion(Sitio sitio, LocalDate checkIn, LocalDate checkOut, double precioBase,
 			PoliticaDeCancelacion politicaDeCancelacion, Propietario propietario, String superficie, int capacidad,
 			Ubicacion ubicacion,TipoDeInmueble tipoDeInmueble);
+	*/
+	public void darDeAltaPublicacion(Publicacion publicacion);
 	//obtenerHistorialAlquileres --> devuelve lista de reservas historico
 }
