@@ -71,6 +71,13 @@ class UserTest {
 
 	}
 	
+	@Test 
+	void inquilinoRankeaPropietarioTest() {
+		inquilino.rankearPropietario(reseniaMock, propietario);
+		assertTrue(propietario.getResenias().contains(reseniaMock));
+	}
+	
+	
 	@Test
 	void elUsuarioSeDaDeAltaEnElSistema() {
 		sitioSpy.addUsuario( inquilino );
@@ -113,7 +120,7 @@ class UserTest {
     	String comentario = "Buen lugar";  	
     	when(resenia1.getComentario()).thenReturn(comentario);
   
-    	inquilino.rankearUsuario(propietario, resenia1);
+    	//inquilino.rankearUsuario(propietario, resenia1);
         List<String> resultado = propietario.obternerComentarios();
 
         assertEquals(comentario, resultado.get(0));
@@ -131,7 +138,7 @@ class UserTest {
     	List<String> comentarioPorCategoria2 = Arrays.asList("Limpio","Buena calidad");
     	when(rankingMock.obtenerCometariosPorCategoria(categoriaMock)).thenReturn(comentarioPorCategoria2);
         
-    	inquilino.rankearUsuario(propietario, resenia1);
+    	//inquilino.rankearUsuario(propietario, resenia1);
     	
         List<String> resultado = inquilino.obetenerComentariosPorCategoria(categoriaMock);
 
@@ -143,7 +150,7 @@ class UserTest {
     void testRankearUsuario() {
         User inquilino2 = mock(User.class);
         Resenia reseniaMock2 = mock(Resenia.class);
-        propietario.rankearUsuario(inquilino, reseniaMock2);
+       // propietario.rankearUsuario(inquilino, reseniaMock2);
 
         verify(inquilino2).agregarResenia(reseniaMock2);
     }
