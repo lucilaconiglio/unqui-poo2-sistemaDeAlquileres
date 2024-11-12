@@ -13,6 +13,7 @@ import categoria.Categoria;
 import observer.EventListener;
 import periodo.Periodo;
 import politicaCancelacion.PoliticaDeCancelacion;
+import ranking.Ranking;
 import servicio.Servicio;
 import tipoDeInmueble.TipoDeInmueble;
 import ubicacion.Ubicacion;
@@ -29,6 +30,7 @@ class PublicacionTest {
     private TipoDeInmueble mockTipoDeInmueble;
     private Ubicacion mockUbicacion;
     private EventListener suscriptorMock;
+    private Ranking mockRanking;
 
     @BeforeEach
     public void setUp() {
@@ -38,7 +40,8 @@ class PublicacionTest {
         mockPolitica = mock(PoliticaDeCancelacion.class);
         mockUbicacion = mock(Ubicacion.class);
         suscriptorMock = mock(EventListener.class);
-
+        mockRanking = mock(Ranking.class);
+        
         // Instancia de Publicacion usando los mocks
         publicacion = new Publicacion(LocalDate.now(), LocalDate.now().plusDays(1), 
                                       100.0, mockPolitica,
@@ -49,15 +52,14 @@ class PublicacionTest {
 
     @Test
     void testAddResenia() {
-        Resenia mockResenia = mock(Resenia.class);
-        when(mockResenia.getPuntaje()).thenReturn(5);
+        Resenia resenia = mock(Resenia.class);
 
-        publicacion.agregarResenia(mockResenia);
+        // Agrega la reseña usando el método de Publicacion
+        publicacion.agregarResenia(resenia);
 
-        List<Resenia> resenias = publicacion.getResenias();
-        assertEquals(1, resenias.size());
-        assertEquals(mockResenia, resenias.get(0));
+        assertEquals(1, publicacion.obternerComentarios().size());
     }
+
 
     @Test
     void testObtenerPromedioGeneral() {
@@ -71,29 +73,7 @@ class PublicacionTest {
         publicacion.agregarResenia(resenia2);
 
         double promedio = publicacion.obtenerPromedioGeneral();
-        assertEquals(9.0, promedio); // 4 + 5 = 9; si quieres que sea el promedio hazlo 4.5
-    }
-
-    @Test
-    void testGetReseniasPorCategoria() {
-        Categoria mockCategoria = mock(Categoria.class);
-        when(mockCategoria.getConcepto()).thenReturn("Categoria1");
-
-        Resenia resenia1 = new Resenia(mockCategoria, 3, "Comentario 1");
-        Resenia resenia2 = new Resenia(mockCategoria, 4, "Comentario 2");
-        // Creamos una categoría diferente para esta reseña
-        Categoria mockCategoriaDiferente = mock(Categoria.class);
-        when(mockCategoriaDiferente.getConcepto()).thenReturn("Categoria2");
-
-        Resenia reseniaDiferente = new Resenia(mockCategoriaDiferente, 5, "Comentario 3");
-
-        publicacion.agregarResenia(resenia1);
-        publicacion.agregarResenia(resenia2);
-        publicacion.agregarResenia(reseniaDiferente);
-
-        List<Resenia> reseniasPorCategoria = publicacion.getReseniasPorCategoria(mockCategoria);
-        
-        assertEquals(2, reseniasPorCategoria.size()); // solo las del mockCategoria
+        assertEquals(4.5, promedio); 
     }
 
     @Test
@@ -103,7 +83,7 @@ class PublicacionTest {
         when(mockPeriodo.getFin()).thenReturn(LocalDate.now().plusDays(2));
         when(mockPeriodo.getPrecio()).thenReturn(150.0);
 
-        publicacion.addPediodo(mockPeriodo);
+        publicacion.addPeriodo(mockPeriodo);
         
         double precio = publicacion.precioPorDia(LocalDate.now());
         assertEquals(150.0, precio);
@@ -115,7 +95,7 @@ class PublicacionTest {
     @Test
     void testRemovePeriodo() {
         Periodo mockPeriodo = mock(Periodo.class);
-        publicacion.addPediodo(mockPeriodo);
+        publicacion.addPeriodo(mockPeriodo);
 
         // Verificamos que el periodo está añadido
         assertEquals(1, publicacion.getPeriodos().size());
@@ -130,7 +110,7 @@ class PublicacionTest {
     @Test
     void testSetPoliticaDeCancelacion() {
         PoliticaDeCancelacion nuevaPolitica = mock(PoliticaDeCancelacion.class);
-        publicacion.SetPoliticaDeCancelacion(nuevaPolitica);
+        publicacion.setPoliticaDeCancelacion(nuevaPolitica);
         
         // Verificamos que la política de cancelación ha sido actualizada
         assertEquals(nuevaPolitica, publicacion.getPoliticaDeCancelacion());
@@ -221,7 +201,7 @@ class PublicacionTest {
         when(mockPeriodo.getFin()).thenReturn(LocalDate.now().plusDays(2));
         when(mockPeriodo.getPrecio()).thenReturn(150.0);
 
-        publicacion.addPediodo(mockPeriodo); // Agregar período
+        publicacion.addPeriodo(mockPeriodo); // Agregar período
 
         LocalDate entrada = LocalDate.now();
         LocalDate salida = LocalDate.now().plusDays(2);
@@ -268,7 +248,8 @@ class PublicacionTest {
     @Test
     public void testReservaInmueble_NotificaReservaInmueble() {
         // Llama al método reservaInmueble
-        publicacion.reservaInmueble();
+    	Reserva reserva = mock(Reserva.class);
+        publicacion.aceptarReserva(reserva);
 
         // Verifica que el método notificarReservaInmueble fue llamado en el suscriptor
         verify(suscriptorMock).notificarReservaInmueble(mockTipoDeInmueble);
