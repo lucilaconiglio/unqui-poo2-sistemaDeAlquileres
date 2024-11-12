@@ -5,6 +5,7 @@ import java.time.LocalDate;
 
 import politicaCancelacion.PoliticaDeCancelacion;
 import publicacion.Publicacion;
+import rankeable.Rankeable;
 import ranking.Ranking;
 import resenia.Resenia;
 import reserva.Reserva;
@@ -16,7 +17,7 @@ import user.inquilino.Inquilino;
 
 
 
-public interface Propietario {
+public interface Propietario extends Rankeable{
 	
 	public void rankearInquilino(Resenia resenia, Inquilino inquilino);
 	public int getAngiguedad();
@@ -24,7 +25,6 @@ public interface Propietario {
 	public void rechazar(Reserva reserva);
 	public int vecesQueAlquiloInmueble(Publicacion publicacion);
 	public int obtenerTotalAlquileres();
-	public Ranking getRanking();
 	
 	// TODO> PASARLE UNA ISNTANCIA DE PUBLICACION.
 	public void darDeAltaPublicacion(Sitio sitio, LocalDate checkIn, LocalDate checkOut, double precioBase,

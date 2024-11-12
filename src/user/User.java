@@ -20,7 +20,7 @@ import user.inquilino.Inquilino;
 import user.propietario.Propietario;
 
 @Getter
-public class User implements Rankeable, Propietario, Inquilino {
+public class User implements Propietario, Inquilino {
 	private String nombreCompleto;
 	private String mail;
 	private LocalDate fechaRegistro;
@@ -68,16 +68,17 @@ public class User implements Rankeable, Propietario, Inquilino {
 	}
 
 	@Override
+	public Ranking getRanking() {
+		return ranking;
+	}
+	
+	@Override
 	public void rankearInmueble(Resenia resenia, Publicacion publicacion) {
 		if (CategoriasManager.getInstancia().obtenerCategoriasDeInmueble().equals(resenia.getCategoria())) {
 			publicacion.agregarResenia(resenia);
 		}
 	}
 
-	@Override
-	public Ranking getRanking() {
-		return ranking;
-	}
 
 	@Override
 	public void rankearPropietario(Resenia resenia, Propietario propietario) {

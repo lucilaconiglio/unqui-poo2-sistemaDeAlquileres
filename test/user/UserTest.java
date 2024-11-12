@@ -36,7 +36,6 @@ class UserTest {
 	private Ubicacion ubicacionMock;
 	private TipoDeInmueble tipoInmuebleMock;
 	private Publicacion publicacionMock;
-	private Ranking rankingMock;
 	private Resenia reseniaMock;
 	private Categoria categoriaMock;
 	private LocalDate checkIn ;
@@ -44,6 +43,7 @@ class UserTest {
 	private double precioBase;
 	private String superficie;
 	private int capacidad;
+	private Ranking rankingMock;
 	
 	@BeforeEach
 	public void setup() {
@@ -53,10 +53,9 @@ class UserTest {
 	    ubicacionMock = mock(Ubicacion.class);
 	    tipoInmuebleMock = mock(TipoDeInmueble.class);
 	    publicacionMock = mock(Publicacion.class);
-	    rankingMock = mock(Ranking.class);
         reseniaMock = mock(Resenia.class);
         categoriaMock = mock(Categoria.class);
-	    
+        rankingMock = mock(Ranking.class);
 	    
 	//	when(sitioSpy.getUsers()).thenReturn(Arrays.asList(inquilino, propietario ));
 
@@ -70,6 +69,7 @@ class UserTest {
 	    capacidad = 4;       
 
 	}
+	
 	
 	@Test 
 	void inquilinoRankeaPropietarioTest() {

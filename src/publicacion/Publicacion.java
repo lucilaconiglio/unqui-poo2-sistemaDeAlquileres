@@ -108,6 +108,14 @@ public class Publicacion implements Rankeable{
 	
 	
 	// RANKING	
+	
+	@Override
+	public Ranking getRanking() {
+		return ranking;
+		
+	}
+	
+	
 	@Override
 	public void agregarResenia(Resenia res) {
 		ranking.agregarResenia(res);
