@@ -22,7 +22,7 @@ public class Ranking {
 	}
 	
 	public double obtenerPromedioGeneral() {
-		return resenias.stream().mapToDouble(res->res.getPuntaje()).sum();
+	    return resenias.isEmpty() ? 0.0 : resenias.stream().mapToDouble(res -> res.getPuntaje()).sum() / resenias.size();
 	}
 	
 	public double obtenerPromedioPorCategoria(Categoria cat) {
@@ -45,5 +45,4 @@ public class Ranking {
 		return obtenerReseniasPorCategoria(cat).stream().map(resenia -> resenia.getComentario()).toList();
 	}
 	
-
 }
