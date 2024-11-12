@@ -113,17 +113,17 @@ class SitioTest {
     @Test
     void testAgregarCategoriaInmueble() {
         sitio.addCategoriaInmueble(categoria);
-        assertEquals(1, sitio.getCategoriasInmueble().size());
-        assertEquals(categoria, sitio.getCategoriasInmueble().get(0));
+        assertEquals(1, sitio.getCategoriaInmueble().size());
+        assertEquals(categoria, sitio.getCategoriaInmueble().get(0));
     }
 
     @Test
     void testEliminarCategoriaInmueble() {
         sitio.addCategoriaInmueble(categoria);
-        assertEquals(1, sitio.getCategoriasInmueble().size());
+        assertEquals(1, sitio.getCategoriaInmueble().size());
 
         sitio.removeCategoriaInmueble(categoria);
-        assertTrue(sitio.getCategoriasInmueble().isEmpty());
+        assertTrue(sitio.getCategoriaInmueble().isEmpty());
     }
 
 
