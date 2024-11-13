@@ -60,7 +60,7 @@ public class User implements Propietario, Inquilino {
 	}
 
 	@Override
-	public List<String> obetenerComentariosPorCategoria(Categoria cat) {
+	public List<String> obtenerComentariosPorCategoria(Categoria cat) {
 		return ranking.obtenerCometariosPorCategoria(cat);
 	}
 
