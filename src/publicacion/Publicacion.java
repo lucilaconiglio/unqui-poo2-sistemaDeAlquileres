@@ -46,6 +46,7 @@ public class Publicacion implements Rankeable{
 	
 	private List<Reserva> reservas;
     private Queue<Reserva> reservasCondicionales;
+    private int vecesAlquilado;
     
 	public Publicacion(LocalDate checkIn, LocalDate checkOut, double precioBase,
 			PoliticaDeCancelacion politicaDeCancelacion, Propietario propietario, String superficie,int capacidad,Ubicacion ubicacion
@@ -68,6 +69,7 @@ public class Publicacion implements Rankeable{
 		this.ranking = new Ranking();
 		this.reservas = new ArrayList<>();
         this.reservasCondicionales =  new LinkedList<>();
+        this.vecesAlquilado = 0;
 	}
 	
 	public void addPeriodo(Periodo periodo) {
@@ -79,8 +81,10 @@ public class Publicacion implements Rankeable{
 	}
 	
 	public void addFoto(String foto) {
-		// TODO: agregar limite de 5 fotos. devolver exepcion cuando se quiere agregar de mas.
-		fotos.add(foto);
+	    if (fotos.size() >= 5) {
+	        throw new IllegalArgumentException("No se puede agregar más de 5 fotos.");
+	    }
+	    fotos.add(foto);
 	}
 	
 	public void removeFoto(String foto) {
@@ -96,9 +100,9 @@ public class Publicacion implements Rankeable{
 	}
 	
 	public double precioPorDia(LocalDate fecha) {
-		return periodos.stream().filter(periodo -> !fecha.isBefore(periodo.getInicio()) && !fecha.isAfter(periodo.getFin()))
-				.findFirst().map(Periodo::getPrecio).orElse(precioBase); // Si no hay periodo específico, usa el precio
-		// base
+		return periodos.stream().filter(periodo -> !fecha.isBefore(periodo.getInicio()) && 		!fecha.isAfter(periodo.getFin()))
+		.findFirst().map(Periodo::getPrecio).orElse(precioBase); // Si no hay periodo específico, usa el 
+		// precio base
 	}
 	
 	public double precioEntreFechas(LocalDate entrada, LocalDate salida) {
@@ -112,18 +116,9 @@ public class Publicacion implements Rankeable{
 		this.politicaDeCancelacion = politicaDeCancelacion;
 	}
 	
-	public PoliticaDeCancelacion getPoliticaDeCancelacion() {
-		return politicaDeCancelacion;
-	}
-	
 	
 	// RANKING	
 	
-	@Override
-	public Ranking getRanking() {
-		return ranking;
-		
-	}
 	
 	
 	@Override
@@ -174,15 +169,16 @@ public class Publicacion implements Rankeable{
     }
 
     // Método que verifica si hay conflicto, ignorando las reservas canceladas
-    public boolean hayConflicto(Reserva nuevaReserva) {
-        return reservas.stream().anyMatch(reserva -> !(reserva.getEstadoReserva() instanceof EstadoCancelada)
-                && reserva.conflictoCon(nuevaReserva));
+    private boolean hayConflicto(Reserva nuevaReserva) {
+        return reservas.stream().anyMatch(reserva -> reserva.conflictoCon(nuevaReserva));
     }
 	
  // Aceptar una reserva: Cambia su estado a 'aceptada' sin moverla de la lista
     public void aceptarReserva(Reserva reserva) {
         reserva.aceptar(); // Cambiar el estado de la reserva a 'aceptada'
         notificarReservaInmueble();
+        vecesAlquilado=+1;
+        System.out.print(vecesAlquilado);
     }
 
     // Cancelar una reserva: Si está aceptada en reservas, cambia su estado a
@@ -202,7 +198,7 @@ public class Publicacion implements Rankeable{
             Reserva siguienteReserva = iterator.next();
 
             // Verificar que la reserva no esté en estado cancelado
-            if (!(siguienteReserva.getEstadoReserva() instanceof EstadoCancelada)) {
+            if (siguienteReserva.getEstadoReserva().estaActiva()) {
                 reservas.add(siguienteReserva); // Moverla a la lista principal
                 iterator.remove(); // Eliminar de las reservas condicionales
                 return true; // Se movió una reserva condicional
@@ -223,6 +219,10 @@ public class Publicacion implements Rankeable{
     }
 	
 
+    public void realizarCheckOut(Reserva reserva) {
+    	reserva.realizarCheckOut();
+    }
+    
 	public void bajarPrecioInmueble(double precioBase) {
 		this.precioBase -= precioBase;
 		notificarBajaDePrecioInmbueble();

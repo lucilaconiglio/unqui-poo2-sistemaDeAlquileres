@@ -4,6 +4,7 @@ import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -34,10 +35,10 @@ class PublicacionTest {
     private Ranking mockRanking;
     private Reserva reservaMock1;
     private Reserva reservaMock2;
+	private List<Ranking> listRanking;
  
     @BeforeEach
     public void setUp() {
-        // Crea mocks de las clases necesarias
         mockPropietario = mock(User.class);
         mockTipoDeInmueble = mock(TipoDeInmueble.class);
         mockPolitica = mock(PoliticaDeCancelacion.class);
@@ -45,7 +46,6 @@ class PublicacionTest {
         suscriptorMock = mock(EventListener.class);
         mockRanking = mock(Ranking.class);
         
-        // Instancia de Publicacion usando los mocks
         publicacion = new Publicacion(LocalDate.now(), LocalDate.now().plusDays(1), 
                                       100.0, mockPolitica,
                                       mockPropietario, "50m²", 4, mockUbicacion, mockTipoDeInmueble);
@@ -57,6 +57,19 @@ class PublicacionTest {
         when(reservaMock1.getEstadoReserva()).thenReturn(new EstadoPendienteDeAprobacion());
         when(reservaMock2.getEstadoReserva()).thenReturn(new EstadoPendienteDeAprobacion());
     }
+    
+    @Test
+    void testGetRanking() {
+        // Asegúrate de que el ranking devuelto no sea nulo
+        assertNotNull(publicacion.getRanking());
+        
+        List<Ranking> listRanking;
+        listRanking= new ArrayList<>();
+        listRanking.add(publicacion.getRanking());
+
+        assertFalse(listRanking.isEmpty());
+    }
+
 
     @Test
     void testAddResenia() {
@@ -86,19 +99,30 @@ class PublicacionTest {
 
     @Test
     void testPrecioPorDia() {
+        // Configuración de un periodo que cubre el rango de fechas
         Periodo mockPeriodo = mock(Periodo.class);
         when(mockPeriodo.getInicio()).thenReturn(LocalDate.now());
         when(mockPeriodo.getFin()).thenReturn(LocalDate.now().plusDays(2));
         when(mockPeriodo.getPrecio()).thenReturn(150.0);
 
         publicacion.addPeriodo(mockPeriodo);
-        
+
+        // Test cuando la fecha está en el rango del periodo
         double precio = publicacion.precioPorDia(LocalDate.now());
         assertEquals(150.0, precio);
-        
+
+        // Test cuando la fecha está fuera del rango del periodo
         precio = publicacion.precioPorDia(LocalDate.now().plusDays(3)); // Debería ser el precio base
         assertEquals(100.0, precio); // Precio Base
     }
+
+    @Test
+    void testPrecioPorDiaSinPeriodos() {
+        // Prueba cuando no hay periodos agregados a la publicación
+        double precio = publicacion.precioPorDia(LocalDate.now());
+        assertEquals(100.0, precio); // Cuando no hay periodos, debe devolver el precioBase
+    }
+
 
     @Test
     void testRemovePeriodo() {
@@ -131,6 +155,88 @@ class PublicacionTest {
         
         // Verificamos que la foto se ha añadido
         assertTrue(publicacion.getFotos().contains(foto)); // Asumiendo que hay un método getFotos()
+    }
+    
+    @Test
+    void testAddMasCincoFotos() {
+        // Agregar hasta 5 fotos
+        publicacion.addFoto("foto1.jpg");
+        publicacion.addFoto("foto2.jpg");
+        publicacion.addFoto("foto3.jpg");
+        publicacion.addFoto("foto4.jpg");
+        publicacion.addFoto("foto5.jpg");
+
+        // Verificar que las 5 fotos han sido agregadas correctamente
+        assertTrue(publicacion.getFotos().contains("foto1.jpg"));
+        assertTrue(publicacion.getFotos().contains("foto2.jpg"));
+        assertTrue(publicacion.getFotos().contains("foto3.jpg"));
+        assertTrue(publicacion.getFotos().contains("foto4.jpg"));
+        assertTrue(publicacion.getFotos().contains("foto5.jpg"));
+
+        // Llamar a addFoto con una sexta foto y verificar la excepción
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            publicacion.addFoto("foto6.jpg");
+        });
+
+        // Verificar el mensaje de la excepción
+        assertEquals("No se puede agregar más de 5 fotos.", exception.getMessage());
+    }
+    
+    @Test
+    void testObtenerComentariosPorCategoria() {
+        // Crear una categoría de prueba
+        Categoria mockCategoria1 = mock(Categoria.class);
+        when(mockCategoria1.getConcepto()).thenReturn("Categoria1");
+        Categoria mockCategoria2= mock(Categoria.class);
+        when(mockCategoria2.getConcepto()).thenReturn("Categoria2"); 
+
+        // Crear reseñas y agregarlas a la publicación
+        Resenia resenia1 = new Resenia(mockCategoria1, 4, "Comentario de prueba 1 con Categoria1.");
+        Resenia resenia2 = new Resenia(mockCategoria1, 5, "Comentario de prueba 2 con Categoria1.");
+        Resenia reseniaDiferente = new Resenia(mockCategoria2, 3, "Comentario de otra categoría.");
+
+        // Agregamos las reseñas a la publicación
+        publicacion.agregarResenia(resenia1);
+        publicacion.agregarResenia(resenia2);
+        publicacion.agregarResenia(reseniaDiferente);
+
+        // Verificar que los comentarios de la categoría correcta son devueltos
+        List<String> comentarios = publicacion.obtenerComentariosPorCategoria(mockCategoria1);
+        
+        // Aseguramos que devuelva los comentarios esperados
+        assertEquals(2, comentarios.size());
+        assertTrue(comentarios.contains("Comentario de prueba 1 con Categoria1."));
+        assertTrue(comentarios.contains("Comentario de prueba 2 con Categoria1."));
+    }
+    
+    @Test
+    void testAddSuscriptor() {
+        // Crear un mock de EventListener
+        EventListener mockSuscriptor = mock(EventListener.class);
+
+        // Agregar el suscriptor
+        publicacion.addSuscriptor(mockSuscriptor);
+
+        // Verificar que el suscriptor ha sido agregado
+        assertTrue(publicacion.getSuscriptores().contains(mockSuscriptor));
+    }
+    
+    @Test
+    void testRemoveSuscriptor() {
+        // Crear un mock de EventListener
+        EventListener mockSuscriptor = mock(EventListener.class);
+
+        // Agregar el suscriptor primero
+        publicacion.addSuscriptor(mockSuscriptor);
+
+        // Asegurarnos de que el suscriptor está en la lista
+        assertTrue(publicacion.getSuscriptores().contains(mockSuscriptor));
+
+        // Ahora eliminar el suscriptor
+        publicacion.removeSuscriptor(mockSuscriptor);
+
+        // Verificar que el suscriptor ha sido eliminado
+        assertFalse(publicacion.getSuscriptores().contains(mockSuscriptor));
     }
 
     @Test
@@ -277,6 +383,7 @@ class PublicacionTest {
         assertFalse(publicacion.getReservasCondicionales().contains(reservaMock1));
     }
 
+    
     @Test
     void testRecibirReservaConConflicto() {
         // Simula conflicto entre reservaMock1 y reservaMock2

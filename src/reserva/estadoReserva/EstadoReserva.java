@@ -9,4 +9,13 @@ public interface EstadoReserva {
 	void rechazar(Reserva reserva);
 
 	void cancelar(Reserva reserva);
+	
+	void realizarCheckOut(Reserva reserva);
+	
+	Boolean estaActiva();
+	
+	Boolean estaOcupada();
+	
+	Boolean finalizadaExitosamente();
+	
 }
