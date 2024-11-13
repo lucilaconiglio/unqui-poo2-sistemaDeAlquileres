@@ -16,7 +16,6 @@ import reserva.Reserva;
 import servicio.Servicio;
 import tipoDeInmueble.TipoDeInmueble;
 import ubicacion.Ubicacion;
-import user.User;
 import user.propietario.Propietario;
 import observer.EventListener;
 
@@ -32,7 +31,6 @@ public class Publicacion implements Rankeable{
 	private String superficie;
 	private int capacidad;
 	private List<String> fotos;
-	private List<Resenia> resenias;
 	private Ubicacion ubicacion;
 	private List<Periodo> periodos;
 	private List<EventListener> suscriptores;
@@ -53,7 +51,6 @@ public class Publicacion implements Rankeable{
 		this.superficie = superficie;
 		this.capacidad = capacidad;
 		this.fotos = new ArrayList<>();
-		this.resenias = new ArrayList<>();
 		this.ubicacion = ubicacion;
 		this.periodos = new ArrayList<>();
 		this.suscriptores = new ArrayList<>();
@@ -63,7 +60,7 @@ public class Publicacion implements Rankeable{
 		this.ranking = new Ranking();
 	}
 	
-	public void addPediodo(Periodo periodo) {
+	public void addPeriodo(Periodo periodo) {
 		this.periodos.add(periodo);
 	}
 	
@@ -71,11 +68,8 @@ public class Publicacion implements Rankeable{
 		periodos.remove(periodo);
 	}
 	
-	public void SetPoliticaDeCancelacion(PoliticaDeCancelacion politica) {
-		this.politicaDeCancelacion=politica;
-	}
-	
 	public void addFoto(String foto) {
+		// TODO: agregar limite de 5 fotos. devolver exepcion cuando se quiere agregar de mas.
 		fotos.add(foto);
 	}
 	
@@ -91,65 +85,37 @@ public class Publicacion implements Rankeable{
 		servicios.remove(servicio);
 	}
 	
-	public List<Resenia> getReseniasPorCategoria(Categoria categoria){
-		return 	resenias.stream().filter(res-> res.getCategoria().getConcepto().equals(categoria.getConcepto())).toList();
-	}
-
 	public double precioPorDia(LocalDate fecha) {
 		return periodos.stream().filter(periodo -> !fecha.isBefore(periodo.getInicio()) && !fecha.isAfter(periodo.getFin()))
 				.findFirst().map(Periodo::getPrecio).orElse(precioBase); // Si no hay periodo específico, usa el precio
-																			// base
+		// base
 	}
-
+	
 	public double precioEntreFechas(LocalDate entrada, LocalDate salida) {
 		return entrada.datesUntil(salida.plusDays(1)) // Genera los días entre entrada y salida, inclusive
 				.mapToDouble(f -> this.precioPorDia(f)) // Calcula el precio para cada día
 				.sum(); // Suma todos los precios diarios
 	}
-
 	
-	public void addSuscriptor(EventListener suscriptor) {
-		suscriptores.add(suscriptor);
-	}
-
-	public void removeSuscriptor(EventListener suscriptor) {
-		suscriptores.remove(suscriptor);
+	// STRATEGY
+	public void setPoliticaDeCancelacion(PoliticaDeCancelacion politicaDeCancelacion) {
+		this.politicaDeCancelacion = politicaDeCancelacion;
 	}
 	
-	public void cancelarReserva(Reserva reserva) {
-		//reserva.cancelar();
-		notificarCancelacionInmueble();
+	public PoliticaDeCancelacion getPoliticaDeCancelacion() {
+		return politicaDeCancelacion;
 	}
 	
-
-	public void reservaInmueble() {
-		// new Reserva()
-		notificarReservaInmueble();
+	
+	// RANKING	
+	
+	@Override
+	public Ranking getRanking() {
+		return ranking;
+		
 	}
 	
-
-	public void bajarPrecioInmueble(double precioBase) {
-		this.precioBase -= precioBase;
-		notificarBajaDePrecioInmbueble();
-	}
-
-	private void notificarCancelacionInmueble() {
-		suscriptores.stream()
-					.forEach(s -> s.notificarCancelacionInmueble(tipoDeInmueble));
-	}
-
-	private void notificarBajaDePrecioInmbueble() {
-		suscriptores.stream()
-					.forEach(s -> s.notificarBajaDePrecioInmbueble(tipoDeInmueble, precioBase));
-	}
-
-	private void notificarReservaInmueble() {
-		suscriptores.stream()
-					.forEach(s -> s.notificarReservaInmueble(tipoDeInmueble));
-	}
-
 	
-	// Ranking
 	@Override
 	public void agregarResenia(Resenia res) {
 		ranking.agregarResenia(res);
@@ -175,6 +141,55 @@ public class Publicacion implements Rankeable{
 	public List<String> obetenerComentariosPorCategoria(Categoria cat) {
 		return ranking.obtenerCometariosPorCategoria(cat);
 	}
+
+	
+	// OBSERVER
+	// RESERVA
+	
+	public void addSuscriptor(EventListener suscriptor) {
+		suscriptores.add(suscriptor);
+	}
+
+	public void removeSuscriptor(EventListener suscriptor) {
+		suscriptores.remove(suscriptor);
+	}
+	
+	public void cancelarReserva(Reserva reserva) {
+		reserva.cancelar();
+		notificarCancelacionInmueble();
+	}
+	
+
+	public void aceptarReserva(Reserva reserva) {
+		reserva.aceptar();
+		notificarReservaInmueble();
+	}
+	
+	public void rechazarReserva(Reserva reserva) {
+		reserva.rechazar();
+	}
+	
+
+	public void bajarPrecioInmueble(double precioBase) {
+		this.precioBase -= precioBase;
+		notificarBajaDePrecioInmbueble();
+	}
+
+	private void notificarCancelacionInmueble() {
+		suscriptores.stream()
+					.forEach(s -> s.notificarCancelacionInmueble(tipoDeInmueble));
+	}
+
+	private void notificarBajaDePrecioInmbueble() {
+		suscriptores.stream()
+					.forEach(s -> s.notificarBajaDePrecioInmbueble(tipoDeInmueble, precioBase));
+	}
+
+	private void notificarReservaInmueble() {
+		suscriptores.stream()
+					.forEach(s -> s.notificarReservaInmueble(tipoDeInmueble));
+	}
+
 	
 	
 }
