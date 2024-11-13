@@ -29,11 +29,15 @@ public class Reserva {
 	}
 
 	public void rechazar() {
-		estadoReserva.cancear(this);
+		estadoReserva.rechazar(this);
 	}
 
 	public void cancelar() {
-		estadoReserva.cancear(this);
+		estadoReserva.cancelar(this);
 	}
+	
+	public boolean conflictoCon(Reserva otraReserva) {
+        return (fechaInicio.isBefore(otraReserva.fechaFin) && fechaFin.isAfter(otraReserva.fechaInicio));
+    }
 
 }

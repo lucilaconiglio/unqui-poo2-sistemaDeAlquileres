@@ -8,5 +8,5 @@ public interface EstadoReserva {
 
 	void rechazar(Reserva reserva);
 
-	void cancear(Reserva reserva);
+	void cancelar(Reserva reserva);
 }

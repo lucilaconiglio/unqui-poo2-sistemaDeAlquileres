@@ -119,27 +119,27 @@ public class User implements Propietario, Inquilino {
 	}
 	// RESERVA
 
-	@Override
-	public void reservar(Publicacion publicacion, LocalDate fechaEntrada, LocalDate fechaSalida) {
-		// TODO Auto-generated method stub
+	 @Override
+	    public void reservar(Publicacion publicacion, LocalDate fechaEntrada, LocalDate fechaSalida) {
+	        Reserva reserva = new Reserva(fechaSalida, fechaSalida, this);
+	        publicacion.recibirReserva(reserva);
+	    }
 
-	}
+	    @Override
+	    public void cancelar(Publicacion publicacion, Reserva reserva) {
+	        publicacion.cancelarReserva(reserva);
 
-	@Override
-	public void cancelar(Reserva reserva) {
-		// TODO Auto-generated method stub
+	    }
 
-	}
+	    @Override
+	    public void aceptar(Publicacion publicacion, Reserva reserva) {
+	        publicacion.aceptarReserva(reserva);
+	    }
 
-	@Override
-	public void aceptar(Reserva reserva) {
-		// TODO Auto-generated method stub
-	}
-
-	@Override
-	public void rechazar(Reserva reserva) {
-		// TODO Auto-generated method stub
-	}
+	    @Override
+	    public void rechazar(Publicacion publicacion, Reserva reserva) {
+	        publicacion.rechazarReserva(reserva);
+	    }
 
 	@Override
 	public List<Reserva> getReservasFuturas() {
