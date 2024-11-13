@@ -1,9 +1,13 @@
 package user;
 
+import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDate;
@@ -13,6 +17,7 @@ import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Spy;
 
 import categoria.Categoria;
@@ -21,6 +26,7 @@ import politicaCancelacion.PoliticaDeCancelacion;
 import publicacion.Publicacion;
 import ranking.Ranking;
 import resenia.Resenia;
+import reserva.Reserva;
 import sitio.Sitio;
 import tipoDeInmueble.TipoDeInmueble;
 import ubicacion.Ubicacion;
@@ -72,32 +78,6 @@ class UserTest {
 	    capacidad = 4;       
 
 	}
-	
-	/*@Test //TODO: Refactor
-	void inquilinoRankeaPropietarioTest() {
-	    // Crear el mock del propietario y de la clase Ranking
-	    Propietario propietarioMock = mock(Propietario.class);
-	    Ranking rankingMock = mock(Ranking.class);
-	    List<Resenia> resenias = new ArrayList<>();
-	    
-	    // Configurar el mock del propietario para devolver el rankingMock
-	    when(propietarioMock.getRanking()).thenReturn(rankingMock);
-	    
-	    // Configurar el comportamiento de getResenias en el rankingMock
-	    when(rankingMock.getResenias()).thenReturn(resenias);
-	    
-	    // Configurar el comportamiento de agregarResenia en el rankingMock
-	    doAnswer(invocation -> {
-	        resenias.add(reseniaMock); // Agregar la reseña a la lista de resenias
-	        return null;
-	    }).when(rankingMock).agregarResenia(reseniaMock);
-
-	    // Ejecutar el método para rankear al propietario
-	    inquilino.rankearPropietario(reseniaMock, propietarioMock);
-
-	    // Verificar que la reseña fue agregada a la lista de reseñas del propietario
-	    assertTrue(rankingMock.getResenias().contains(reseniaMock));
-	}*/
 	@Test
 	void elUsuarioSeDaDeAltaEnElSistema() {
 		sitioSpy.addUsuario( inquilino );
@@ -142,7 +122,7 @@ class UserTest {
     	
     	when(resenia1.getComentario()).thenReturn(comentario);
     	when(propietarioMock.obternerComentarios()).thenReturn(comentarios );
-    	//inquilino.rankearUsuario(propietario, resenia1);
+
         List<String> resultado = propietarioMock.obternerComentarios();
 
         assertEquals(comentarios , resultado);
@@ -199,6 +179,238 @@ class UserTest {
         verify(publicacionMock).agregarResenia(reseniaMock);
     }
   */
-  //InquilinoRankeaPropietarioDeCategoriaNoExistente
-  //UsuarioObtiene
+
+    /*@Test
+    void inquilinoRankeaPropietario() {
+
+        Inquilino inquilinoMock = mock(Inquilino.class);
+        Propietario propietarioMock = mock(Propietario.class);
+        Ranking rankingMock = mock(Ranking.class);
+        Resenia reseniaMock = mock(Resenia.class);
+        Categoria categoriaMock = mock(Categoria.class);
+    	when(categoriasManagerMock.getInstancia())
+        when(categoriaMock.getConcepto()).thenReturn("Lindo");   
+        when(categoriasManagerMock.obtenerCategoriasDePropietario()).thenReturn(Arrays.asList(categoriaMock));
+        when(propietarioMock.getRanking()).thenReturn(rankingMock);
+        when(reseniaMock.getCategoria()).thenReturn(categoriaMock);
+       
+        
+        
+        inquilino.rankearPropietario(reseniaMock, propietario);
+        System.out.println("Ver resenias del propietario: "+ propietario.getRanking().getResenias());
+       // verify(propietario).getRanking().agregarResenia(reseniaMock);
+
+    }
+    */
+    
+    @Test
+    void inquilinoRankeaPropietario() {
+        // Instancia real de CategoriasManager
+        CategoriasManager categoriasManager = CategoriasManager.getInstancia();
+
+        // Configuración de categorías para el test
+        Categoria categoriaMock = mock(Categoria.class);
+        when(categoriaMock.getConcepto()).thenReturn("Lindo");
+        
+        // Agrega la categoría al CategoriasManager
+        categoriasManager.agregarCategoria(categoriaMock, Propietario.class);
+
+        // Mock de otras dependencias
+     // Usa instancia real si es posible
+        Propietario propietarioMock = mock(Propietario.class);
+        Ranking rankingMock = mock(Ranking.class);
+        Resenia reseniaMock = mock(Resenia.class);
+        
+        // Configuración de mocks adicionales
+        when(propietarioMock.getRanking()).thenReturn(rankingMock);
+        rankingMock.agregarResenia(reseniaMock);
+        when(reseniaMock.getCategoria()).thenReturn(categoriaMock);
+
+        // Acción
+        inquilino.rankearPropietario(reseniaMock, propietarioMock);
+
+        // Verificación
+        verify(rankingMock).agregarResenia(reseniaMock);
+    }
+
+    
+    
+ 
+    @Test
+    void inquilinoNoRankeaPropietarioCuandoNoExiste() {
+
+        Inquilino inquilinoMock = mock(Inquilino.class);
+        Resenia reseniaMock = mock(Resenia.class);
+        Categoria categoriaMock = mock(Categoria.class);
+
+    
+        when(reseniaMock.getCategoria()).thenReturn(categoriaMock);
+        when(categoriasManagerMock.obtenerCategoriasDePropietario()).thenReturn(Arrays.asList(categoriaMock));
+
+      
+        inquilinoMock.rankearPropietario(reseniaMock, null);
+
+     
+        verifyNoInteractions(categoriasManagerMock);
+    }
+    
+    
+    @Test
+    void propietarioRankeaInquilino() {
+        // Instancia real de CategoriasManager
+        CategoriasManager categoriasManager = CategoriasManager.getInstancia();
+
+        // Configuración de categorías para el test
+        Categoria categoriaMock = mock(Categoria.class);
+        when(categoriaMock.getConcepto()).thenReturn("Amigable");
+
+        // Agrega la categoría al CategoriasManager para Inquilino
+        categoriasManager.agregarCategoria(categoriaMock, Inquilino.class);
+
+        // Instancia real de Propietario si es posible, o mantenemos el mock
+   // Usa la instancia real si aplica
+        Inquilino inquilinoMock = mock(Inquilino.class);
+        Ranking rankingMock = mock(Ranking.class);
+        Resenia reseniaMock = mock(Resenia.class);
+
+        // Configuración de mocks adicionales
+        when(inquilinoMock.getRanking()).thenReturn(rankingMock);
+        rankingMock.agregarResenia(reseniaMock);
+        when(reseniaMock.getCategoria()).thenReturn(categoriaMock);
+
+        // Acción: Propietario rankea a Inquilino
+        propietario.rankearInquilino(reseniaMock, inquilinoMock);
+
+        // Verificación
+        verify(rankingMock).agregarResenia(reseniaMock);
+    }
+
+
+    @Test
+    void propietarioRankeaInquilinoNoExiste() {
+
+        Propietario propietarioMock = mock(Propietario.class);
+        Resenia reseniaMock = mock(Resenia.class);
+        Categoria categoriaMock = mock(Categoria.class);
+
+        when(reseniaMock.getCategoria()).thenReturn(categoriaMock);
+        when(categoriasManagerMock.obtenerCategoriasDeInquilino()).thenReturn(Arrays.asList(categoriaMock));
+
+
+        propietarioMock.rankearInquilino(reseniaMock, null);
+
+        verifyNoInteractions(categoriasManagerMock);
+    }
+
+    
+    @Test
+    void inquilinoRankeaPropietarioDeCategoriaNoExistente() {
+        Inquilino inquilinoMock = mock(Inquilino.class);
+        Propietario propietarioMock = mock(Propietario.class);
+        Ranking rankingMock = mock(Ranking.class); 
+        Resenia reseniaMock = mock(Resenia.class);
+        Categoria categoriaMock = mock(Categoria.class);
+        Categoria categoriaNoExistenteMock = mock(Categoria.class);
+
+        when(propietarioMock.getRanking()).thenReturn(rankingMock);
+        when(reseniaMock.getCategoria()).thenReturn(categoriaNoExistenteMock);
+        when(categoriasManagerMock.obtenerCategoriasDePropietario()).thenReturn(Arrays.asList(categoriaMock));
+
+        inquilinoMock.rankearPropietario(reseniaMock, propietarioMock);
+
+        verify(rankingMock, never()).agregarResenia(reseniaMock);
+    }
+
+    
+    @Test
+    void inquilinoReservaPublicacion() {
+        Inquilino inquilino = new User(superficie, superficie, capacidad, sitioSpy); 
+        Publicacion publicacionMock = mock(Publicacion.class); 
+        LocalDate fechaEntrada = LocalDate.of(2024, 12, 1);
+        LocalDate fechaSalida = LocalDate.of(2024, 12, 10);
+
+        inquilino.reservar(publicacionMock, fechaEntrada, fechaSalida);
+        ArgumentCaptor<Reserva> reservaCaptor = ArgumentCaptor.forClass(Reserva.class);
+
+        verify(publicacionMock).recibirReserva(reservaCaptor.capture());
+
+        Reserva reservaCapturada = reservaCaptor.getValue();
+        System.out.println("Reserva capturada: " + reservaCapturada);
+        assertEquals(fechaEntrada, reservaCapturada.getFechaInicio());
+        assertEquals(fechaSalida, reservaCapturada.getFechaFin());
+        assertEquals(inquilino, reservaCapturada.getInquilino());
+    }
+
+    @Test
+    void inquilinoCancelaReservaPublicacion() {
+        Inquilino inquilino = new User(superficie, superficie, capacidad, sitioSpy); 
+        Publicacion publicacionMock = mock(Publicacion.class); 
+        LocalDate fechaEntrada = LocalDate.of(2024, 12, 1);
+        LocalDate fechaSalida = LocalDate.of(2024, 12, 10);
+
+        Reserva reserva = new Reserva(fechaEntrada, fechaSalida, inquilino);
+        inquilino.reservar(publicacionMock, fechaEntrada, fechaSalida);
+        inquilino.cancelar(publicacionMock, reserva);
+
+
+        ArgumentCaptor<Reserva> reservaCaptor = ArgumentCaptor.forClass(Reserva.class);
+
+        verify(publicacionMock).cancelarReserva(reservaCaptor.capture());
+
+        Reserva reservaCancelada = reservaCaptor.getValue();
+        System.out.println("Reserva cancelada: " + reservaCancelada);
+        assertEquals(fechaEntrada, reservaCancelada.getFechaInicio());
+        assertEquals(fechaSalida, reservaCancelada.getFechaFin());
+        assertEquals(inquilino, reservaCancelada.getInquilino());
+    }
+
+    @Test
+    void propietarioAceptaReservaPublicacion() {
+        Propietario propietario = new User(superficie, superficie, capacidad, sitioSpy);
+        Inquilino inquilino = new User(superficie, superficie, capacidad, sitioSpy);
+        Publicacion publicacionMock = mock(Publicacion.class); 
+        LocalDate fechaEntrada = LocalDate.of(2024, 12, 1);
+        LocalDate fechaSalida = LocalDate.of(2024, 12, 10);
+
+        Reserva reserva = new Reserva(fechaEntrada, fechaSalida, inquilino);
+        
+        propietario.aceptar(publicacionMock, reserva); 
+        ArgumentCaptor<Reserva> reservaCaptor = ArgumentCaptor.forClass(Reserva.class);
+
+        verify(publicacionMock).aceptarReserva(reservaCaptor.capture());
+
+        Reserva reservaAceptada = reservaCaptor.getValue();
+        System.out.println("Reserva aceptada: " + reservaAceptada);
+        assertEquals(fechaEntrada, reservaAceptada.getFechaInicio());
+        assertEquals(fechaSalida, reservaAceptada.getFechaFin());
+
+    }
+
+    @Test
+    void propietarioRechazaReservaPublicacion() {
+        Propietario propietario = new User(superficie, superficie, capacidad, sitioSpy); 
+        Inquilino inquilino = new User(superficie, superficie, capacidad, sitioSpy);
+        Publicacion publicacionMock = mock(Publicacion.class); 
+        LocalDate fechaEntrada = LocalDate.of(2024, 12, 1);
+        LocalDate fechaSalida = LocalDate.of(2024, 12, 10);
+
+        Reserva reserva = new Reserva(fechaEntrada, fechaSalida, inquilino);
+
+        propietario.rechazar(publicacionMock, reserva);
+
+        ArgumentCaptor<Reserva> reservaCaptor = ArgumentCaptor.forClass(Reserva.class);
+   
+        verify(publicacionMock).rechazarReserva(reservaCaptor.capture());
+
+        Reserva reservaRechazada = reservaCaptor.getValue();
+        System.out.println("Reserva rechazada: " + reservaRechazada);
+        assertEquals(fechaEntrada, reservaRechazada.getFechaInicio());
+        assertEquals(fechaSalida, reservaRechazada.getFechaFin());
+
+    }
+
+    //Veces que alquilo unInmueble-- No testear
+    //oberterTtoalAlquileres --NoTestear
+    //obtenerPromedioGeniarl -- No Testar
+    //getDeReservasFuturas ---No Testar
 }
