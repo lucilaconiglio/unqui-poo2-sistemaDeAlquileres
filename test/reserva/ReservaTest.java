@@ -37,7 +37,7 @@ public class ReservaTest {
 	private LocalDate fechaInicio;
 	private LocalDate fechaFin;
 
-	@BeforeEach
+	@BeforeEach 
 	void setUp() {
 		
 		inquilino = mock(Inquilino.class);
