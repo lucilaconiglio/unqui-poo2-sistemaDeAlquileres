@@ -1,6 +1,8 @@
 package sitio;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -9,10 +11,13 @@ import categoriasManager.CategoriasManager;
 import lombok.Getter;
 import publicacion.Publicacion;
 import rankeable.Rankeable;
+import reserva.Reserva;
+import reserva.estadoReserva.EstadoConsolidada;
 import search.Search;
 import servicio.Servicio;
 import tipoDeInmueble.TipoDeInmueble;
 import user.User;
+import user.inquilino.Inquilino;
 @Getter 
 public class Sitio {
 
@@ -28,6 +33,14 @@ public class Sitio {
 		this.users = new ArrayList<>();
 	}
 
+	public void addUsuario(User user) {
+		users.add(user);
+	}
+	
+	public void removeUsuario(User user) {
+		users.remove(user);
+	}
+	
 
 	public List<Publicacion> buscarPublicaciones(Search search) {
 		// Se filtran las publicaciones según los criterios de búsqueda.
@@ -42,6 +55,8 @@ public class Sitio {
 	public void removePublicacion(Publicacion publicacion) {
 		publicaciones.remove(publicacion);
 	}
+	
+	// ADMINISTRACION DEL PUBLICO
 
 	public void addServicio(Servicio servicio) {
 		this.servicios.add(servicio);
@@ -59,22 +74,40 @@ public class Sitio {
 		tiposDeInmueble.remove(_tiposDeInmueble);
 	}
 
+	
+    // Método para obtener el top-ten de inquilinos que más han alquilado en el sitio
+    public List<Inquilino> topDiezInquilinos() {
+        return publicaciones.stream()
+                .flatMap(publicacion -> publicacion.getReservas().stream()) // Convierte cada lista de reservas en un stream
+                .filter(reserva -> reserva.getEstadoReserva() instanceof EstadoConsolidada) // Filtra las reservas concretadas
+                .collect(Collectors.groupingBy(Reserva::getInquilino, Collectors.counting())) // Agrupa y cuenta por inquilino
+                .entrySet().stream()
+                .sorted(Map.Entry.<Inquilino, Long>comparingByValue().reversed()) // Ordena por cantidad en orden descendente
+                .limit(10) // Toma los primeros diez
+                .map(Map.Entry::getKey) // Extrae los inquilinos
+                .collect(Collectors.toList()); // Devuelve la lista de los top 10
+    }
+    
+    // Método para obtener todos los inmuebles libres (sin reservas activas o concretadas)
+    public List<Publicacion> obtenerInmueblesLibres() {
+        return publicaciones.stream()
+                .filter(publicacion -> publicacion.getReservas().stream()
+                        .noneMatch(reserva -> reserva.getEstadoReserva() instanceof EstadoConsolidada)
+            			)
+                .collect(Collectors.toList());
+    }
 
-	public List<User> topTenInquilinos() {
-		return null;
-	}// implementar y revisar tipado
+    // Método para calcular la tasa de ocupación del sitio (porcentaje de inmuebles alquilados)
+    public double tasaDeOcupacion() {
+        long inmueblesAlquilados = publicaciones.stream()
+                .filter(publicacion -> publicacion.getReservas().stream()
+                        .anyMatch(reserva -> reserva.getEstadoReserva() instanceof EstadoConsolidada))
+                .count();
 
+        long totalInmuebles = publicaciones.size();
 
-	public double tasaOcupacion() {
-		return 0.0;
-	} // implementar y revisar tipado
-
-	public void addUsuario(User user) {
-		users.add(user);
-	}
-
-	public void removeUsuario(User user) {
-		users.remove(user);
-	}
+        return totalInmuebles > 0 ? (double) inmueblesAlquilados / totalInmuebles * 100 : 0;
+    }
+    
 
 }
