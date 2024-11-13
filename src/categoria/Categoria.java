@@ -8,7 +8,7 @@ public class Categoria {
 	}
 	
 	public String getConcepto() {
-		return this.concepto;
+		return concepto;
 	}
 
 }

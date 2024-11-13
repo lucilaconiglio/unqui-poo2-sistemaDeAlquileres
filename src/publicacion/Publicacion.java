@@ -46,6 +46,7 @@ public class Publicacion implements Rankeable{
 	
 	private List<Reserva> reservas;
     private Queue<Reserva> reservasCondicionales;
+    private int vecesAlquilado;
     
 	public Publicacion(LocalDate checkIn, LocalDate checkOut, double precioBase,
 			PoliticaDeCancelacion politicaDeCancelacion, Propietario propietario, String superficie,int capacidad,Ubicacion ubicacion
@@ -68,6 +69,7 @@ public class Publicacion implements Rankeable{
 		this.ranking = new Ranking();
 		this.reservas = new ArrayList<>();
         this.reservasCondicionales =  new LinkedList<>();
+        this.vecesAlquilado = 0;
 	}
 	
 	public void addPeriodo(Periodo periodo) {
@@ -79,8 +81,10 @@ public class Publicacion implements Rankeable{
 	}
 	
 	public void addFoto(String foto) {
-		// TODO: agregar limite de 5 fotos. devolver exepcion cuando se quiere agregar de mas.
-		fotos.add(foto);
+	    if (fotos.size() >= 5) {
+	        throw new IllegalArgumentException("No se puede agregar más de 5 fotos.");
+	    }
+	    fotos.add(foto);
 	}
 	
 	public void removeFoto(String foto) {
@@ -183,6 +187,7 @@ public class Publicacion implements Rankeable{
     public void aceptarReserva(Reserva reserva) {
         reserva.aceptar(); // Cambiar el estado de la reserva a 'aceptada'
         notificarReservaInmueble();
+        vecesAlquilado=+1;
     }
 
     // Cancelar una reserva: Si está aceptada en reservas, cambia su estado a
