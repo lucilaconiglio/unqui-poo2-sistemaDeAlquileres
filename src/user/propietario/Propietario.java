@@ -21,8 +21,8 @@ public interface Propietario extends Rankeable{
 	
 	public void rankearInquilino(Resenia resenia, Inquilino inquilino);
 	public int getAngiguedad();
-	public void aceptar(Reserva reserva);
-	public void rechazar(Reserva reserva);
+	public void aceptar(Publicacion publicacion, Reserva reserva);
+    public void rechazar(Publicacion publicacion, Reserva reserva);
 	public int vecesQueAlquiloInmueble(Publicacion publicacion);
 	public int obtenerTotalAlquileres();
 	
