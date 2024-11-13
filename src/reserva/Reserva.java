@@ -25,6 +25,7 @@ public class Reserva {
 	}
 
 	public void aceptar() {
+		System.out.print("Inside aceptar");
 		estadoReserva.aceptar(this);
 	}
 

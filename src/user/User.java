@@ -133,6 +133,7 @@ public class User implements Propietario, Inquilino {
 
 	    @Override
 	    public void aceptar(Publicacion publicacion, Reserva reserva) {
+	    	System.out.print("Inside aceptar resrva");
 	        publicacion.aceptarReserva(reserva);
 	    }
 
