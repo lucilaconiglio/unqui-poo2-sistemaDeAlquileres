@@ -141,9 +141,13 @@ class SitioTest {
         // Ejecuta el método para obtener inmuebles libres
         List<Publicacion> inmueblesLibres = sitio.obtenerInmueblesLibres();
 
-        // Verifica que solo publicacionMock2 esté libre (sin reservas activas o consolidadas)
-        assertEquals(2, inmueblesLibres.size());
+        // Verifica publicacionMock1 esté libre (esta en estade pendiente de aprobacion, por ende, desocupada)
+        assertTrue(inmueblesLibres.contains(publicacionMock1));
+        
+        // Verifica publicacionMock2 esté libre 
         assertTrue(inmueblesLibres.contains(publicacionMock2));
+        
+        assertEquals(2, inmueblesLibres.size());
     }
     
     @Test
