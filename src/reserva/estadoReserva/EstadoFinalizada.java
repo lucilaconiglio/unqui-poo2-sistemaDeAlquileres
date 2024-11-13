@@ -2,33 +2,31 @@ package reserva.estadoReserva;
 
 import reserva.Reserva;
 
-public class EstadoPendienteDeAprobacion implements EstadoReserva{
+public class EstadoFinalizada implements EstadoReserva {
 
 	@Override
 	public void aceptar(Reserva reserva) {
-		reserva.setEstadoReserva(new EstadoConsolidada());
+		// no hace nada
 	}
 
 	@Override
 	public void rechazar(Reserva reserva) {
-		reserva.setEstadoReserva(new EstadoCancelada());
-		
+		// no hace nada		
 	}
 
 	@Override
 	public void cancelar(Reserva reserva) {
-		reserva.setEstadoReserva(new EstadoCancelada());
-	}
-
-	@Override
-	public Boolean estaActiva() {
-		return true;
+		// no hace nada		
 	}
 
 	@Override
 	public void realizarCheckOut(Reserva reserva) {
-		// TODO Auto-generated method stub
-		
+		// no hace nada		
+	}
+
+	@Override
+	public Boolean estaActiva() {
+		return false;
 	}
 
 	@Override
@@ -40,5 +38,5 @@ public class EstadoPendienteDeAprobacion implements EstadoReserva{
 	public Boolean estaOcupada() {
 		return false;
 	}
-	
+
 }

@@ -19,4 +19,25 @@ public class EstadoConsolidada implements EstadoReserva{
 		reserva.setEstadoReserva(new EstadoCancelada());
 	}
 
+	@Override
+	public Boolean estaActiva() {
+		return true;
+	}
+
+	@Override
+	public void realizarCheckOut(Reserva reserva) {
+		reserva.setEstadoReserva(new EstadoFinalizada());
+		
+	}
+
+	@Override
+	public Boolean finalizadaExitosamente() {
+		return false;
+	}
+
+	@Override
+	public Boolean estaOcupada() {
+		return true;
+	}
+
 }

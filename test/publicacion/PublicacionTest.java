@@ -383,6 +383,7 @@ class PublicacionTest {
         assertFalse(publicacion.getReservasCondicionales().contains(reservaMock1));
     }
 
+    
     @Test
     void testRecibirReservaConConflicto() {
         // Simula conflicto entre reservaMock1 y reservaMock2

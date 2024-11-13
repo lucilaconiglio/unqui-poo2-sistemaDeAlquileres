@@ -78,8 +78,8 @@ public class Sitio {
     // Método para obtener el top-ten de inquilinos que más han alquilado en el sitio
     public List<Inquilino> topDiezInquilinos() {
         return publicaciones.stream()
-                .flatMap(publicacion -> publicacion.getReservas().stream()) // Convierte cada lista de reservas en un stream
-                .filter(reserva -> reserva.getEstadoReserva() instanceof EstadoConsolidada) // Filtra las reservas concretadas
+                .flatMap(p -> p.getReservas().stream()) // Convierte cada lista de reservas en un stream
+                .filter(r -> r.getEstadoReserva().estaOcupada() || r.getEstadoReserva().finalizadaExitosamente()) // Filtra las reservas concretadas
                 .collect(Collectors.groupingBy(Reserva::getInquilino, Collectors.counting())) // Agrupa y cuenta por inquilino
                 .entrySet().stream()
                 .sorted(Map.Entry.<Inquilino, Long>comparingByValue().reversed()) // Ordena por cantidad en orden descendente
@@ -88,11 +88,11 @@ public class Sitio {
                 .collect(Collectors.toList()); // Devuelve la lista de los top 10
     }
     
- // Método para obtener todos los inmuebles libres (sin reservas activas o concretadas)
+ // Método para obtener todos los inmuebles libres 
     public List<Publicacion> obtenerInmueblesLibres() {
         return publicaciones.stream()
                 .filter(publicacion -> publicacion.getReservas().stream()
-                        .noneMatch(reserva -> reserva.getEstadoReserva() instanceof EstadoConsolidada)
+                        .noneMatch(reserva -> reserva.getEstadoReserva().estaOcupada())
                         )
                 .collect(Collectors.toList());
     }
@@ -101,7 +101,7 @@ public class Sitio {
     public double tasaDeOcupacion() {
         long inmueblesAlquilados = publicaciones.stream()
                 .filter(publicacion -> publicacion.getReservas().stream()
-                        .anyMatch(reserva -> reserva.getEstadoReserva() instanceof EstadoConsolidada))
+                        .anyMatch(reserva -> reserva.getEstadoReserva().estaOcupada()))
                 .count();
 
         long totalInmuebles = publicaciones.size();

@@ -36,8 +36,24 @@ public class Reserva {
 		estadoReserva.cancelar(this);
 	}
 	
+	public void realizarCheckOut() {
+		estadoReserva.realizarCheckOut(this);
+	}
+	
+	public Boolean estaActiva() {
+		return estadoReserva.estaActiva();
+	}
+	
+	public Boolean estaOcupada() {
+		return estadoReserva.estaOcupada();
+	}
+	
 	public boolean conflictoCon(Reserva otraReserva) {
-        return (fechaInicio.isBefore(otraReserva.fechaFin) && fechaFin.isAfter(otraReserva.fechaInicio));
+        return estaActiva() && (fechaInicio.isBefore(otraReserva.fechaFin) && fechaFin.isAfter(otraReserva.fechaInicio));
     }
+
+	public Boolean finalizadaExitosamente() {
+		return estadoReserva.finalizadaExitosamente();
+	}
 
 }
