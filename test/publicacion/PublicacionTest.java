@@ -21,6 +21,7 @@ import user.User;
 import user.propietario.Propietario;
 import resenia.Resenia;
 import reserva.Reserva;
+import reserva.estadoReserva.EstadoPendienteDeAprobacion;
 
 class PublicacionTest {
 
@@ -31,7 +32,9 @@ class PublicacionTest {
     private Ubicacion mockUbicacion;
     private EventListener suscriptorMock;
     private Ranking mockRanking;
-
+    private Reserva reservaMock1;
+    private Reserva reservaMock2;
+ 
     @BeforeEach
     public void setUp() {
         // Crea mocks de las clases necesarias
@@ -48,6 +51,11 @@ class PublicacionTest {
                                       mockPropietario, "50m²", 4, mockUbicacion, mockTipoDeInmueble);
         
         publicacion.addSuscriptor(suscriptorMock);
+        reservaMock1 = mock(Reserva.class);
+        reservaMock2 = mock(Reserva.class);
+        // Configura estado inicial de reservas mockeadas
+        when(reservaMock1.getEstadoReserva()).thenReturn(new EstadoPendienteDeAprobacion());
+        when(reservaMock2.getEstadoReserva()).thenReturn(new EstadoPendienteDeAprobacion());
     }
 
     @Test
@@ -227,9 +235,11 @@ class PublicacionTest {
         Reserva reserva = mock(Reserva.class);
 
         // Llama al método cancelarReserva en Publicacion
+        publicacion.recibirReserva(reserva);
         publicacion.cancelarReserva(reserva);
 
-        // Verifica que el método notificarCancelacionInmueble fue llamado en el suscriptor
+        // Verifica que el método notificarCancelacionInmueble fue llamado en el
+        // suscriptor
         verify(suscriptorMock).notificarCancelacionInmueble(mockTipoDeInmueble);
     }
 
@@ -255,4 +265,83 @@ class PublicacionTest {
         verify(suscriptorMock).notificarReservaInmueble(mockTipoDeInmueble);
     }
     
+    
+    @Test
+    void testRecibirReservaSinConflicto() {
+
+        // Ejecutar el método
+        publicacion.recibirReserva(reservaMock1);
+
+        // Verificar que la reserva fue agregada a reservas
+        assertTrue(publicacion.getReservas().contains(reservaMock1));
+        assertFalse(publicacion.getReservasCondicionales().contains(reservaMock1));
+    }
+
+    @Test
+    void testRecibirReservaConConflicto() {
+        // Simula conflicto entre reservaMock1 y reservaMock2
+        when(reservaMock1.conflictoCon(reservaMock2)).thenReturn(true);
+        when(reservaMock2.conflictoCon(reservaMock1)).thenReturn(true);
+
+        // Ejecuta el flujo de reservas
+        publicacion.recibirReserva(reservaMock1); // Agregar reservaMock1 sin conflicto
+        publicacion.recibirReserva(reservaMock2); // reservaMock2 tiene conflicto, debería ir a reservasCondicionales
+
+        // Verifica que reservaMock1 esté en reservas y reservaMock2 en reservasCondicionales
+        assertTrue(publicacion.getReservas().contains(reservaMock1));
+        assertFalse(publicacion.getReservasCondicionales().contains(reservaMock1));
+        
+        assertTrue(publicacion.getReservasCondicionales().contains(reservaMock2));
+        assertFalse(publicacion.getReservas().contains(reservaMock2));
+    }
+    
+    @Test
+    void testCancelarReservaYMoverCondicionalALaReserva() {
+        // Simula conflicto entre reservaMock1 y reservaMock2
+        when(reservaMock1.conflictoCon(reservaMock2)).thenReturn(true); // reservaMock1 está en conflicto con reservaMock2
+        when(reservaMock2.conflictoCon(reservaMock1)).thenReturn(true); // reservaMock2 está en conflicto con reservaMock1
+
+        // Ejecuta el flujo de reservas
+        publicacion.recibirReserva(reservaMock1); // reservaMock1 irá a reservasCondicionales debido al conflicto con reservaMock2
+        publicacion.recibirReserva(reservaMock2); // reservaMock2 irá a reservasCondicionales debido al conflicto con reservaMock1
+
+        // Verifica que ambas reservas estén en reservas condicionales
+        assertTrue(publicacion.getReservas().contains(reservaMock1));
+        assertFalse(publicacion.getReservasCondicionales().contains(reservaMock1));
+
+
+        // Ahora, cancelar reservaMock2
+        publicacion.cancelarReserva(reservaMock1); // Llamamos a cancelarReserva para cambiar su estado a cancelado
+
+
+        // La reservaMock1 fue cancelada,  y reservaMock2 debería pasar a reservas activas
+        // Verifica que reservaMock2 ya no esté en reservas condicionales
+        assertFalse(publicacion.getReservasCondicionales().contains(reservaMock2)); 
+        assertTrue(publicacion.getReservas().contains(reservaMock2)); // reservaMock1 debe pasar a reservas activas
+
+   }
+    @Test
+    void testRechazarReservaYProcesarCondicional() {
+        // Simula conflicto entre reservaMock1 y reservaMock2
+        when(reservaMock1.conflictoCon(reservaMock2)).thenReturn(true); // reservaMock1 está en conflicto con reservaMock2
+        when(reservaMock2.conflictoCon(reservaMock1)).thenReturn(true); // reservaMock2 está en conflicto con reservaMock1
+
+        // Ejecuta el flujo de reservas
+        publicacion.recibirReserva(reservaMock1); // reservaMock1 irá a reservas
+        publicacion.recibirReserva(reservaMock2); // reservaMock2 irá a reservasCondicionales debido al conflicto con reservaMock1
+
+        // Verifica que ambas reservas estén sus respectivas listas
+        assertTrue(publicacion.getReservas().contains(reservaMock1));
+        assertTrue(publicacion.getReservasCondicionales().contains(reservaMock2));
+
+        // Ahora, rechazar reservaMock1
+        publicacion.rechazarReserva(reservaMock1); // Llamamos a rechazarReserva para cambiar su estado a cancelado
+
+        // Verifica que la reservaMock2 haya sido procesada y movida a reservas activas
+        assertFalse(publicacion.getReservasCondicionales().contains(reservaMock2)); // reservaMock2 no debe estar en reservas condicionales
+       
+        // Verifica que reservaMock2 haya pasado de condicionales a reservas activas
+        assertFalse(publicacion.getReservasCondicionales().contains(reservaMock2)); // reservaMock2 ya no debe estar en condicionales
+        assertTrue(publicacion.getReservas().contains(reservaMock2)); // reservaMock2 debe pasar a reservas activas
+    }
 }

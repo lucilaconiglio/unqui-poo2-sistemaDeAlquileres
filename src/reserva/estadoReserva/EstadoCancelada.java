@@ -17,7 +17,7 @@ public class EstadoCancelada implements EstadoReserva {
 	}
 
 	@Override
-	public void cancear(Reserva reserva) {
+	public void cancelar(Reserva reserva) {
 		// TODO Auto-generated method stub
 		
 	}

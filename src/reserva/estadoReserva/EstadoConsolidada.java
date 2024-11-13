@@ -15,7 +15,7 @@ public class EstadoConsolidada implements EstadoReserva{
 	}
 
 	@Override
-	public void cancear(Reserva reserva) {
+	public void cancelar(Reserva reserva) {
 		reserva.setEstadoReserva(new EstadoCancelada());
 	}
 

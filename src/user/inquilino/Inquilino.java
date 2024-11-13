@@ -16,8 +16,8 @@ public interface Inquilino extends Rankeable {
 	public List<Reserva> getReservasFuturas();
 	public List<Reserva> getReservasDeCiudad(String ciudad);
 	public List<String> getCiudadesDondeHayReserva();
-	public void reservar(Publicacion publicacion, LocalDate fechaEntrada, LocalDate fechaSalida);
-	public void cancelar(Reserva reserva);
+    public void reservar(Publicacion publicacion, LocalDate fechaEntrada, LocalDate fechaSalida);
+    public void cancelar(Publicacion publicacion, Reserva reserva);
 	public void rankearPropietario(Resenia resenia, Propietario propietario);
 
 }
