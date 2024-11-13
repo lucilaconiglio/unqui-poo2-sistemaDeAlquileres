@@ -154,7 +154,7 @@ public class User implements Propietario, Inquilino {
 
 	@Override
 	public List<Reserva> getReservasDeCiudad(String ciudad) {
-		// TODO resolver mas tarde
+		// TODO resolver mas tarde!
 		return null;
 	}
 
