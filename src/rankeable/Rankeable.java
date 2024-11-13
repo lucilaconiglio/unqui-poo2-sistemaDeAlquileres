@@ -14,5 +14,5 @@ public interface Rankeable {
 	public double obtenerPromedioGeneral();
 	public double obtenerPromedioCategoria(Categoria cat);
 	public List<String> obternerComentarios();
-	public List<String> obetenerComentariosPorCategoria(Categoria cat);
+	public List<String> obtenerComentariosPorCategoria(Categoria cat);
 }

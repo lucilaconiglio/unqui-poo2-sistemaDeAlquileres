@@ -43,11 +43,8 @@ public class User implements Propietario, Inquilino {
 	}
 
 	@Override
-	public void darDeAltaPublicacion(Sitio sitio, LocalDate checkIn, LocalDate checkOut, double precioBase,
-			PoliticaDeCancelacion politicaDeCancelacion, Propietario propietario, String superficie, int capacidad,
-			Ubicacion ubicacion, TipoDeInmueble tipoInmueble) {
-		sitio.addPublicacion(new Publicacion(checkIn, checkOut, precioBase, politicaDeCancelacion, this, superficie,
-				capacidad, ubicacion, tipoInmueble));
+	public void darDeAltaPublicacion(Publicacion publicacion) {
+		sitio.addPublicacion(publicacion);
 
 	}
 	// RANKING
@@ -63,7 +60,7 @@ public class User implements Propietario, Inquilino {
 	}
 
 	@Override
-	public List<String> obetenerComentariosPorCategoria(Categoria cat) {
+	public List<String> obtenerComentariosPorCategoria(Categoria cat) {
 		return ranking.obtenerCometariosPorCategoria(cat);
 	}
 
