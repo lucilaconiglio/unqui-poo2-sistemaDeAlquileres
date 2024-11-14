@@ -2,6 +2,7 @@ package sitio;
 
 import static org.mockito.Mockito.*;
 
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 
@@ -18,7 +19,9 @@ import reserva.estadoReserva.EstadoConsolidada;
 import reserva.estadoReserva.EstadoPendienteDeAprobacion;
 import servicio.Servicio;
 import tipoDeInmueble.TipoDeInmueble;
+import ubicacion.Ubicacion;
 import user.inquilino.Inquilino;
+import user.propietario.Propietario;
 
 
 class SitioTest {
@@ -190,101 +193,254 @@ class SitioTest {
     
     @Test
     void testObtenerReservasFuturas() {
-        // Configuración del mock de Sitio
-        Sitio sitioMock = mock(Sitio.class);
+        // Configuración del test (instancia real de Sitio)
+        Sitio sitio = new Sitio(); // Usamos una instancia real de Sitio
         Inquilino inquilinoMock = mock(Inquilino.class);
+        
+        // Creamos las publicaciones y sus reservas mockeadas
+        Publicacion publicacionMock1 = mock(Publicacion.class);
+        Publicacion publicacionMock2 = mock(Publicacion.class);
+        
         Reserva reservaMock1 = mock(Reserva.class);
         Reserva reservaMock2 = mock(Reserva.class);
-
-        // Crear una lista simulada de reservas futuras
+        
+        // Definir fechas futuras para las reservas
+        LocalDate fechaFutura1 = LocalDate.now().plusDays(1);
+        LocalDate fechaFutura2 = LocalDate.now().plusDays(2);
+        
+        // Configurar las fechas de inicio de las reservas mockeadas
+        when(reservaMock1.getFechaInicio()).thenReturn(fechaFutura1);
+        when(reservaMock2.getFechaInicio()).thenReturn(fechaFutura2);
+        
+        // Configurar el inquilino de las reservas
+        when(reservaMock1.getInquilino()).thenReturn(inquilinoMock); // Asignar el inquilino a la primera reserva
+        when(reservaMock2.getInquilino()).thenReturn(inquilinoMock); // Asignar el inquilino a la segunda reserva
+        
+        // Configurar las publicaciones para devolver las reservas correspondientes
+        when(publicacionMock1.getReservas()).thenReturn(Arrays.asList(reservaMock1));
+        when(publicacionMock2.getReservas()).thenReturn(Arrays.asList(reservaMock2));
+        
+        // Añadir publicaciones al sitio
+        sitio.addPublicacion(publicacionMock1);
+        sitio.addPublicacion(publicacionMock2);
+        
+        // Crear la lista de reservas futuras que se espera obtener
         List<Reserva> reservasFuturas = Arrays.asList(reservaMock1, reservaMock2);
-        when(sitioMock.obtenerTodasLasReservasFuturas(inquilinoMock)).thenReturn(reservasFuturas);
+        
+        // Acción: Llamamos al método que estamos probando
+        List<Reserva> resultado = sitio.obtenerTodasLasReservasFuturas(inquilinoMock);
 
-        // Acción
-        List<Reserva> resultado = sitioMock.obtenerTodasLasReservasFuturas(inquilinoMock);
-
-        // Verificación
+        // Verificación: esperamos que el resultado contenga ambas reservas futuras
         assertEquals(reservasFuturas, resultado);
-        verify(sitioMock).obtenerTodasLasReservasFuturas(inquilinoMock);
     }
     
     @Test
     void testObtenerReservasDeInquilinoEnCiudad() {
-        // Configuración del mock de Sitio
-        Sitio sitioMock = mock(Sitio.class);
+        // Configuración de los mocks
         Inquilino inquilinoMock = mock(Inquilino.class);
         String ciudad = "Buenos Aires";
         Reserva reservaMock1 = mock(Reserva.class);
         Reserva reservaMock2 = mock(Reserva.class);
-  
-        // Lista simulada de reservas en la ciudad
-        List<Reserva> reservasEnCiudad = Arrays.asList(reservaMock1, reservaMock2);
-        when(sitioMock.obtenerReservasDeInquilinoEnCiudad(ciudad, inquilinoMock)).thenReturn(reservasEnCiudad);
+        Publicacion publicacionMock = mock(Publicacion.class);
 
-        // Acción
-        List<Reserva> resultado = sitioMock.obtenerReservasDeInquilinoEnCiudad(ciudad, inquilinoMock);
+        // Mock de Ubicacion
+        Ubicacion ubicacionMock = mock(Ubicacion.class);
+        when(ubicacionMock.getCiudad()).thenReturn(ciudad); // Simulamos que la ciudad es Buenos Aires
 
-        // Verificación
-        assertEquals(reservasEnCiudad, resultado);
-        verify(sitioMock).obtenerReservasDeInquilinoEnCiudad(ciudad, inquilinoMock);
+        // Configurar las reservas para devolver el inquilinoMock
+        when(reservaMock1.getInquilino()).thenReturn(inquilinoMock);
+        when(reservaMock2.getInquilino()).thenReturn(inquilinoMock);
+
+        // Configurar el mock de Publicacion para que devuelva el mock de Ubicacion
+        when(publicacionMock.getUbicacion()).thenReturn(ubicacionMock); // Aseguramos que getUbicacion devuelve ubicacionMock
+        when(publicacionMock.getReservas()).thenReturn(Arrays.asList(reservaMock1, reservaMock2)); // Reservas mockeadas
+
+        // Añadir la publicación al Sitio
+        sitio.addPublicacion(publicacionMock); // Aquí agregamos la publicación al Sitio
+
+        // Acción: llamar al método que estamos probando
+        List<Reserva> resultado = sitio.obtenerReservasDeInquilinoEnCiudad(ciudad, inquilinoMock);
+
+        // Verificación: esperamos que el resultado contenga ambas reservas
+        assertEquals(2, resultado.size()); // Verificamos que la lista de reservas tenga dos elementos
+        assertTrue(resultado.contains(reservaMock1)); // Verificamos que contenga reservaMock1
+        assertTrue(resultado.contains(reservaMock2)); // Verificamos que contenga reservaMock2
+
     }
  
     @Test
     void testObtenerCiudadesDondeInquilinoTieneReserva() {
-        // Configuración del mock de Sitio
-        Sitio sitioMock = mock(Sitio.class);
         Inquilino inquilinoMock = mock(Inquilino.class);
 
-        // Lista simulada de ciudades con reserva
+        // Crear publicaciones mockeadas
+        Publicacion publicacionMock1 = mock(Publicacion.class);
+        Publicacion publicacionMock2 = mock(Publicacion.class);
+
+        // Crear reservas mockeadas
+        Reserva reservaMock1 = mock(Reserva.class);
+        Reserva reservaMock2 = mock(Reserva.class);
+
+        // Crear ubicaciones mockeadas
+        Ubicacion ubicacionMock1 = mock(Ubicacion.class);
+        Ubicacion ubicacionMock2 = mock(Ubicacion.class);
+
+        // Configurar las ubicaciones para devolver ciudades
+        when(ubicacionMock1.getCiudad()).thenReturn("Buenos Aires");
+        when(ubicacionMock2.getCiudad()).thenReturn("Córdoba");
+
+        // Configurar las reservas para devolver el inquilino y las ubicaciones correspondientes
+        when(reservaMock1.getInquilino()).thenReturn(inquilinoMock);
+        when(reservaMock2.getInquilino()).thenReturn(inquilinoMock);
+
+        // Configurar las publicaciones para devolver las reservas y las ubicaciones
+        when(publicacionMock1.getReservas()).thenReturn(Arrays.asList(reservaMock1));
+        when(publicacionMock2.getReservas()).thenReturn(Arrays.asList(reservaMock2));
+        when(publicacionMock1.getUbicacion()).thenReturn(ubicacionMock1);
+        when(publicacionMock2.getUbicacion()).thenReturn(ubicacionMock2);
+
+        // Añadir publicaciones al sitio
+        sitio.addPublicacion(publicacionMock1);
+        sitio.addPublicacion(publicacionMock2);
+
+        // Lista de ciudades que esperamos como resultado
         List<String> ciudadesConReserva = Arrays.asList("Buenos Aires", "Córdoba");
-        when(sitioMock.obtenerCiudadesDondeInquilinoTieneReserva(inquilinoMock)).thenReturn(ciudadesConReserva);
 
-        // Acción
-        List<String> resultado = sitioMock.obtenerCiudadesDondeInquilinoTieneReserva(inquilinoMock);
+        // Acción: Llamamos al método que estamos probando
+        List<String> resultado = sitio.obtenerCiudadesDondeInquilinoTieneReserva(inquilinoMock);
 
-        // Verificación
+        // Verificación: esperamos que el resultado contenga las ciudades correctas
         assertEquals(ciudadesConReserva, resultado);
-        verify(sitioMock).obtenerCiudadesDondeInquilinoTieneReserva(inquilinoMock);
     }
     
-    @Test 
+    @Test
     void testObtenerReservas() {
-        // Configuración del mock de Sitio
-        Sitio sitioMock = mock(Sitio.class);
         Inquilino inquilinoMock = mock(Inquilino.class);
         Reserva reservaMock1 = mock(Reserva.class);
         Reserva reservaMock2 = mock(Reserva.class);
 
-        // Lista simulada de reservas asociadas al inquilino
+        // Configuración de las reservas y el inquilino mockeado
+        when(reservaMock1.getInquilino()).thenReturn(inquilinoMock);
+        when(reservaMock2.getInquilino()).thenReturn(inquilinoMock);
+
+        // Añadir reservas a las publicaciones
+        Publicacion publicacionMock1 = mock(Publicacion.class);
+        Publicacion publicacionMock2 = mock(Publicacion.class);
+        
+        when(publicacionMock1.getReservas()).thenReturn(Arrays.asList(reservaMock1));
+        when(publicacionMock2.getReservas()).thenReturn(Arrays.asList(reservaMock2));
+
+        // Añadir publicaciones al sitio
+        sitio.addPublicacion(publicacionMock1);
+        sitio.addPublicacion(publicacionMock2);
+
+        // Lista de reservas esperadas
         List<Reserva> reservas = Arrays.asList(reservaMock1, reservaMock2);
-        when(sitioMock.obtenerTodasLasReservasDe(inquilinoMock)).thenReturn(reservas);
 
-        // Acción
-        List<Reserva> resultado = sitioMock.obtenerTodasLasReservasDe(inquilinoMock);
+        // Acción: Llamamos al método que estamos probando
+        List<Reserva> resultado = sitio.obtenerTodasLasReservasDe(inquilinoMock);
 
-        // Verificación
+        // Verificación: esperamos que el resultado contenga ambas reservas
         assertEquals(reservas, resultado);
-        verify(sitioMock).obtenerTodasLasReservasDe(inquilinoMock);
     }
-    
+
     @Test
     void testCantidadDeVecesQueAlquiloInmueble() {
         // Configuración del mock de Publicacion
         Publicacion publicacionMock = mock(Publicacion.class);
-
+        
         // Configuración del comportamiento esperado: supongamos que la publicación fue alquilada 5 veces
         when(publicacionMock.getVecesAlquilado()).thenReturn(5);
-
-        // Crear una instancia de Sitio
-        Sitio sitio = new Sitio();
-
-        // Acción
+        
+        // Acción: llamamos al método que estamos probando
         int vecesAlquilado = sitio.cantidadDeVecesQueAlquiloInmueble(publicacionMock);
 
-        // Verificación
+        // Verificación: esperamos que el número de veces alquilado sea 5
         assertEquals(5, vecesAlquilado);
-        verify(publicacionMock).getVecesAlquilado();  // Verifica que se haya llamado al método getVecesAlquilado
+        
+        // Verificar que se haya llamado al método getVecesAlquilado en el mock
+        verify(publicacionMock).getVecesAlquilado();  
     }
     
+    @Test
+    void testCantidadDeVecesQueAlquiloInmuebles() {
+        // Configuración de los mocks
+        Propietario propietarioMock = mock(Propietario.class);
+        Publicacion publicacionMock1 = mock(Publicacion.class);
+        Publicacion publicacionMock2 = mock(Publicacion.class);
+        Publicacion publicacionMock3 = mock(Publicacion.class); // Agregado el mock de publicacionMock3
+
+        // Configuramos el comportamiento de las publicaciones
+        when(publicacionMock1.getPropietario()).thenReturn(propietarioMock);
+        when(publicacionMock2.getPropietario()).thenReturn(propietarioMock);
+        when(publicacionMock3.getPropietario()).thenReturn(propietarioMock); // Mockeamos getPropietario para publicacionMock3
+        when(publicacionMock1.getVecesAlquilado()).thenReturn(3);  // Esta publicación fue alquilada 3 veces
+        when(publicacionMock2.getVecesAlquilado()).thenReturn(2);  // Esta publicación fue alquilada 2 veces
+        when(publicacionMock3.getVecesAlquilado()).thenReturn(1);  // Esta publicación fue alquilada 1 vez (agregado un valor para publicacionMock3)
+
+        // Creamos una lista de publicaciones
+        List<Publicacion> publicaciones = Arrays.asList(publicacionMock1, publicacionMock2, publicacionMock3);
+
+        // Agregamos las publicaciones
+        sitio.addPublicacion(publicacionMock1);
+        sitio.addPublicacion(publicacionMock2);
+        sitio.addPublicacion(publicacionMock3);  // Asegúrate de que publicacionMock3 está incluida correctamente
+
+        // Acción: llamar al método que estamos probando
+        int vecesAlquilado = sitio.cantidadDeVecesQueAlquiloInmuebles(propietarioMock);
+
+        // Verificación: esperamos que el resultado sea la suma de las veces alquiladas (3 + 2 + 1 = 6)
+        assertEquals(6, vecesAlquilado);
+
+        // Verificar que se haya llamado a getPropietario() y getVecesAlquilado() en las publicaciones
+        verify(publicacionMock1).getPropietario();
+        verify(publicacionMock1).getVecesAlquilado();
+        verify(publicacionMock2).getPropietario();
+        verify(publicacionMock2).getVecesAlquilado();
+        verify(publicacionMock3).getPropietario();
+        verify(publicacionMock3).getVecesAlquilado();
+    }
+
+    @Test
+    void testInmueblesAlquilados() {
+        // Configuración de los mocks
+        Propietario propietarioMock = mock(Propietario.class);
+        Publicacion publicacionMock1 = mock(Publicacion.class);
+        Publicacion publicacionMock2 = mock(Publicacion.class);
+        Publicacion publicacionMock3 = mock(Publicacion.class); // Publicación adicional para la prueba
+
+        // Configuramos el comportamiento de las publicaciones
+        when(publicacionMock1.getPropietario()).thenReturn(propietarioMock);
+        when(publicacionMock2.getPropietario()).thenReturn(propietarioMock);
+        when(publicacionMock3.getPropietario()).thenReturn(propietarioMock); // Aseguramos que el propietario es el mismo
+
+        when(publicacionMock1.getVecesAlquilado()).thenReturn(3);  // Publicación alquilada 3 veces
+        when(publicacionMock2.getVecesAlquilado()).thenReturn(0);  // Publicación no alquilada
+        when(publicacionMock3.getVecesAlquilado()).thenReturn(1);  // Publicación alquilada 1 vez
+
+        // Creamos una lista de publicaciones y las agregamos al Sitio
+        List<Publicacion> publicaciones = Arrays.asList(publicacionMock1, publicacionMock2, publicacionMock3);
+
+        // Agregamos las publicaciones al sitio
+        sitio.addPublicacion(publicacionMock1);
+        sitio.addPublicacion(publicacionMock2);
+        sitio.addPublicacion(publicacionMock3);
+
+        // Acción: llamar al método que estamos probando
+        List<Publicacion> resultado = sitio.inmueblesAlquilados(propietarioMock);
+
+        // Verificación: esperamos que el resultado contenga solo las publicaciones alquiladas (publicacionMock1 y publicacionMock3)
+        assertEquals(2, resultado.size());  // Solo publicacionMock1 y publicacionMock3 deben ser incluidas
+        assertTrue(resultado.contains(publicacionMock1));  // Debe contener publicacionMock1
+        assertTrue(resultado.contains(publicacionMock3));  // Debe contener publicacionMock3
+        assertFalse(resultado.contains(publicacionMock2)); // No debe contener publicacionMock2
+
+        // Verificar que se haya llamado a getPropietario() y getVecesAlquilado() en las publicaciones
+        verify(publicacionMock1).getPropietario();
+        verify(publicacionMock1).getVecesAlquilado();
+        verify(publicacionMock2).getPropietario();
+        verify(publicacionMock2).getVecesAlquilado();
+        verify(publicacionMock3).getPropietario();
+        verify(publicacionMock3).getVecesAlquilado();
+    }
 
 }
