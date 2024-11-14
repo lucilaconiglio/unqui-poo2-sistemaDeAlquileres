@@ -10,6 +10,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
+import java.lang.reflect.Field;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -100,19 +101,19 @@ class UserTest {
 		
 		assertEquals(1, sitioSpy.getPublicaciones().size() );
 	}
-	
+	/*
 	@Test
     void testObtenerPromedioCategoria() {
-  /*      when(rankingMock.obtenerPromedioPorCategoria(categoriaMock)).thenReturn(4.5);
+        when(rankingMock.obtenerPromedioPorCategoria(categoriaMock)).thenReturn(4.5);
 
         double promedio = inquilino.obtenerPromedioCategoria(categoriaMock);
 
         assertEquals(4.5, promedio, 0.01);
         verify(rankingMock).obtenerPromedioPorCategoria(categoriaMock);
-    */
+    
     }
-
-    @Test
+*/
+  /*  @Test
     void testObtenerComentarios() {
     	Resenia resenia1 = mock(Resenia.class);
     	Resenia resenia2 = mock(Resenia.class);
@@ -128,8 +129,8 @@ class UserTest {
         assertEquals(comentarios , resultado);
     
     }
-
-    @Test
+*/
+   /* @Test
     void testObtenerComentariosPorCategoria() {
         Inquilino inquilinoMock = mock(Inquilino.class);
 
@@ -144,7 +145,7 @@ class UserTest {
 
         List<String> resultado = inquilinoMock.obtenerComentariosPorCategoria(categoriaMock);
         assertEquals(comentarios, resultado);
-    }
+    }*/
 
     @Test
     void testGetReseniasDelUsuario() {
@@ -408,6 +409,322 @@ class UserTest {
         assertEquals(fechaSalida, reservaRechazada.getFechaFin());
 
     }
+    
+    @Test
+    void testObtenerReservasFuturas() {
+        // Configuración del mock de Sitio
+        Sitio sitioMock = mock(Sitio.class);
+        Reserva reservaMock1 = mock(Reserva.class);
+        Reserva reservaMock2 = mock(Reserva.class);
+ //       Inquilino inquilino = new User(); // Suponiendo que User implementa Inquilino
+
+        // Crear una lista simulada de reservas futuras
+        List<Reserva> reservasFuturas = Arrays.asList(reservaMock1,reservaMock2);
+        when(sitioMock.obtenerTodasLasReservasFuturas(inquilino)).thenReturn(reservasFuturas);
+
+        // Acción
+        List<Reserva> resultado = inquilino.obtenerReservasFuturas(sitioMock);
+
+        // Verificación
+        assertEquals(reservasFuturas, resultado);
+        verify(sitioMock).obtenerTodasLasReservasFuturas(inquilino);
+    }
+    
+    @Test
+    void testObtenerReservasDeInquilinoEnCiudad() {
+        // Configuración del mock de Sitio
+        Sitio sitioMock = mock(Sitio.class);
+        String ciudad = "Buenos Aires";
+        Reserva reservaMock1 = mock(Reserva.class);
+        Reserva reservaMock2 = mock(Reserva.class);
+
+        // Lista simulada de reservas en la ciudad
+        List<Reserva> reservasEnCiudad = Arrays.asList(reservaMock1,reservaMock2);
+        when(sitioMock.obtenerReservasDeInquilinoEnCiudad(ciudad, inquilino)).thenReturn(reservasEnCiudad);
+
+        // Acción
+        List<Reserva> resultado = inquilino.obtenerReservasDeInquilinoEnCiudad(ciudad, sitioMock);
+
+        // Verificación
+        assertEquals(reservasEnCiudad, resultado);
+        verify(sitioMock).obtenerReservasDeInquilinoEnCiudad(ciudad, inquilino);
+    }
+
+    @Test
+    void testObtenerCiudadesDondeInquilinoTieneReserva() {
+        // Configuración del mock de Sitio
+        Sitio sitioMock = mock(Sitio.class);
+    
+
+        // Lista simulada de ciudades
+        List<String> ciudadesConReserva = Arrays.asList("Buenos Aires", "Córdoba");
+        when(sitioMock.obtenerCiudadesDondeInquilinoTieneReserva(inquilino)).thenReturn(ciudadesConReserva);
+
+        // Acción
+        List<String> resultado = inquilino.obtenerCiudadesDondeInquilinoTieneReserva(sitioMock);
+
+        // Verificación
+        assertEquals(ciudadesConReserva, resultado);
+        verify(sitioMock).obtenerCiudadesDondeInquilinoTieneReserva(inquilino);
+    }
+    
+    
+    @Test
+    void testObtenerReservas() {
+        // Configuración del mock de Sitio
+        Sitio sitioMock = mock(Sitio.class);
+        Reserva reservaMock1 = mock(Reserva.class);
+        Reserva reservaMock2 = mock(Reserva.class);
+
+        // Lista simulada de reservas asociadas al inquilino
+        List<Reserva> reservas = Arrays.asList(reservaMock1,reservaMock2);
+        when(sitioMock.obtenerTodasLasReservasDe(inquilino)).thenReturn(reservas);
+
+        // Acción
+        List<Reserva> resultado = inquilino.obtenerReservas(sitioMock);
+
+        // Verificación
+        assertEquals(reservas, resultado);
+        verify(sitioMock).obtenerTodasLasReservasDe(inquilino);
+    }
+
+   ///-------------------------------------------->
+    
+    @Test
+    void testGetAntiguedad() {
+        // Creación de usuario en una fecha pasada simulada mediante modificación
+        Sitio sitioMock = mock(Sitio.class);
+        User usuario = new User("Nombre Completo", "email@example.com", 123456789, sitioMock);
+        
+        // Simulación de antigüedad esperada (considerando que fechaRegistro es la de hoy)
+        int antiguedadEsperada = 0; // Ya que la antigüedad es inmediata a la fecha de creación
+        
+        // Acción
+        int antiguedadActual = usuario.getAntiguedad();
+
+        // Verificación
+        assertEquals(antiguedadEsperada, antiguedadActual);
+    }
+
+    /* @Test // TODO REFACTOR
+    void testAgregarResenia() {
+        // Mock de Resenia
+        Sitio sitioMock = mock(Sitio.class);
+        Resenia reseniaMock = mock(Resenia.class);
+        
+        // Crear una instancia real de User con un mock de Ranking
+        Ranking rankingMock = mock(Ranking.class);
+        //User usuario = new User("Nombre Completo", "mail@example.com", 123456789, sitioMock);
+        User usuario = mock(User.class);
+        // Acción
+        
+        when(usuario.getRanking()).thenReturn(rankingMock);
+        when(usuario.getRanking().getResenias()).thenReturn(Arrays.asList(reseniaMock));
+  //      usuario.getRanking().agregarResenia(reseniaMock);
+
+        // Verificación
+        verify(usuario).agregarResenia(reseniaMock);
+        verify(rankingMock).agregarResenia(reseniaMock);
+    }
+*/
+    
+    @Test
+    void testGetRanking() {
+        // Crear una instancia de User con un Ranking predefinido
+    	Sitio sitioMock = mock(Sitio.class);
+    	User usuario = new User("Nombre Completo", "mail@example.com", 123456789, sitioMock);
+        
+        // Obtener el ranking usando el método getRanking
+        Ranking resultado = usuario.getRanking();
+        
+        // Verificación: Asegurar que el ranking no sea nulo y es la instancia esperada
+        assertNotNull(resultado, "El ranking no debería ser nulo");
+        assertEquals(usuario.getRanking(), resultado, "Debería devolver el mismo ranking asignado en User");
+    }
+
+    @Test
+    void testObtenerComentarios() throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+        // Mock de Ranking y configuración de comentarios
+    	Sitio sitioMock = mock(Sitio.class);
+        Ranking rankingMock = mock(Ranking.class);
+        List<String> comentariosEsperados = Arrays.asList("Excelente servicio", "Muy recomendable");
+        when(rankingMock.obtenerComentarios()).thenReturn(comentariosEsperados);
+
+        // Crear instancia de User con el mock de Ranking (si es posible pasar el mock en el constructor)
+        User usuario = new User("Nombre Completo", "mail@example.com", 123456789, sitioMock);
+        
+        // Reemplazar el ranking en el usuario (si no hay un setter de ranking, se puede simular en el constructor)
+        Field rankingField = User.class.getDeclaredField("ranking");
+        rankingField.setAccessible(true);
+        rankingField.set(usuario, rankingMock);
+        
+        // Acción: Llamada al método obtenerComentarios
+        List<String> comentarios = usuario.obternerComentarios();
+        
+        // Verificación
+        assertEquals(comentariosEsperados, comentarios, "Los comentarios obtenidos no coinciden con los esperados");
+        verify(rankingMock).obtenerComentarios();  // Verifica que se haya llamado al método en el mock
+    }
+
+    @Test
+    void testObtenerPromedioGeneral() throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+        // Mock de Ranking
+    	Sitio sitioMock = mock(Sitio.class);
+        Ranking rankingMock = mock(Ranking.class);
+        
+        // Definición del valor esperado del promedio
+        double promedioEsperado = 4.5;
+        when(rankingMock.obtenerPromedioGeneral()).thenReturn(promedioEsperado);
+        
+        // Crear instancia de User con el mock de Ranking (si es posible pasar el mock en el constructor)
+        User usuario = new User("Nombre Completo", "mail@example.com", 123456789, sitioMock);
+        
+        // Reemplazar el ranking en el usuario (si no hay un setter, se puede simular en el constructor)
+        Field rankingField = User.class.getDeclaredField("ranking");
+        rankingField.setAccessible(true);
+        rankingField.set(usuario, rankingMock);
+        
+        // Acción: Llamada al método obtenerPromedioGeneral
+        double promedioActual = usuario.obtenerPromedioGeneral();
+        
+        // Verificación
+        assertEquals(promedioEsperado, promedioActual, 0.01, "El promedio general obtenido no coincide con el esperado");
+        verify(rankingMock).obtenerPromedioGeneral();  // Verifica que se haya llamado al método en el mock
+    }
+
+    @Test
+    void testObtenerPromedioCategoria() throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+        // Mock de Ranking y Categoria
+    	Sitio sitioMock = mock(Sitio.class);
+        Ranking rankingMock = mock(Ranking.class);
+        Categoria categoriaMock = mock(Categoria.class);
+
+        // Definición del promedio esperado para la categoría
+        double promedioEsperado = 4.2;
+        when(rankingMock.obtenerPromedioPorCategoria(categoriaMock)).thenReturn(promedioEsperado);
+
+        // Crear instancia de User
+        User usuario = new User("Nombre Completo", "mail@example.com", 123456789, sitioMock);
+
+        // Reemplazar el ranking en el usuario
+        Field rankingField = User.class.getDeclaredField("ranking");
+        rankingField.setAccessible(true);
+        rankingField.set(usuario, rankingMock);
+
+        // Acción
+        double promedioActual = usuario.obtenerPromedioCategoria(categoriaMock);
+
+        // Verificación
+        assertEquals(promedioEsperado, promedioActual, 0.01, "El promedio obtenido para la categoría no coincide con el esperado");
+        verify(rankingMock).obtenerPromedioPorCategoria(categoriaMock); // Verificar que se llame al método en el mock
+    }
+
+    @Test
+    void testGetResenias() throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+        // Mock de Ranking y Resenia
+    	Sitio sitioMock = mock(Sitio.class);
+        Ranking rankingMock = mock(Ranking.class);
+        Resenia reseniaMock1 = mock(Resenia.class);
+        Resenia reseniaMock2 = mock(Resenia.class);
+        List<Resenia> reseniasEsperadas = Arrays.asList(reseniaMock1, reseniaMock2);
+
+        // Configuración del mock de Ranking para retornar la lista de reseñas
+        when(rankingMock.getResenias()).thenReturn(reseniasEsperadas);
+
+        // Crear instancia de User
+        User usuario = new User("Nombre Completo", "mail@example.com", 123456789, sitioMock);
+
+        // Reemplazar el ranking en el usuario
+        Field rankingField = User.class.getDeclaredField("ranking");
+        rankingField.setAccessible(true);
+        rankingField.set(usuario, rankingMock);
+
+        // Acción
+        List<Resenia> reseniasActuales = usuario.getResenias();
+
+        // Verificación
+        assertEquals(reseniasEsperadas, reseniasActuales, "La lista de reseñas obtenida no coincide con la esperada");
+        verify(rankingMock).getResenias(); // Verificar que se llame al método en el mock
+    }
+
+    @Test
+    void testObtenerComentariosPorCategoria() throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+        // Mock de Ranking y Categoria
+    	Sitio sitioMock = mock(Sitio.class);
+        Ranking rankingMock = mock(Ranking.class);
+        Categoria categoriaMock = mock(Categoria.class);
+
+        // Configuración de comentarios esperados para la categoría
+        List<String> comentariosEsperados = Arrays.asList("Buen servicio", "Muy recomendado");
+        when(rankingMock.obtenerCometariosPorCategoria(categoriaMock)).thenReturn(comentariosEsperados);
+
+        // Crear instancia de User
+        User usuario = new User("Nombre Completo", "mail@example.com", 123456789, sitioMock);
+
+        // Inyección del ranking mock en el usuario usando reflexión
+        Field rankingField = User.class.getDeclaredField("ranking");
+        rankingField.setAccessible(true);
+        rankingField.set(usuario, rankingMock);
+
+        // Acción
+        List<String> comentariosActuales = usuario.obtenerComentariosPorCategoria(categoriaMock);
+
+        // Verificación
+        assertEquals(comentariosEsperados, comentariosActuales, "La lista de comentarios obtenida no coincide con la esperada");
+        verify(rankingMock).obtenerCometariosPorCategoria(categoriaMock); // Verificar que se llame al método en el mock
+    }
+    
+    @Test
+    void testAgregarResenia() {
+        // Mock de Ranking y Resenia
+    	Sitio sitioMock = mock(Sitio.class);
+        Ranking rankingMock = mock(Ranking.class);
+        Resenia reseniaMock = mock(Resenia.class);
+
+        // Crear instancia de User con ranking mockeado
+        User usuario = new User("Nombre Completo", "mail@example.com", 123456789, sitioMock);
+
+        // Inyección del ranking mock en el usuario usando reflexión
+        try {
+            Field rankingField = User.class.getDeclaredField("ranking");
+            rankingField.setAccessible(true);
+            rankingField.set(usuario, rankingMock);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            fail("No se pudo inyectar el ranking mock");
+        }
+
+        // Acción: Llamar al método agregarResenia en User
+        usuario.agregarResenia(reseniaMock);
+
+        // Verificación: Verificar que se llamó al método agregarResenia del mock de Ranking
+        verify(rankingMock).agregarResenia(reseniaMock);
+    }
+    
+    /*@Test
+    void testRankearInmueble() {
+        // Mock de las dependencias
+       	Sitio sitioMock = mock(Sitio.class);
+        CategoriasManager categoriasManagerMock = mock(CategoriasManager.class);
+        Categoria categoriaMock = mock(Categoria.class);
+        Resenia reseniaMock = mock(Resenia.class);
+        Publicacion publicacionMock = mock(Publicacion.class);
+
+        // Mock de CategoriasManager para devolver una categoría específica
+        when(CategoriasManager.getInstancia()).thenReturn(categoriasManagerMock);
+        when(categoriasManagerMock.obtenerCategoriasDeInmueble()).thenReturn(Arrays.asList(categoriaMock));
+        when(reseniaMock.getCategoria()).thenReturn(categoriaMock);
+
+        // Crear instancia de User
+        User usuario = new User("Nombre Completo", "mail@example.com", 123456789, sitioMock);
+
+        // Acción: Llamar al método rankearInmueble
+        usuario.rankearInmueble(reseniaMock, publicacionMock);
+
+        // Verificación: Verificar que se llama a agregarResenia en la publicación si las categorías coinciden
+        verify(publicacionMock).agregarResenia(reseniaMock);
+    }
+*/
+
 
     //Veces que alquilo unInmueble-- No testear
     //oberterTtoalAlquileres --NoTestear

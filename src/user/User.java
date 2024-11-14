@@ -7,6 +7,7 @@ import java.util.List;
 import categoria.Categoria;
 import categoriasManager.CategoriasManager;
 import lombok.Getter;
+import lombok.Setter;
 import politicaCancelacion.PoliticaDeCancelacion;
 import publicacion.Publicacion;
 import rankeable.Rankeable;
@@ -35,10 +36,11 @@ public class User implements Propietario, Inquilino {
 		this.numeroDeTelefono = numeroDeTelefono;
 		this.sitio = sitio;
 		this.ranking = new Ranking();
+		this.fechaRegistro = LocalDate.now();
 	}
 
 	@Override
-	public int getAngiguedad() {
+	public int getAntiguedad() {
 		return Period.between(fechaRegistro, LocalDate.now()).getYears();
 	}
 
