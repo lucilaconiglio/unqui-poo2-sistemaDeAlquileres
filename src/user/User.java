@@ -6,6 +6,7 @@ import java.util.List;
 
 import categoria.Categoria;
 import categoriasManager.CategoriasManager;
+import formaDePago.FormaDePago;
 import lombok.Getter;
 import politicaCancelacion.PoliticaDeCancelacion;
 import publicacion.Publicacion;
@@ -124,8 +125,8 @@ public class User implements Propietario, Inquilino {
 	// RESERVA
 
 	 @Override
-	    public void reservar(Publicacion publicacion, LocalDate fechaEntrada, LocalDate fechaSalida) {
-	        Reserva reserva = new Reserva(fechaEntrada, fechaSalida, this);
+	    public void reservar(Publicacion publicacion, LocalDate fechaEntrada, LocalDate fechaSalida, FormaDePago formaDePago) {
+	        Reserva reserva = new Reserva(fechaEntrada, fechaSalida, this, formaDePago);
 	        publicacion.recibirReserva(reserva);
 	    }
 

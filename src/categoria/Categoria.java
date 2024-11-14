@@ -1,5 +1,8 @@
 package categoria;
 
+import lombok.Getter;
+
+@Getter
 public class Categoria {
 	private String concepto;
 	
@@ -7,8 +10,4 @@ public class Categoria {
 		this.concepto=concepto;
 	}
 	
-	public String getConcepto() {
-		return concepto;
-	}
-
 }
