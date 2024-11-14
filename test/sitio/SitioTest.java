@@ -266,6 +266,25 @@ class SitioTest {
         assertEquals(reservas, resultado);
         verify(sitioMock).obtenerTodasLasReservasDe(inquilinoMock);
     }
+    
+    @Test
+    void testCantidadDeVecesQueAlquiloInmueble() {
+        // Configuración del mock de Publicacion
+        Publicacion publicacionMock = mock(Publicacion.class);
 
+        // Configuración del comportamiento esperado: supongamos que la publicación fue alquilada 5 veces
+        when(publicacionMock.getVecesAlquilado()).thenReturn(5);
+
+        // Crear una instancia de Sitio
+        Sitio sitio = new Sitio();
+
+        // Acción
+        int vecesAlquilado = sitio.cantidadDeVecesQueAlquiloInmueble(publicacionMock);
+
+        // Verificación
+        assertEquals(5, vecesAlquilado);
+        verify(publicacionMock).getVecesAlquilado();  // Verifica que se haya llamado al método getVecesAlquilado
+    }
+    
 
 }
