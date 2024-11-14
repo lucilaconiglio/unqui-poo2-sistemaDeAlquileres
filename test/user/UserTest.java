@@ -57,6 +57,7 @@ class UserTest {
 	private Ranking rankingMock;
 	private CategoriasManager categoriasManagerMock;
 	private FormaDePago formaDePagoMock;
+	private Reserva reservaMock;
 	
 	@BeforeEach
 	public void setup() {
@@ -71,6 +72,7 @@ class UserTest {
         rankingMock = mock(Ranking.class);
         categoriasManagerMock = mock(CategoriasManager.class);
         formaDePagoMock = mock(FormaDePago.class);
+        reservaMock = mock(Reserva.class);
         
         inquilino = new User("Pedro", "Lopez", 14333333, sitioSpy);
 		propietario = new User("Raul", "Gutierrez",11223344, sitioSpy);
@@ -229,15 +231,44 @@ class UserTest {
         when(propietarioMock.getRanking()).thenReturn(rankingMock);
         rankingMock.agregarResenia(reseniaMock);
         when(reseniaMock.getCategoria()).thenReturn(categoriaMock);
-
+        when(reservaMock.finalizadaExitosamente()).thenReturn(true);
         // Acción
-        inquilino.rankearPropietario(reseniaMock, propietarioMock);
+        inquilino.rankearPropietario(reseniaMock, propietarioMock, reservaMock);
 
         // Verificación
         verify(rankingMock).agregarResenia(reseniaMock);
     }
 
-    
+    @Test
+    void inquilinoRankeaPropietarioPeroNoSeRealizoElCheckout() {
+        // Instancia real de CategoriasManager
+        CategoriasManager categoriasManager = CategoriasManager.getInstancia();
+
+        // Configuración de categorías para el test
+        Categoria categoriaMock = mock(Categoria.class);
+        when(categoriaMock.getConcepto()).thenReturn("Lindo");
+        
+        // Agrega la categoría al CategoriasManager
+        categoriasManager.agregarCategoria(categoriaMock, Propietario.class);
+
+        // Mock de otras dependencias
+     // Usa instancia real si es posible
+        Propietario propietarioMock = mock(Propietario.class);
+        Ranking rankingMock = mock(Ranking.class);
+        Resenia reseniaMock = mock(Resenia.class);
+        
+        // Configuración de mocks adicionales
+        when(propietarioMock.getRanking()).thenReturn(rankingMock);
+        rankingMock.agregarResenia(reseniaMock);
+        when(reseniaMock.getCategoria()).thenReturn(categoriaMock);
+        when(reservaMock.finalizadaExitosamente()).thenReturn(false);
+        // Acción
+        inquilino.rankearPropietario(reseniaMock, propietarioMock, reservaMock);
+
+        // Verificación
+        verify(rankingMock).agregarResenia(reseniaMock);
+    }
+
     
  
     @Test
@@ -250,9 +281,9 @@ class UserTest {
     
         when(reseniaMock.getCategoria()).thenReturn(categoriaMock);
         when(categoriasManagerMock.obtenerCategoriasDePropietario()).thenReturn(Arrays.asList(categoriaMock));
-
+        when(reservaMock.finalizadaExitosamente()).thenReturn(true);
       
-        inquilinoMock.rankearPropietario(reseniaMock, null);
+        inquilinoMock.rankearPropietario(reseniaMock, null, reservaMock);
 
      
         verifyNoInteractions(categoriasManagerMock);
@@ -281,9 +312,10 @@ class UserTest {
         when(inquilinoMock.getRanking()).thenReturn(rankingMock);
         rankingMock.agregarResenia(reseniaMock);
         when(reseniaMock.getCategoria()).thenReturn(categoriaMock);
-
+        when(reservaMock.finalizadaExitosamente()).thenReturn(true);
+        
         // Acción: Propietario rankea a Inquilino
-        propietario.rankearInquilino(reseniaMock, inquilinoMock);
+        propietario.rankearInquilino(reseniaMock, inquilinoMock, reservaMock);
 
         // Verificación
         verify(rankingMock).agregarResenia(reseniaMock);
@@ -299,9 +331,9 @@ class UserTest {
 
         when(reseniaMock.getCategoria()).thenReturn(categoriaMock);
         when(categoriasManagerMock.obtenerCategoriasDeInquilino()).thenReturn(Arrays.asList(categoriaMock));
+        when(reservaMock.finalizadaExitosamente()).thenReturn(true);
 
-
-        propietarioMock.rankearInquilino(reseniaMock, null);
+        propietarioMock.rankearInquilino(reseniaMock, null, reservaMock);
 
         verifyNoInteractions(categoriasManagerMock);
     }
@@ -319,8 +351,9 @@ class UserTest {
         when(propietarioMock.getRanking()).thenReturn(rankingMock);
         when(reseniaMock.getCategoria()).thenReturn(categoriaNoExistenteMock);
         when(categoriasManagerMock.obtenerCategoriasDePropietario()).thenReturn(Arrays.asList(categoriaMock));
-
-        inquilinoMock.rankearPropietario(reseniaMock, propietarioMock);
+        when(reservaMock.finalizadaExitosamente()).thenReturn(true);
+        
+        inquilinoMock.rankearPropietario(reseniaMock, propietarioMock, reservaMock);
 
         verify(rankingMock, never()).agregarResenia(reseniaMock);
     }

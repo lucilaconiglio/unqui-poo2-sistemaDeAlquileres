@@ -73,27 +73,27 @@ public class User implements Propietario, Inquilino {
 	}
 	
 	@Override
-	public void rankearInmueble(Resenia resenia, Publicacion publicacion) {
-		if (CategoriasManager.getInstancia().obtenerCategoriasDeInmueble().equals(resenia.getCategoria())) {
+	public void rankearInmueble(Resenia resenia, Publicacion publicacion, Reserva reserva) {
+		if (reserva.finalizadaExitosamente() && CategoriasManager.getInstancia().obtenerCategoriasDeInmueble().equals(resenia.getCategoria())) {
 			publicacion.agregarResenia(resenia);
 		}
 	}
 
 
 	@Override
-	public void rankearPropietario(Resenia resenia, Propietario propietario) {
+	public void rankearPropietario(Resenia resenia, Propietario propietario, Reserva reserva) {
 		
 		System.out.println("dentro de rankearPropietario Categ: "+CategoriasManager.getInstancia().obtenerCategoriasDePropietario());
 		System.out.println("resenia concepto: "+ resenia.getCategoria().getConcepto());
 		
-		if (CategoriasManager.getInstancia().obtenerCategoriasDePropietario().equals(resenia.getCategoria())) {
+		if (reserva.finalizadaExitosamente() && CategoriasManager.getInstancia().obtenerCategoriasDePropietario().equals(resenia.getCategoria())) {
 			propietario.getRanking().agregarResenia(resenia);
 		}
 	}
 
 	@Override
-	public void rankearInquilino(Resenia resenia, Inquilino inquilino) {
-		if (CategoriasManager.getInstancia().obtenerCategoriasDeInquilino().equals(resenia.getCategoria())) {
+	public void rankearInquilino(Resenia resenia, Inquilino inquilino, Reserva reserva) {
+		if (reserva.finalizadaExitosamente() && CategoriasManager.getInstancia().obtenerCategoriasDeInquilino().equals(resenia.getCategoria())) {
 			inquilino.getRanking().agregarResenia(resenia);
 		}
 	}
