@@ -99,15 +99,15 @@ public class User implements Propietario, Inquilino {
 	}
 
 	@Override
-	public int vecesQueAlquiloInmueble(Publicacion publicacion) {
+	public int vecesQueAlquiloInmueble(Publicacion publicacion,Sitio sitio) {
 		// TODO: agregar contador de veces alquilado en la publi
-		return 0;
+		return sitio.cantidadDeVecesQueAlquiloInmueble(publicacion);
 	}
 
 	@Override
-	public int obtenerTotalAlquileres() {
+	public int obtenerTotalAlquileres(Sitio sitio) {
 		// TODO Auto-generated method stub
-		return 0;
+		return sitio.cantidadDeVecesQueAlquiloInmuebles(this);
 	}
 
 	@Override
@@ -173,6 +173,12 @@ public class User implements Propietario, Inquilino {
 	@Override
 	public List<Reserva> obtenerReservasFuturas(Sitio sitio) {
 		return sitio.obtenerTodasLasReservasFuturas(this);
+	}
+
+	@Override
+	public List<Publicacion> historialDeInmueblesAlquilados(Sitio sitio) {
+		// TODO Auto-generated method stub
+		return sitio.inmueblesAlquilados(this);
 	}
 
 

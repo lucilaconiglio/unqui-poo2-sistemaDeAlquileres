@@ -19,6 +19,7 @@ import servicio.Servicio;
 import tipoDeInmueble.TipoDeInmueble;
 import user.User;
 import user.inquilino.Inquilino;
+import user.propietario.Propietario;
 @Getter 
 public class Sitio {
 
@@ -148,6 +149,24 @@ public class Sitio {
                         .map(r -> p.getUbicacion().getCiudad())) // Mapea la ciudad de la publicación de cada reserva
                 .distinct() // Evita ciudades duplicadas
                 .collect(Collectors.toList()); // Recoge los resultados en una lista
+    } 
+    
+    public int cantidadDeVecesQueAlquiloInmueble(Publicacion publicacion) {
+        return publicacion.getVecesAlquilado();
+    }
+    
+    public int cantidadDeVecesQueAlquiloInmuebles(Propietario propietario) {
+        return publicaciones.stream()
+                .filter(p -> p.getPropietario().equals(propietario))
+                .mapToInt(p -> p.getVecesAlquilado())
+                .sum();
+    }
+    
+    public List<Publicacion> inmueblesAlquilados(Propietario propietario) {
+        return publicaciones.stream()
+                .filter(p -> p.getPropietario().equals(propietario))
+                .filter(p -> p.getVecesAlquilado() > 0)
+                .toList();
     }
 
 }
