@@ -157,11 +157,6 @@ public class User implements Propietario, Inquilino {
 		return sitio.obtenerTodasLasReservasDe(this);
 	}
 
-	@Override
-	public List<Reserva> obtenerReservasFuturas(Sitio sitio) {
-		// TODO Auto-generated method stub
-		return sitio.obtenerTodasLasReservasFuturas(this);
-	}
 
 	@Override
 	public List<Reserva> obtenerReservasDeInquilinoEnCiudad(String ciudad, Sitio sitio) {
@@ -173,5 +168,12 @@ public class User implements Propietario, Inquilino {
 	public List<String> obtenerCiudadesDondeInquilinoTieneReserva(Sitio sitio) {
 		return sitio.obtenerCiudadesDondeInquilinoTieneReserva(this);
 	}
+
+
+	@Override
+	public List<Reserva> obtenerReservasFuturas(Sitio sitio) {
+		return sitio.obtenerTodasLasReservasFuturas(this);
+	}
+
 
 }
