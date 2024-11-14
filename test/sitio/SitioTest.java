@@ -228,7 +228,7 @@ class SitioTest {
         assertEquals(reservasEnCiudad, resultado);
         verify(sitioMock).obtenerReservasDeInquilinoEnCiudad(ciudad, inquilinoMock);
     }
-
+ 
     @Test
     void testObtenerCiudadesDondeInquilinoTieneReserva() {
         // Configuración del mock de Sitio
