@@ -36,7 +36,7 @@ public class Sitio {
 
 
 	public List<Publicacion> buscarPublicaciones(Search search) {
-		// Se filtran las publicaciones según los criterios de búsqueda.
+		// Se filtran las publicaciones según los criterios de búsqueda. 
 		return search.filterPublicaciones(publicaciones);
 	}
 
@@ -127,7 +127,7 @@ public class Sitio {
     	return  obtenerTodasLasReservasDe(inquilino)
     			.stream()
     			.filter(r -> r.getFechaInicio().isAfter(LocalDate.now()))
-    			.toList();
+    			.toList(); 
     }
     
     public List<Reserva> obtenerReservasDeInquilinoEnCiudad(String ciudad,Inquilino inquilino){
