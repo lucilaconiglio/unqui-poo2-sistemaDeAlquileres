@@ -23,6 +23,7 @@ import org.mockito.Spy;
 
 import categoria.Categoria;
 import categoriasManager.CategoriasManager;
+import formaDePago.FormaDePago;
 import politicaCancelacion.PoliticaDeCancelacion;
 import publicacion.Publicacion;
 import ranking.Ranking;
@@ -55,6 +56,7 @@ class UserTest {
 	private int capacidad;
 	private Ranking rankingMock;
 	private CategoriasManager categoriasManagerMock;
+	private FormaDePago formaDePagoMock;
 	
 	@BeforeEach
 	public void setup() {
@@ -68,6 +70,7 @@ class UserTest {
         categoriaMock = mock(Categoria.class);
         rankingMock = mock(Ranking.class);
         categoriasManagerMock = mock(CategoriasManager.class);
+        formaDePagoMock = mock(FormaDePago.class);
         
         inquilino = new User("Pedro", "Lopez", 14333333, sitioSpy);
 		propietario = new User("Raul", "Gutierrez",11223344, sitioSpy);
@@ -330,7 +333,7 @@ class UserTest {
         LocalDate fechaEntrada = LocalDate.of(2024, 12, 1);
         LocalDate fechaSalida = LocalDate.of(2024, 12, 10);
 
-        inquilino.reservar(publicacionMock, fechaEntrada, fechaSalida);
+        inquilino.reservar(publicacionMock, fechaEntrada, fechaSalida, formaDePagoMock);
         ArgumentCaptor<Reserva> reservaCaptor = ArgumentCaptor.forClass(Reserva.class);
 
         verify(publicacionMock).recibirReserva(reservaCaptor.capture());
@@ -349,8 +352,8 @@ class UserTest {
         LocalDate fechaEntrada = LocalDate.of(2024, 12, 1);
         LocalDate fechaSalida = LocalDate.of(2024, 12, 10);
 
-        Reserva reserva = new Reserva(fechaEntrada, fechaSalida, inquilino);
-        inquilino.reservar(publicacionMock, fechaEntrada, fechaSalida);
+        Reserva reserva = new Reserva(fechaEntrada, fechaSalida, inquilino, formaDePagoMock);
+        inquilino.reservar(publicacionMock, fechaEntrada, fechaSalida, formaDePagoMock);
         inquilino.cancelar(publicacionMock, reserva);
 
 
@@ -373,7 +376,7 @@ class UserTest {
         LocalDate fechaEntrada = LocalDate.of(2024, 12, 1);
         LocalDate fechaSalida = LocalDate.of(2024, 12, 10);
 
-        Reserva reserva = new Reserva(fechaEntrada, fechaSalida, inquilino);
+        Reserva reserva = new Reserva(fechaEntrada, fechaSalida, inquilino, formaDePagoMock);
         
         propietario.aceptar(publicacionMock, reserva); 
         ArgumentCaptor<Reserva> reservaCaptor = ArgumentCaptor.forClass(Reserva.class);
@@ -395,7 +398,7 @@ class UserTest {
         LocalDate fechaEntrada = LocalDate.of(2024, 12, 1);
         LocalDate fechaSalida = LocalDate.of(2024, 12, 10);
 
-        Reserva reserva = new Reserva(fechaEntrada, fechaSalida, inquilino);
+        Reserva reserva = new Reserva(fechaEntrada, fechaSalida, inquilino, formaDePagoMock);
 
         propietario.rechazar(publicacionMock, reserva);
 

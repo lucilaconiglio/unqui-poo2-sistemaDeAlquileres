@@ -1,5 +1,6 @@
 package periodo;
 
+
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.LocalDate;
@@ -24,16 +25,4 @@ class PeriodoTest {
         assertEquals(150.0, periodo.getPrecio(), "El precio debe ser 150.0");
     }
 
-    @Test
-    void testSetters() {
-        periodo.setConcepto("Temporada Baja");
-        periodo.setPrecio(100.0);
-        periodo.setInicio(LocalDate.of(2023, 5, 1));
-        periodo.setFin(LocalDate.of(2023, 5, 31));
-
-        assertEquals("Temporada Baja", periodo.getConcepto(), "El concepto debería haber sido actualizado a 'Temporada Baja'");
-        assertEquals(100.0, periodo.getPrecio(), "El precio debería haber sido actualizado a 100.0");
-        assertEquals(LocalDate.of(2023, 5, 1), periodo.getInicio(), "La fecha de inicio debería haber sido actualizada");
-        assertEquals(LocalDate.of(2023, 5, 31), periodo.getFin(), "La fecha de fin debería haber sido actualizada");
-    }
 }

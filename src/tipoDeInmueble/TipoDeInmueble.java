@@ -1,5 +1,8 @@
 package tipoDeInmueble;
 
+import lombok.Getter;
+
+@Getter
 public class TipoDeInmueble {
 	private String concepto;
 	
@@ -7,8 +10,4 @@ public class TipoDeInmueble {
 		this.concepto=concepto;
 	}
 	
-	public String getConcepto() {
-		return this.concepto;
-	}
-
 }
