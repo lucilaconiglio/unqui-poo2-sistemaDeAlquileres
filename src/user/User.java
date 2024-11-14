@@ -7,6 +7,7 @@ import java.util.List;
 import categoria.Categoria;
 import categoriasManager.CategoriasManager;
 import lombok.Getter;
+import lombok.Setter;
 import politicaCancelacion.PoliticaDeCancelacion;
 import publicacion.Publicacion;
 import rankeable.Rankeable;
@@ -35,10 +36,11 @@ public class User implements Propietario, Inquilino {
 		this.numeroDeTelefono = numeroDeTelefono;
 		this.sitio = sitio;
 		this.ranking = new Ranking();
+		this.fechaRegistro = LocalDate.now();
 	}
 
 	@Override
-	public int getAngiguedad() {
+	public int getAntiguedad() {
 		return Period.between(fechaRegistro, LocalDate.now()).getYears();
 	}
 
@@ -123,50 +125,51 @@ public class User implements Propietario, Inquilino {
 	}
 	// RESERVA
 
-	 @Override
-	    public void reservar(Publicacion publicacion, LocalDate fechaEntrada, LocalDate fechaSalida) {
-	        Reserva reserva = new Reserva(fechaEntrada, fechaSalida, this);
-	        publicacion.recibirReserva(reserva);
-	    }
+	@Override
+    public void reservar(Publicacion publicacion, LocalDate fechaEntrada, LocalDate fechaSalida) {
+        Reserva reserva = new Reserva(fechaEntrada, fechaSalida, this);
+        publicacion.recibirReserva(reserva);
+    }
 
-	    @Override
-	    public void cancelar(Publicacion publicacion, Reserva reserva) {
-	        publicacion.cancelarReserva(reserva);
+    @Override
+    public void cancelar(Publicacion publicacion, Reserva reserva) {
+        publicacion.cancelarReserva(reserva);
 
-	    }
+    }
 
-	    @Override
-	    public void aceptar(Publicacion publicacion, Reserva reserva) {
-	    	System.out.print("Inside aceptar resrva");
-	        publicacion.aceptarReserva(reserva);
-	    }
+    @Override
+    public void aceptar(Publicacion publicacion, Reserva reserva) {
+    	System.out.print("Inside aceptar resrva");
+        publicacion.aceptarReserva(reserva);
+    }
 
-	    @Override
-	    public void rechazar(Publicacion publicacion, Reserva reserva) {
-	        publicacion.rechazarReserva(reserva);
-	    }
+    @Override
+    public void rechazar(Publicacion publicacion, Reserva reserva) {
+        publicacion.rechazarReserva(reserva);
+    }
+
 
 	@Override
-	public List<Reserva> getReservasFuturas() {
-		LocalDate hoy = LocalDate.now();
-
-		// Filtrar reservas que tienen fecha de inicio mayor a hoy
-		// return sitio.getReservas(this).stream().filter(reserva ->
-		// reserva.getFechaInicio().isAfter(hoy)).toList(); TODO: VER DE PONER QUE EL
-		// USER CONOZCA AL SITIO.
-		return reservas.stream().filter(reserva -> reserva.getFechaInicio().isAfter(hoy)).toList();
+	public List<Reserva>  obtenerReservas(Sitio sitio) {
+			
+		return sitio.obtenerTodasLasReservasDe(this);
 	}
 
 	@Override
-	public List<Reserva> getReservasDeCiudad(String ciudad) {
-		// TODO resolver mas tarde!
-		return null;
-	}
-
-	@Override
-	public List<String> getCiudadesDondeHayReserva() {
+	public List<Reserva> obtenerReservasFuturas(Sitio sitio) {
 		// TODO Auto-generated method stub
-		return null;
+		return sitio.obtenerTodasLasReservasFuturas(this);
+	}
+
+	@Override
+	public List<Reserva> obtenerReservasDeInquilinoEnCiudad(String ciudad, Sitio sitio) {
+		// TODO Auto-generated method stub
+		return sitio.obtenerReservasDeInquilinoEnCiudad(ciudad, this);
+	}
+
+	@Override
+	public List<String> obtenerCiudadesDondeInquilinoTieneReserva(Sitio sitio) {
+		return sitio.obtenerCiudadesDondeInquilinoTieneReserva(this);
 	}
 
 }
