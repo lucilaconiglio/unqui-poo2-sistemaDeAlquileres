@@ -20,7 +20,7 @@ import user.inquilino.Inquilino;
 
 public interface Propietario extends Rankeable{
 	
-	public void rankearInquilino(Resenia resenia, Inquilino inquilino);
+	public void rankearInquilino(Resenia resenia, Inquilino inquilino, Reserva reserva);
 	public int getAntiguedad();
 	public void aceptar(Publicacion publicacion, Reserva reserva);
     public void rechazar(Publicacion publicacion, Reserva reserva);
