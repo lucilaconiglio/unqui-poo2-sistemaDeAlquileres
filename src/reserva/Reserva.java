@@ -2,6 +2,7 @@ package reserva;
 
 import java.time.LocalDate;
 
+import formaDePago.FormaDePago;
 import lombok.Getter;
 import lombok.Setter;
 import reserva.estadoReserva.EstadoPendienteDeAprobacion;
@@ -16,16 +17,17 @@ public class Reserva {
 	private LocalDate fechaInicio;
 	private LocalDate fechaFin;
 	private Inquilino inquilino;
+	private FormaDePago formaDePago;
 
-	public Reserva(LocalDate fechaInicio, LocalDate fechaFin, Inquilino inquilino) {
+	public Reserva(LocalDate fechaInicio, LocalDate fechaFin, Inquilino inquilino, FormaDePago formaDePago) {
 		this.estadoReserva = new EstadoPendienteDeAprobacion();
 		this.fechaInicio = fechaInicio;
 		this.fechaFin = fechaFin;
 		this.inquilino = inquilino;
+		this.formaDePago = formaDePago;
 	}
 
 	public void aceptar() {
-		System.out.print("Inside aceptar");
 		estadoReserva.aceptar(this);
 	}
 

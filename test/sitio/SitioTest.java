@@ -187,5 +187,104 @@ class SitioTest {
         // Verifica la tasa de ocupación (1 de 3 está ocupado, debe ser aproximadamente 33.33%)
         assertEquals(33.33, tasaOcupacion, 0.1);
     }
+    
+    @Test
+    void testObtenerReservasFuturas() {
+        // Configuración del mock de Sitio
+        Sitio sitioMock = mock(Sitio.class);
+        Inquilino inquilinoMock = mock(Inquilino.class);
+        Reserva reservaMock1 = mock(Reserva.class);
+        Reserva reservaMock2 = mock(Reserva.class);
+
+        // Crear una lista simulada de reservas futuras
+        List<Reserva> reservasFuturas = Arrays.asList(reservaMock1, reservaMock2);
+        when(sitioMock.obtenerTodasLasReservasFuturas(inquilinoMock)).thenReturn(reservasFuturas);
+
+        // Acción
+        List<Reserva> resultado = sitioMock.obtenerTodasLasReservasFuturas(inquilinoMock);
+
+        // Verificación
+        assertEquals(reservasFuturas, resultado);
+        verify(sitioMock).obtenerTodasLasReservasFuturas(inquilinoMock);
+    }
+    
+    @Test
+    void testObtenerReservasDeInquilinoEnCiudad() {
+        // Configuración del mock de Sitio
+        Sitio sitioMock = mock(Sitio.class);
+        Inquilino inquilinoMock = mock(Inquilino.class);
+        String ciudad = "Buenos Aires";
+        Reserva reservaMock1 = mock(Reserva.class);
+        Reserva reservaMock2 = mock(Reserva.class);
+  
+        // Lista simulada de reservas en la ciudad
+        List<Reserva> reservasEnCiudad = Arrays.asList(reservaMock1, reservaMock2);
+        when(sitioMock.obtenerReservasDeInquilinoEnCiudad(ciudad, inquilinoMock)).thenReturn(reservasEnCiudad);
+
+        // Acción
+        List<Reserva> resultado = sitioMock.obtenerReservasDeInquilinoEnCiudad(ciudad, inquilinoMock);
+
+        // Verificación
+        assertEquals(reservasEnCiudad, resultado);
+        verify(sitioMock).obtenerReservasDeInquilinoEnCiudad(ciudad, inquilinoMock);
+    }
+
+    @Test
+    void testObtenerCiudadesDondeInquilinoTieneReserva() {
+        // Configuración del mock de Sitio
+        Sitio sitioMock = mock(Sitio.class);
+        Inquilino inquilinoMock = mock(Inquilino.class);
+
+        // Lista simulada de ciudades con reserva
+        List<String> ciudadesConReserva = Arrays.asList("Buenos Aires", "Córdoba");
+        when(sitioMock.obtenerCiudadesDondeInquilinoTieneReserva(inquilinoMock)).thenReturn(ciudadesConReserva);
+
+        // Acción
+        List<String> resultado = sitioMock.obtenerCiudadesDondeInquilinoTieneReserva(inquilinoMock);
+
+        // Verificación
+        assertEquals(ciudadesConReserva, resultado);
+        verify(sitioMock).obtenerCiudadesDondeInquilinoTieneReserva(inquilinoMock);
+    }
+    
+    @Test 
+    void testObtenerReservas() {
+        // Configuración del mock de Sitio
+        Sitio sitioMock = mock(Sitio.class);
+        Inquilino inquilinoMock = mock(Inquilino.class);
+        Reserva reservaMock1 = mock(Reserva.class);
+        Reserva reservaMock2 = mock(Reserva.class);
+
+        // Lista simulada de reservas asociadas al inquilino
+        List<Reserva> reservas = Arrays.asList(reservaMock1, reservaMock2);
+        when(sitioMock.obtenerTodasLasReservasDe(inquilinoMock)).thenReturn(reservas);
+
+        // Acción
+        List<Reserva> resultado = sitioMock.obtenerTodasLasReservasDe(inquilinoMock);
+
+        // Verificación
+        assertEquals(reservas, resultado);
+        verify(sitioMock).obtenerTodasLasReservasDe(inquilinoMock);
+    }
+    
+    @Test
+    void testCantidadDeVecesQueAlquiloInmueble() {
+        // Configuración del mock de Publicacion
+        Publicacion publicacionMock = mock(Publicacion.class);
+
+        // Configuración del comportamiento esperado: supongamos que la publicación fue alquilada 5 veces
+        when(publicacionMock.getVecesAlquilado()).thenReturn(5);
+
+        // Crear una instancia de Sitio
+        Sitio sitio = new Sitio();
+
+        // Acción
+        int vecesAlquilado = sitio.cantidadDeVecesQueAlquiloInmueble(publicacionMock);
+
+        // Verificación
+        assertEquals(5, vecesAlquilado);
+        verify(publicacionMock).getVecesAlquilado();  // Verifica que se haya llamado al método getVecesAlquilado
+    }
+    
 
 }

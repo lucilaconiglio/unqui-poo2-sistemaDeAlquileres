@@ -3,6 +3,7 @@ package sitio;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -18,6 +19,7 @@ import servicio.Servicio;
 import tipoDeInmueble.TipoDeInmueble;
 import user.User;
 import user.inquilino.Inquilino;
+import user.propietario.Propietario;
 @Getter 
 public class Sitio {
 
@@ -35,7 +37,7 @@ public class Sitio {
 
 
 	public List<Publicacion> buscarPublicaciones(Search search) {
-		// Se filtran las publicaciones según los criterios de búsqueda.
+		// Se filtran las publicaciones según los criterios de búsqueda. 
 		return search.filterPublicaciones(publicaciones);
 	}
 
@@ -109,5 +111,62 @@ public class Sitio {
         return totalInmuebles > 0 ? (double) inmueblesAlquilados / totalInmuebles * 100 : 0;
     }
     
+    public List<Reserva> obtenerTodasLasReservasDelSitio(){
+    	return publicaciones.stream()
+    			.flatMap(p -> p.getReservas().stream())
+    			.toList();
+    }
     
+    public List<Reserva> obtenerTodasLasReservasDe(Inquilino inquilino){
+    	return obtenerTodasLasReservasDelSitio()
+    			.stream()
+    			.filter(r -> r.getInquilino().equals(inquilino))
+    			.toList();
+    }
+    
+    public List<Reserva> obtenerTodasLasReservasFuturas(Inquilino inquilino){
+    	return  obtenerTodasLasReservasDe(inquilino)
+    			.stream()
+    			.filter(r -> r.getFechaInicio().isAfter(LocalDate.now()))
+    			.toList(); 
+    }
+    
+    public List<Reserva> obtenerReservasDeInquilinoEnCiudad(String ciudad,Inquilino inquilino){
+    	/*return publicaciones.stream()
+    			.filter(p -> p.getUbicacion().getCiudad().);
+    	*/
+    	  return publicaciones.stream()
+    	            .filter(p -> p.getUbicacion().getCiudad().equals(ciudad)) // Filtra por ciudad
+    	            .flatMap(p -> p.getReservas().stream()) // Descompone las reservas de cada publicación
+    	            .filter(r -> r.getInquilino().equals(inquilino)) // Filtra por inquilino
+    	            .collect(Collectors.toList()); 
+    }
+ 
+    public List<String> obtenerCiudadesDondeInquilinoTieneReserva(Inquilino inquilino) {
+        return publicaciones.stream()
+                .flatMap(p -> p.getReservas().stream() // Descompone las reservas de cada publicación
+                        .filter(r -> r.getInquilino().equals(inquilino)) // Filtra por inquilino
+                        .map(r -> p.getUbicacion().getCiudad())) // Mapea la ciudad de la publicación de cada reserva
+                .distinct() // Evita ciudades duplicadas
+                .collect(Collectors.toList()); // Recoge los resultados en una lista
+    } 
+    
+    public int cantidadDeVecesQueAlquiloInmueble(Publicacion publicacion) {
+        return publicacion.getVecesAlquilado();
+    }
+    
+    public int cantidadDeVecesQueAlquiloInmuebles(Propietario propietario) {
+        return publicaciones.stream()
+                .filter(p -> p.getPropietario().equals(propietario))
+                .mapToInt(p -> p.getVecesAlquilado())
+                .sum();
+    }
+    
+    public List<Publicacion> inmueblesAlquilados(Propietario propietario) {
+        return publicaciones.stream()
+                .filter(p -> p.getPropietario().equals(propietario))
+                .filter(p -> p.getVecesAlquilado() > 0)
+                .toList();
+    }
+
 }
