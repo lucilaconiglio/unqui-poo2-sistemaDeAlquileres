@@ -187,6 +187,7 @@ public class Publicacion implements Rankeable{
         if (reservas.contains(reserva)) { // se procesa la reserva condicional solo si la reserva no es codicioal.
             if (!procesarPrimeraReservaCondicionalDisponible()) {
                 notificarCancelacionInmueble();
+                double montoResarcimiento = politicaDeCancelacion.calcularResarcimiento(this, reserva);
             }
         }
     }
