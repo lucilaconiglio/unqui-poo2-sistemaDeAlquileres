@@ -178,7 +178,6 @@ public class Publicacion implements Rankeable{
         reserva.aceptar(); // Cambiar el estado de la reserva a 'aceptada'
         notificarReservaInmueble();
         vecesAlquilado=+1;
-        System.out.print(vecesAlquilado);
     }
 
     // Cancelar una reserva: Si está aceptada en reservas, cambia su estado a

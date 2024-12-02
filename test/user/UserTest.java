@@ -203,7 +203,7 @@ class UserTest {
         
         
         inquilino.rankearPropietario(reseniaMock, propietario);
-        System.out.println("Ver resenias del propietario: "+ propietario.getRanking().getResenias());
+    
        // verify(propietario).getRanking().agregarResenia(reseniaMock);
 
     }
@@ -372,7 +372,7 @@ class UserTest {
         verify(publicacionMock).recibirReserva(reservaCaptor.capture());
 
         Reserva reservaCapturada = reservaCaptor.getValue();
-        System.out.println("Reserva capturada: " + reservaCapturada);
+       
         assertEquals(fechaEntrada, reservaCapturada.getFechaInicio());
         assertEquals(fechaSalida, reservaCapturada.getFechaFin());
         assertEquals(inquilino, reservaCapturada.getInquilino());
@@ -395,7 +395,7 @@ class UserTest {
         verify(publicacionMock).cancelarReserva(reservaCaptor.capture());
 
         Reserva reservaCancelada = reservaCaptor.getValue();
-        System.out.println("Reserva cancelada: " + reservaCancelada);
+      
         assertEquals(fechaEntrada, reservaCancelada.getFechaInicio());
         assertEquals(fechaSalida, reservaCancelada.getFechaFin());
         assertEquals(inquilino, reservaCancelada.getInquilino());
@@ -417,7 +417,7 @@ class UserTest {
         verify(publicacionMock).aceptarReserva(reservaCaptor.capture());
 
         Reserva reservaAceptada = reservaCaptor.getValue();
-        System.out.println("Reserva aceptada: " + reservaAceptada);
+      
         assertEquals(fechaEntrada, reservaAceptada.getFechaInicio());
         assertEquals(fechaSalida, reservaAceptada.getFechaFin());
 
@@ -440,7 +440,7 @@ class UserTest {
         verify(publicacionMock).rechazarReserva(reservaCaptor.capture());
 
         Reserva reservaRechazada = reservaCaptor.getValue();
-        System.out.println("Reserva rechazada: " + reservaRechazada);
+    
         assertEquals(fechaEntrada, reservaRechazada.getFechaInicio());
         assertEquals(fechaSalida, reservaRechazada.getFechaFin());
 
