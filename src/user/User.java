@@ -83,9 +83,6 @@ public class User implements Propietario, Inquilino {
 	@Override
 	public void rankearPropietario(Resenia resenia, Propietario propietario, Reserva reserva) {
 		
-		System.out.println("dentro de rankearPropietario Categ: "+CategoriasManager.getInstancia().obtenerCategoriasDePropietario());
-		System.out.println("resenia concepto: "+ resenia.getCategoria().getConcepto());
-		
 		if (reserva.finalizadaExitosamente() && CategoriasManager.getInstancia().obtenerCategoriasDePropietario().equals(resenia.getCategoria())) {
 			propietario.getRanking().agregarResenia(resenia);
 		}
@@ -141,7 +138,6 @@ public class User implements Propietario, Inquilino {
 
     @Override
     public void aceptar(Publicacion publicacion, Reserva reserva) {
-    	System.out.print("Inside aceptar resrva");
         publicacion.aceptarReserva(reserva);
     }
 
