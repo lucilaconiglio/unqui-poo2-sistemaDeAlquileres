@@ -60,35 +60,27 @@ public class ReservaTest {
 
 	@Test
 	void testAceptarReserva() {
-		
-		doAnswer(invocation -> {
-            publicacion.aceptarReserva(reserva);
-            return null;
-        }).when(propietario).aceptar(publicacion, reserva);
+
+
 		
 		doAnswer(invocation -> {
             reserva.aceptar();
             return null;
         }).when(publicacion).aceptarReserva(reserva);
 		
-		propietario.aceptar(publicacion, reserva);
+		publicacion.aceptarReserva(reserva);
 		assertEquals(EstadoConsolidada.class, reserva.getEstadoReserva().getClass());
 	}
 
 	@Test
 	void testRechazarReserva() {
-		
-		doAnswer(invocation -> {
-            publicacion.rechazarReserva(reserva);
-            return null;
-        }).when(propietario).rechazar(publicacion, reserva);
-		
+
 		doAnswer(invocation -> {
             reserva.rechazar();
             return null;
         }).when(publicacion).rechazarReserva(reserva);
 		
-		propietario.rechazar(publicacion, reserva);
+		publicacion.rechazarReserva(reserva);
 		assertEquals(EstadoCancelada.class, reserva.getEstadoReserva().getClass());
 		
 	}
@@ -96,31 +88,19 @@ public class ReservaTest {
 	@Test
 	void testCancelarReservaQueEstabaAceptada() {
 		
-		// Primero acepto la Reserva.
-		doAnswer(invocation -> {
-            publicacion.aceptarReserva(reserva);
-            return null;
-        }).when(propietario).aceptar(publicacion, reserva);
-		
 		doAnswer(invocation -> {
             reserva.aceptar();
             return null;
         }).when(publicacion).aceptarReserva(reserva);
 		
-		propietario.aceptar(publicacion, reserva);
-		
-		// El Inquilino cancela la Reserva
-		doAnswer(invocation -> {
-            publicacion.cancelarReserva(reserva);
-            return null;
-        }).when(inquilino).cancelar(publicacion, reserva);
+		publicacion.aceptarReserva(reserva);
 		
 		doAnswer(invocation -> {
             reserva.cancelar();
             return null;
         }).when(publicacion).cancelarReserva(reserva);
 		
-		inquilino.cancelar(publicacion, reserva);
+		publicacion.cancelarReserva(reserva);
 		assertEquals(EstadoCancelada.class, reserva.getEstadoReserva().getClass());
 		
 		
@@ -129,17 +109,13 @@ public class ReservaTest {
 	@Test
 	void testRealizarCheckOut() {
 		// Primero acepto la Reserva.
-		doAnswer(invocation -> {
-            publicacion.aceptarReserva(reserva);
-            return null;
-        }).when(propietario).aceptar(publicacion, reserva);
-		
+
 		doAnswer(invocation -> {
             reserva.aceptar();
             return null;
         }).when(publicacion).aceptarReserva(reserva);
 		
-		propietario.aceptar(publicacion, reserva);
+		publicacion.aceptarReserva(reserva);
 		
 		// Se ejecuta el check out
 		doAnswer(invocation -> {
@@ -161,17 +137,14 @@ public class ReservaTest {
 	void testEstaOcupada() {
 		// Para que una reserva este ocupada esta necesita estar aceptada.
 		
-		doAnswer(invocation -> {
-            publicacion.aceptarReserva(reserva);
-            return null;
-        }).when(propietario).aceptar(publicacion, reserva);
+		
 		
 		doAnswer(invocation -> {
             reserva.aceptar();
             return null;
         }).when(publicacion).aceptarReserva(reserva);
 		
-		propietario.aceptar(publicacion, reserva);
+		publicacion.aceptarReserva(reserva);
 		
 		// verificamos que este ocupada
 		assertTrue(reserva.estaOcupada());
@@ -194,17 +167,14 @@ public class ReservaTest {
 
 		// rechazamos la primer reserva (SUT) para que esta no genere conflicto, mas alla de que tengan 
 		// fechas que conflictuen entre si
-		doAnswer(invocation -> {
-            publicacion.rechazarReserva(reserva);
-            return null;
-        }).when(propietario).rechazar(publicacion, reserva);
+		
 		
 		doAnswer(invocation -> {
             reserva.rechazar();
             return null;
         }).when(publicacion).rechazarReserva(reserva);
 		
-		propietario.rechazar(publicacion, reserva);
+		publicacion.rechazarReserva(reserva);
 
 		assertFalse(reserva.conflictoCon(otraReserva));
 	}
@@ -212,17 +182,13 @@ public class ReservaTest {
 	@Test
 	void testFinalizadaExitosamente() {
 		// Primero acepto la Reserva.
-		doAnswer(invocation -> {
-            publicacion.aceptarReserva(reserva);
-            return null;
-        }).when(propietario).aceptar(publicacion, reserva);
 		
 		doAnswer(invocation -> {
             reserva.aceptar();
             return null;
         }).when(publicacion).aceptarReserva(reserva);
 		
-		propietario.aceptar(publicacion, reserva);
+		publicacion.aceptarReserva(reserva);
 		
 		// Se ejecuta el check out
 		doAnswer(invocation -> {
@@ -239,32 +205,24 @@ public class ReservaTest {
 	 @Test
 	    void testAceptarEnEstadoCanceladoNoHaceNada() {
 			// Primero acepto la Reserva.
-			doAnswer(invocation -> {
-	            publicacion.aceptarReserva(reserva);
-	            return null;
-	        }).when(propietario).aceptar(publicacion, reserva);
-			
+						
 			doAnswer(invocation -> {
 	            reserva.aceptar();
 	            return null;
 	        }).when(publicacion).aceptarReserva(reserva);
 			
-			propietario.aceptar(publicacion, reserva);
+			publicacion.aceptarReserva(reserva);
 			
 			// El Inquilino cancela la Reserva
-			doAnswer(invocation -> {
-	            publicacion.cancelarReserva(reserva);
-	            return null;
-	        }).when(inquilino).cancelar(publicacion, reserva);
 			
 			doAnswer(invocation -> {
 	            reserva.cancelar();
 	            return null;
 	        }).when(publicacion).cancelarReserva(reserva);
 			
-			inquilino.cancelar(publicacion, reserva);
+			publicacion.cancelarReserva(reserva);
 			assertEquals(EstadoCancelada.class, reserva.getEstadoReserva().getClass());
-			propietario.aceptar(publicacion, reserva);
+			publicacion.aceptarReserva(reserva);
 			// reserva cancelada que es aceptada no hace nada, sigue en estado cancelada.
 			assertEquals(EstadoCancelada.class, reserva.getEstadoReserva().getClass());
 			
