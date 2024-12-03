@@ -14,5 +14,8 @@ public class Ubicacion {
 		this.ciudad = ciudad;
 		this.direccion = direccion;
 	}
-
+	
+	public boolean esDeCiudad(String ciudad) {
+		return this.ciudad.equals(ciudad);
+	}
 }
