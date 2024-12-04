@@ -42,7 +42,9 @@ public class FiltroBaseTest {
         // Configuramos los valores de retorno de los mocks
         when(publicacion.getCapacidad()).thenReturn(capacidad);
         when(publicacion.getUbicacion()).thenReturn(ubicacion);
+        when(publicacion.esDeCiudad(ciudad)).thenReturn(true);
         when(ubicacion.getCiudad()).thenReturn(ciudad);
+        
 
         return publicacion;
     }

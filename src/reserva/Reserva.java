@@ -59,7 +59,7 @@ public class Reserva {
 		return estadoReserva.finalizadaExitosamente();
 	}
 	
-	public Boolean esIniquilino(Inquilino  inquilino) {
+	public Boolean esInquilino(Inquilino  inquilino) {
 		return this.inquilino.equals(inquilino);
 	}
 	
