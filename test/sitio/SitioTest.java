@@ -118,11 +118,14 @@ class SitioTest {
         sitio.addPublicacion(publicacionMock1);
         sitio.addPublicacion(publicacionMock1);
         sitio.addPublicacion(publicacionMock1);
-        
+      
+        when(reservaConsolidadaMock.estaOcupada()).thenReturn(true);
         when(publicacionMock1.getReservas()).thenReturn(Arrays.asList(reservaConsolidadaMock, reservaCanceladaMock));
+      
         when(publicacionMock2.getReservas()).thenReturn(Arrays.asList(reservaConsolidadaMock));
         when(publicacionMock3.getReservas()).thenReturn(Arrays.asList(reservaConsolidadaMock));
-
+ 
+        
         List<Inquilino> topInquilinos = sitio.topDiezInquilinos();
 
         // Verifica que el inquilino esté en el top 10
@@ -181,6 +184,7 @@ class SitioTest {
         sitio.addPublicacion(publicacionMock3);
         
         // Configura publicaciones con reservas para tasa de ocupación
+        when(reservaConsolidadaMock.estaOcupada()).thenReturn(true);
         when(publicacionMock1.getReservas()).thenReturn(Arrays.asList(reservaConsolidadaMock)); // Ocupado
         when(publicacionMock2.getReservas()).thenReturn(Arrays.asList(reservaCanceladaMock));   // Libre
         when(publicacionMock3.getReservas()).thenReturn(Arrays.asList(reservaPendienteMock));   // Libre
@@ -210,14 +214,17 @@ class SitioTest {
         
         // Configurar las fechas de inicio de las reservas mockeadas
         when(reservaMock1.getFechaInicio()).thenReturn(fechaFutura1);
+        when(reservaMock1.esDespuesDe(fechaFutura1)).thenReturn(true);
         when(reservaMock2.getFechaInicio()).thenReturn(fechaFutura2);
+        when(reservaMock2.esDespuesDe(fechaFutura2)).thenReturn(true);
         
         // Configurar el inquilino de las reservas
         when(reservaMock1.getInquilino()).thenReturn(inquilinoMock); // Asignar el inquilino a la primera reserva
-        when(reservaMock1.esIniquilino(inquilinoMock)).thenReturn(true);
+        when(reservaMock1.esInquilino(inquilinoMock)).thenReturn(true);
         when(reservaMock2.getInquilino()).thenReturn(inquilinoMock); // Asignar el inquilino a la segunda reserva
-        when(reservaMock2.esIniquilino(inquilinoMock)).thenReturn(true);
+        when(reservaMock2.esInquilino(inquilinoMock)).thenReturn(true);
         
+    
         // Configurar las publicaciones para devolver las reservas correspondientes
         when(publicacionMock1.getReservas()).thenReturn(Arrays.asList(reservaMock1));
         when(publicacionMock2.getReservas()).thenReturn(Arrays.asList(reservaMock2));
@@ -240,30 +247,31 @@ class SitioTest {
     void testObtenerReservasDeInquilinoEnCiudad() {
         // Configuración de los mocks
         Inquilino inquilinoMock = mock(Inquilino.class);
-        String ciudad = "Buenos Aires";
+        //String ciudad = "Buenos Aires";
         Reserva reservaMock1 = mock(Reserva.class);
         Reserva reservaMock2 = mock(Reserva.class);
         Publicacion publicacionMock = mock(Publicacion.class);
 
         // Mock de Ubicacion
         Ubicacion ubicacionMock = mock(Ubicacion.class);
-        when(ubicacionMock.getCiudad()).thenReturn(ciudad); // Simulamos que la ciudad es Buenos Aires
+        when(ubicacionMock.getCiudad()).thenReturn("Buenos Aires"); // Simulamos que la ciudad es Buenos Aires
 
         // Configurar las reservas para devolver el inquilinoMock
         when(reservaMock1.getInquilino()).thenReturn(inquilinoMock);
-        when(reservaMock1.esIniquilino(inquilinoMock)).thenReturn(true);
+        when(reservaMock1.esInquilino(inquilinoMock)).thenReturn(true);
         when(reservaMock2.getInquilino()).thenReturn(inquilinoMock);
-        when(reservaMock2.esIniquilino(inquilinoMock)).thenReturn(true);
+        when(reservaMock2.esInquilino(inquilinoMock)).thenReturn(true);
 
         // Configurar el mock de Publicacion para que devuelva el mock de Ubicacion
         when(publicacionMock.getUbicacion()).thenReturn(ubicacionMock); // Aseguramos que getUbicacion devuelve ubicacionMock
+        when(publicacionMock.esDeCiudad("Buenos Aires")).thenReturn(true);
         when(publicacionMock.getReservas()).thenReturn(Arrays.asList(reservaMock1, reservaMock2)); // Reservas mockeadas
 
         // Añadir la publicación al Sitio
         sitio.addPublicacion(publicacionMock); // Aquí agregamos la publicación al Sitio
 
         // Acción: llamar al método que estamos probando
-        List<Reserva> resultado = sitio.obtenerReservasDeInquilinoEnCiudad(ciudad, inquilinoMock);
+        List<Reserva> resultado = sitio.obtenerReservasDeInquilinoEnCiudad("Buenos Aires", inquilinoMock);
 
         // Verificación: esperamos que el resultado contenga ambas reservas
         assertEquals(2, resultado.size()); // Verificamos que la lista de reservas tenga dos elementos
@@ -298,9 +306,9 @@ class SitioTest {
 
         // Configurar las reservas para devolver el inquilino y las ubicaciones correspondientes
      //   when(reservaMock1.getInquilino()).thenReturn(inquilinoMock);
-        when(reservaMock1.esIniquilino(inquilinoMock)).thenReturn(true);
+        when(reservaMock1.esInquilino(inquilinoMock)).thenReturn(true);
      //   when(reservaMock2.getInquilino()).thenReturn(inquilinoMock);
-        when(reservaMock2.esIniquilino(inquilinoMock)).thenReturn(true);
+        when(reservaMock2.esInquilino(inquilinoMock)).thenReturn(true);
         
         // Configurar las publicaciones para devolver las reservas y las ubicaciones
         when(publicacionMock1.getReservas()).thenReturn(Arrays.asList(reservaMock1));
@@ -332,9 +340,9 @@ class SitioTest {
 
         // Configuración de las reservas y el inquilino mockeado
         when(reservaMock1.getInquilino()).thenReturn(inquilinoMock);
-        when(reservaMock1.esIniquilino(inquilinoMock)).thenReturn(true);
+        when(reservaMock1.esInquilino(inquilinoMock)).thenReturn(true);
         when(reservaMock2.getInquilino()).thenReturn(inquilinoMock);
-        when(reservaMock2.esIniquilino(inquilinoMock)).thenReturn(true);
+        when(reservaMock2.esInquilino(inquilinoMock)).thenReturn(true);
 
         // Añadir reservas a las publicaciones
         Publicacion publicacionMock1 = mock(Publicacion.class);
