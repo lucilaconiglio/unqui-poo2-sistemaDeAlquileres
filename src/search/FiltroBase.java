@@ -31,19 +31,17 @@ public class FiltroBase implements Search {
 
 	    // Filtrar primero por ciudad
 	    List<Publicacion> result = publicaciones.stream()
-	            .filter(p -> p.getUbicacion().esDeCiudad(ciudad)).toList();
+	            .filter(p -> p.esDeCiudad(ciudad)).toList();
 	    
 	    // Aplicar los filtros adicionales
-	    for (Search filtro : filtros) {
-	        result = filtro.filterPublicaciones(result);  // Aplicar cada filtro a las publicaciones filtradas
+	    for (Filtro filtro : filtros) {
+	        result = filtro.filterPublicaciones(result, this);  // Aplicar cada filtro a las publicaciones filtradas
 	    }
 
 	    return result;
 	}
 
 	public void addFiltro(Filtro filtro) {
-		filtro.setFechaEntrada(fechaEntrada);
-		filtro.setFechaSalida(fechaSalida);
 		filtros.add(filtro);
 	}
 
