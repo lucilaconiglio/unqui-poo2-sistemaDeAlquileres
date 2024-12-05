@@ -1,6 +1,5 @@
 package search.filtro.filtroPrecio;
 
-import java.time.LocalDate;
 import java.util.List;
 
 import publicacion.Publicacion;

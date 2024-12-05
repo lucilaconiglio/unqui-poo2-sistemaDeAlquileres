@@ -1,6 +1,5 @@
 package search.filtro;
 
-import java.time.LocalDate;
 import java.util.List;
 
 import lombok.Getter;
@@ -14,7 +13,7 @@ public class FiltroCantidadDeHuespedes implements Filtro {
 
 	private int cantidad; 
 	
-	public FiltroCantidadDeHuespedes() {
+	public FiltroCantidadDeHuespedes(int cantidad) {
 		this.cantidad = cantidad;
 	}
 

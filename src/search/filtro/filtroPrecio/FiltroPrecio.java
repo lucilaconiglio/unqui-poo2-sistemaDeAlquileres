@@ -1,7 +1,5 @@
 package search.filtro.filtroPrecio;
 
-import java.time.LocalDate;
-
 import lombok.Getter;
 import lombok.Setter;
 import search.filtro.Filtro;

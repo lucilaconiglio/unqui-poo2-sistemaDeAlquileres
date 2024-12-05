@@ -3,7 +3,6 @@ package search;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -12,7 +11,7 @@ import search.filtro.Filtro;
 
 @Getter
 @Setter
-public class FiltroBase implements Search {
+public class FiltroBase {
 
 	private String ciudad;
 	private LocalDate fechaEntrada;
@@ -26,7 +25,6 @@ public class FiltroBase implements Search {
 		this.filtros = new ArrayList<>();
 	}
 
-	@Override
 	public List<Publicacion> filterPublicaciones(List<Publicacion> publicaciones) {
 
 	    // Filtrar primero por ciudad
