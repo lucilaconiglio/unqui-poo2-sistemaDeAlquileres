@@ -409,7 +409,8 @@ class PublicacionTest {
         // Simula conflicto entre reservaMock1 y reservaMock2
         when(reservaMock1.conflictoCon(reservaMock2)).thenReturn(true); // reservaMock1 está en conflicto con reservaMock2
         when(reservaMock2.conflictoCon(reservaMock1)).thenReturn(true); // reservaMock2 está en conflicto con reservaMock1
-
+        when(reservaMock2.estaActiva()).thenReturn(true);
+        
         // Ejecuta el flujo de reservas
         publicacion.recibirReserva(reservaMock1); // reservaMock1 irá a reservasCondicionales debido al conflicto con reservaMock2
         publicacion.recibirReserva(reservaMock2); // reservaMock2 irá a reservasCondicionales debido al conflicto con reservaMock1
@@ -434,7 +435,8 @@ class PublicacionTest {
         // Simula conflicto entre reservaMock1 y reservaMock2
         when(reservaMock1.conflictoCon(reservaMock2)).thenReturn(true); // reservaMock1 está en conflicto con reservaMock2
         when(reservaMock2.conflictoCon(reservaMock1)).thenReturn(true); // reservaMock2 está en conflicto con reservaMock1
-
+        when(reservaMock2.estaActiva()).thenReturn(true);
+        
         // Ejecuta el flujo de reservas
         publicacion.recibirReserva(reservaMock1); // reservaMock1 irá a reservas
         publicacion.recibirReserva(reservaMock2); // reservaMock2 irá a reservasCondicionales debido al conflicto con reservaMock1
@@ -443,9 +445,10 @@ class PublicacionTest {
         assertTrue(publicacion.getReservas().contains(reservaMock1));
         assertTrue(publicacion.getReservasCondicionales().contains(reservaMock2));
 
+
         // Ahora, rechazar reservaMock1
         publicacion.rechazarReserva(reservaMock1); // Llamamos a rechazarReserva para cambiar su estado a cancelado
-
+    
         // Verifica que la reservaMock2 haya sido procesada y movida a reservas activas
         assertTrue(publicacion.getReservasCondicionales().contains(reservaMock2)); // reservaMock2 no debe estar en reservas condicionales
        

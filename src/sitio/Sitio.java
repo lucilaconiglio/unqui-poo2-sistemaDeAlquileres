@@ -79,6 +79,7 @@ public class Sitio {
 
     // Método para obtener el top-ten de inquilinos que más han alquilado en el sitio
     public List<Inquilino> topDiezInquilinos() {
+     	
         return publicaciones.stream()
                 .flatMap(p -> p.getReservas().stream()) // Convierte cada lista de reservas en un stream
                 .filter(r -> r.estaOcupada() || r.finalizadaExitosamente()) // Filtra las reservas concretadas
@@ -120,7 +121,7 @@ public class Sitio {
     public List<Reserva> obtenerTodasLasReservasDe(Inquilino inquilino){
     	return obtenerTodasLasReservasDelSitio()
     			.stream()
-    			.filter(r -> r.esIniquilino(inquilino))
+    			.filter(r -> r.esInquilino(inquilino))
     			.toList();
     }
     
@@ -138,14 +139,14 @@ public class Sitio {
     	  return publicaciones.stream()
     	            .filter(p -> p.esDeCiudad(ciudad)) // Filtra por ciudad
     	            .flatMap(p -> p.getReservas().stream()) // Descompone las reservas de cada publicación
-    	            .filter(r -> r.esIniquilino(inquilino)) // Filtra por inquilino
+    	            .filter(r -> r.esInquilino(inquilino)) // Filtra por inquilino
     	            .collect(Collectors.toList()); 
     }
  
     public List<String> obtenerCiudadesDondeInquilinoTieneReserva(Inquilino inquilino) {
         return publicaciones.stream()
                 .flatMap(p -> p.getReservas().stream() // Descompone las reservas de cada publicación
-                        .filter(r -> r.esIniquilino(inquilino)) // Filtra por inquilino
+                        .filter(r -> r.esInquilino(inquilino)) // Filtra por inquilino
                         .map(r -> p.getCiudad())) // Mapea la ciudad de la publicación de cada reserva
                 .distinct() // Evita ciudades duplicadas
                 .collect(Collectors.toList()); // Recoge los resultados en una lista
