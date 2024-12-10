@@ -19,6 +19,12 @@ class UbicacionTest {
         // Verifica que el país se haya asignado correctamente
         assertEquals("Argentina", ubicacion.getPais(), "El país debe ser 'Argentina'");
     }
+    @Test
+    void testesDeCiudad() {
+        // Verifica que el país se haya asignado correctamente
+        assertTrue(ubicacion.esDeCiudad("Buenos Aires"));
+    }
+
 
     @Test
     void testGetCiudad() {

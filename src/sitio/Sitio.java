@@ -15,7 +15,6 @@ import rankeable.Rankeable;
 import reserva.Reserva;
 import reserva.estadoReserva.EstadoConsolidada;
 import search.FiltroBase;
-import search.Search;
 import servicio.Servicio;
 import tipoDeInmueble.TipoDeInmueble;
 import user.User;
