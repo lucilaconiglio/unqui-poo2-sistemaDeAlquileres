@@ -6,18 +6,12 @@ import java.util.List;
 
 import categoria.Categoria;
 import categoriasManager.CategoriasManager;
-import formaDePago.FormaDePago;
 import lombok.Getter;
-import lombok.Setter;
-import politicaCancelacion.PoliticaDeCancelacion;
 import publicacion.Publicacion;
-import rankeable.Rankeable;
 import ranking.Ranking;
 import resenia.Resenia;
 import reserva.Reserva;
 import sitio.Sitio;
-import tipoDeInmueble.TipoDeInmueble;
-import ubicacion.Ubicacion;
 import user.inquilino.Inquilino;
 import user.propietario.Propietario;
 
@@ -79,12 +73,8 @@ public class User implements Propietario, Inquilino {
 		}
 	}
 
-
 	@Override
 	public void rankearPropietario(Resenia resenia, Propietario propietario, Reserva reserva) {
-		
-		System.out.println("dentro de rankearPropietario Categ: "+CategoriasManager.getInstancia().obtenerCategoriasDePropietario());
-		System.out.println("resenia concepto: "+ resenia.getCategoria().getConcepto());
 		
 		if (reserva.finalizadaExitosamente() && CategoriasManager.getInstancia().obtenerCategoriasDePropietario().equals(resenia.getCategoria())) {
 			propietario.getRanking().agregarResenia(resenia);
@@ -99,87 +89,16 @@ public class User implements Propietario, Inquilino {
 	}
 
 	@Override
-	public int vecesQueAlquiloInmueble(Publicacion publicacion,Sitio sitio) {
-		// TODO: agregar contador de veces alquilado en la publi
-		return sitio.cantidadDeVecesQueAlquiloInmueble(publicacion);
-	}
-
-	@Override
-	public int obtenerTotalAlquileres(Sitio sitio) {
-		// TODO Auto-generated method stub
-		return sitio.cantidadDeVecesQueAlquiloInmuebles(this);
-	}
-
-	@Override
 	public void agregarResenia(Resenia res) {
 		ranking.agregarResenia(res);
-
 	}
 
 	@Override
 	public double obtenerPromedioGeneral() {
 		return ranking.obtenerPromedioGeneral();
-	};
+	}
 
 	public List<Resenia> getResenias() {
 		return ranking.getResenias();
 	}
-	// RESERVA
-
-
-	 @Override
-	    public void reservar(Publicacion publicacion, LocalDate fechaEntrada, LocalDate fechaSalida, FormaDePago formaDePago) {
-	        Reserva reserva = new Reserva(fechaEntrada, fechaSalida, this, formaDePago);
-	        publicacion.recibirReserva(reserva);
-	    }
-
-    @Override
-    public void cancelar(Publicacion publicacion, Reserva reserva) {
-        publicacion.cancelarReserva(reserva);
-
-    }
-
-    @Override
-    public void aceptar(Publicacion publicacion, Reserva reserva) {
-    	System.out.print("Inside aceptar resrva");
-        publicacion.aceptarReserva(reserva);
-    }
-
-    @Override
-    public void rechazar(Publicacion publicacion, Reserva reserva) {
-        publicacion.rechazarReserva(reserva);
-    }
-
-
-	@Override
-	public List<Reserva>  obtenerReservas(Sitio sitio) {
-			
-		return sitio.obtenerTodasLasReservasDe(this);
-	}
-
-
-	@Override
-	public List<Reserva> obtenerReservasDeInquilinoEnCiudad(String ciudad, Sitio sitio) {
-		// TODO Auto-generated method stub
-		return sitio.obtenerReservasDeInquilinoEnCiudad(ciudad, this);
-	}
-
-	@Override
-	public List<String> obtenerCiudadesDondeInquilinoTieneReserva(Sitio sitio) {
-		return sitio.obtenerCiudadesDondeInquilinoTieneReserva(this);
-	}
-
-
-	@Override
-	public List<Reserva> obtenerReservasFuturas(Sitio sitio) {
-		return sitio.obtenerTodasLasReservasFuturas(this);
-	}
-
-	@Override
-	public List<Publicacion> historialDeInmueblesAlquilados(Sitio sitio) {
-		// TODO Auto-generated method stub
-		return sitio.inmueblesAlquilados(this);
-	}
-
-
 }

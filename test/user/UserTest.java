@@ -106,52 +106,7 @@ class UserTest {
 		
 		assertEquals(1, sitioSpy.getPublicaciones().size() );
 	}
-	/*
-	@Test
-    void testObtenerPromedioCategoria() {
-        when(rankingMock.obtenerPromedioPorCategoria(categoriaMock)).thenReturn(4.5);
-
-        double promedio = inquilino.obtenerPromedioCategoria(categoriaMock);
-
-        assertEquals(4.5, promedio, 0.01);
-        verify(rankingMock).obtenerPromedioPorCategoria(categoriaMock);
-    
-    }
-*/
-  /*  @Test
-    void testObtenerComentarios() {
-    	Resenia resenia1 = mock(Resenia.class);
-    	Resenia resenia2 = mock(Resenia.class);
-    	Propietario propietarioMock = mock(Propietario.class);
-    	String comentario = "Buen lugar";  	
-    	List<String> comentarios = Arrays.asList("Excelente lugar", "Me encanto");
-    	
-    	when(resenia1.getComentario()).thenReturn(comentario);
-    	when(propietarioMock.obternerComentarios()).thenReturn(comentarios );
-
-        List<String> resultado = propietarioMock.obternerComentarios();
-
-        assertEquals(comentarios , resultado);
-    
-    }
-*/
-   /* @Test
-    void testObtenerComentariosPorCategoria() {
-        Inquilino inquilinoMock = mock(Inquilino.class);
-
-        categoriasManagerMock.agregarCategoria(categoriaMock, Inquilino.class);
-        when(reseniaMock.getCategoria()).thenReturn(categoriaMock);
-
-
-        List<String> comentarios = Arrays.asList("Muy bueno", "Genial");
-        when(reseniaMock.getComentario()).thenReturn("Muy bueno");
-
-        when(inquilinoMock.obtenerComentariosPorCategoria(categoriaMock)).thenReturn(comentarios);
-
-        List<String> resultado = inquilinoMock.obtenerComentariosPorCategoria(categoriaMock);
-        assertEquals(comentarios, resultado);
-    }*/
-
+	
     @Test
     void testGetReseniasDelUsuario() {
         User inquilino2 = mock(User.class);
@@ -167,47 +122,7 @@ class UserTest {
         assertEquals(resenias,inquilino2.getResenias());
     }
     
- /* @Test // TODO: Refactor
-    void testRankearInmueble() {
-        // Crear una lista con categoriaMock
-        List<Categoria> categorias = Arrays.asList(categoriaMock);
-
-        // Configurar el mock de CategoriasManager para devolver la lista de categorías
-        when(categoriasManagerMock.obtenerCategoriasDeInmueble()).thenReturn(categorias);
-        
-        // Asegurar que la categoría de la reseña sea la correcta
-        when(reseniaMock.getCategoria()).thenReturn(categoriaMock);
-
-        // Ejecutar el método rankearInmueble
-        inquilino.rankearInmueble(reseniaMock, publicacionMock);
-        inquilino.
-        // Verificar que agregarResenia se llame en publicacionMock con reseniaMock
-        verify(publicacionMock).agregarResenia(reseniaMock);
-    }
-  */
-
-    /*@Test
-    void inquilinoRankeaPropietario() {
-
-        Inquilino inquilinoMock = mock(Inquilino.class);
-        Propietario propietarioMock = mock(Propietario.class);
-        Ranking rankingMock = mock(Ranking.class);
-        Resenia reseniaMock = mock(Resenia.class);
-        Categoria categoriaMock = mock(Categoria.class);
-    	when(categoriasManagerMock.getInstancia())
-        when(categoriaMock.getConcepto()).thenReturn("Lindo");   
-        when(categoriasManagerMock.obtenerCategoriasDePropietario()).thenReturn(Arrays.asList(categoriaMock));
-        when(propietarioMock.getRanking()).thenReturn(rankingMock);
-        when(reseniaMock.getCategoria()).thenReturn(categoriaMock);
-       
-        
-        
-        inquilino.rankearPropietario(reseniaMock, propietario);
-        System.out.println("Ver resenias del propietario: "+ propietario.getRanking().getResenias());
-       // verify(propietario).getRanking().agregarResenia(reseniaMock);
-
-    }
-    */
+ 
     
     @Test
     void inquilinoRankeaPropietario() {
@@ -358,172 +273,6 @@ class UserTest {
         verify(rankingMock, never()).agregarResenia(reseniaMock);
     }
 
-    
-    @Test
-    void inquilinoReservaPublicacion() {
-        Inquilino inquilino = new User(superficie, superficie, capacidad, sitioSpy); 
-        Publicacion publicacionMock = mock(Publicacion.class); 
-        LocalDate fechaEntrada = LocalDate.of(2024, 12, 1);
-        LocalDate fechaSalida = LocalDate.of(2024, 12, 10);
-
-        inquilino.reservar(publicacionMock, fechaEntrada, fechaSalida, formaDePagoMock);
-        ArgumentCaptor<Reserva> reservaCaptor = ArgumentCaptor.forClass(Reserva.class);
-
-        verify(publicacionMock).recibirReserva(reservaCaptor.capture());
-
-        Reserva reservaCapturada = reservaCaptor.getValue();
-        System.out.println("Reserva capturada: " + reservaCapturada);
-        assertEquals(fechaEntrada, reservaCapturada.getFechaInicio());
-        assertEquals(fechaSalida, reservaCapturada.getFechaFin());
-        assertEquals(inquilino, reservaCapturada.getInquilino());
-    }
-
-    @Test
-    void inquilinoCancelaReservaPublicacion() {
-        Inquilino inquilino = new User(superficie, superficie, capacidad, sitioSpy); 
-        Publicacion publicacionMock = mock(Publicacion.class); 
-        LocalDate fechaEntrada = LocalDate.of(2024, 12, 1);
-        LocalDate fechaSalida = LocalDate.of(2024, 12, 10);
-
-        Reserva reserva = new Reserva(fechaEntrada, fechaSalida, inquilino, formaDePagoMock);
-        inquilino.reservar(publicacionMock, fechaEntrada, fechaSalida, formaDePagoMock);
-        inquilino.cancelar(publicacionMock, reserva);
-
-
-        ArgumentCaptor<Reserva> reservaCaptor = ArgumentCaptor.forClass(Reserva.class);
-
-        verify(publicacionMock).cancelarReserva(reservaCaptor.capture());
-
-        Reserva reservaCancelada = reservaCaptor.getValue();
-        System.out.println("Reserva cancelada: " + reservaCancelada);
-        assertEquals(fechaEntrada, reservaCancelada.getFechaInicio());
-        assertEquals(fechaSalida, reservaCancelada.getFechaFin());
-        assertEquals(inquilino, reservaCancelada.getInquilino());
-    }
-
-    @Test
-    void propietarioAceptaReservaPublicacion() {
-        Propietario propietario = new User(superficie, superficie, capacidad, sitioSpy);
-        Inquilino inquilino = new User(superficie, superficie, capacidad, sitioSpy);
-        Publicacion publicacionMock = mock(Publicacion.class); 
-        LocalDate fechaEntrada = LocalDate.of(2024, 12, 1);
-        LocalDate fechaSalida = LocalDate.of(2024, 12, 10);
-
-        Reserva reserva = new Reserva(fechaEntrada, fechaSalida, inquilino, formaDePagoMock);
-        
-        propietario.aceptar(publicacionMock, reserva); 
-        ArgumentCaptor<Reserva> reservaCaptor = ArgumentCaptor.forClass(Reserva.class);
-
-        verify(publicacionMock).aceptarReserva(reservaCaptor.capture());
-
-        Reserva reservaAceptada = reservaCaptor.getValue();
-        System.out.println("Reserva aceptada: " + reservaAceptada);
-        assertEquals(fechaEntrada, reservaAceptada.getFechaInicio());
-        assertEquals(fechaSalida, reservaAceptada.getFechaFin());
-
-    }
-
-    @Test
-    void propietarioRechazaReservaPublicacion() {
-        Propietario propietario = new User(superficie, superficie, capacidad, sitioSpy); 
-        Inquilino inquilino = new User(superficie, superficie, capacidad, sitioSpy);
-        Publicacion publicacionMock = mock(Publicacion.class); 
-        LocalDate fechaEntrada = LocalDate.of(2024, 12, 1);
-        LocalDate fechaSalida = LocalDate.of(2024, 12, 10);
-
-        Reserva reserva = new Reserva(fechaEntrada, fechaSalida, inquilino, formaDePagoMock);
-
-        propietario.rechazar(publicacionMock, reserva);
-
-        ArgumentCaptor<Reserva> reservaCaptor = ArgumentCaptor.forClass(Reserva.class);
-   
-        verify(publicacionMock).rechazarReserva(reservaCaptor.capture());
-
-        Reserva reservaRechazada = reservaCaptor.getValue();
-        System.out.println("Reserva rechazada: " + reservaRechazada);
-        assertEquals(fechaEntrada, reservaRechazada.getFechaInicio());
-        assertEquals(fechaSalida, reservaRechazada.getFechaFin());
-
-    }
-    
-    @Test
-    void testObtenerReservasFuturas() {
-        // Configuración del mock de Sitio
-        Sitio sitioMock = mock(Sitio.class);
-        Reserva reservaMock1 = mock(Reserva.class);
-        Reserva reservaMock2 = mock(Reserva.class);
- //       Inquilino inquilino = new User(); // Suponiendo que User implementa Inquilino
-
-        // Crear una lista simulada de reservas futuras
-        List<Reserva> reservasFuturas = Arrays.asList(reservaMock1,reservaMock2);
-        when(sitioMock.obtenerTodasLasReservasFuturas(inquilino)).thenReturn(reservasFuturas);
-
-        // Acción
-        List<Reserva> resultado = inquilino.obtenerReservasFuturas(sitioMock);
-
-        // Verificación
-        assertEquals(reservasFuturas, resultado);
-        verify(sitioMock).obtenerTodasLasReservasFuturas(inquilino);
-    }
-    
-    @Test
-    void testObtenerReservasDeInquilinoEnCiudad() {
-        // Configuración del mock de Sitio
-        Sitio sitioMock = mock(Sitio.class);
-        String ciudad = "Buenos Aires";
-        Reserva reservaMock1 = mock(Reserva.class);
-        Reserva reservaMock2 = mock(Reserva.class);
-
-        // Lista simulada de reservas en la ciudad
-        List<Reserva> reservasEnCiudad = Arrays.asList(reservaMock1,reservaMock2);
-        when(sitioMock.obtenerReservasDeInquilinoEnCiudad(ciudad, inquilino)).thenReturn(reservasEnCiudad);
-
-        // Acción
-        List<Reserva> resultado = inquilino.obtenerReservasDeInquilinoEnCiudad(ciudad, sitioMock);
-
-        // Verificación
-        assertEquals(reservasEnCiudad, resultado);
-        verify(sitioMock).obtenerReservasDeInquilinoEnCiudad(ciudad, inquilino);
-    }
-
-    @Test
-    void testObtenerCiudadesDondeInquilinoTieneReserva() {
-        // Configuración del mock de Sitio
-        Sitio sitioMock = mock(Sitio.class);
-    
-
-        // Lista simulada de ciudades
-        List<String> ciudadesConReserva = Arrays.asList("Buenos Aires", "Córdoba");
-        when(sitioMock.obtenerCiudadesDondeInquilinoTieneReserva(inquilino)).thenReturn(ciudadesConReserva);
-
-        // Acción
-        List<String> resultado = inquilino.obtenerCiudadesDondeInquilinoTieneReserva(sitioMock);
-
-        // Verificación
-        assertEquals(ciudadesConReserva, resultado);
-        verify(sitioMock).obtenerCiudadesDondeInquilinoTieneReserva(inquilino);
-    }
-    
-    
-    @Test
-    void testObtenerReservas() {
-        // Configuración del mock de Sitio
-        Sitio sitioMock = mock(Sitio.class);
-        Reserva reservaMock1 = mock(Reserva.class);
-        Reserva reservaMock2 = mock(Reserva.class);
-
-        // Lista simulada de reservas asociadas al inquilino
-        List<Reserva> reservas = Arrays.asList(reservaMock1,reservaMock2);
-        when(sitioMock.obtenerTodasLasReservasDe(inquilino)).thenReturn(reservas);
-
-        // Acción
-        List<Reserva> resultado = inquilino.obtenerReservas(sitioMock);
-
-        // Verificación
-        assertEquals(reservas, resultado);
-        verify(sitioMock).obtenerTodasLasReservasDe(inquilino);
-    }
-
    ///-------------------------------------------->
     
     @Test
@@ -542,27 +291,7 @@ class UserTest {
         assertEquals(antiguedadEsperada, antiguedadActual);
     }
 
-    /* @Test // TODO REFACTOR
-    void testAgregarResenia() {
-        // Mock de Resenia
-        Sitio sitioMock = mock(Sitio.class);
-        Resenia reseniaMock = mock(Resenia.class);
-        
-        // Crear una instancia real de User con un mock de Ranking
-        Ranking rankingMock = mock(Ranking.class);
-        //User usuario = new User("Nombre Completo", "mail@example.com", 123456789, sitioMock);
-        User usuario = mock(User.class);
-        // Acción
-        
-        when(usuario.getRanking()).thenReturn(rankingMock);
-        when(usuario.getRanking().getResenias()).thenReturn(Arrays.asList(reseniaMock));
-  //      usuario.getRanking().agregarResenia(reseniaMock);
-
-        // Verificación
-        verify(usuario).agregarResenia(reseniaMock);
-        verify(rankingMock).agregarResenia(reseniaMock);
-    }
-*/
+   
     
     @Test
     void testGetRanking() {
@@ -735,35 +464,4 @@ class UserTest {
         // Verificación: Verificar que se llamó al método agregarResenia del mock de Ranking
         verify(rankingMock).agregarResenia(reseniaMock);
     }
-    
-    /*@Test
-    void testRankearInmueble() {
-        // Mock de las dependencias
-       	Sitio sitioMock = mock(Sitio.class);
-        CategoriasManager categoriasManagerMock = mock(CategoriasManager.class);
-        Categoria categoriaMock = mock(Categoria.class);
-        Resenia reseniaMock = mock(Resenia.class);
-        Publicacion publicacionMock = mock(Publicacion.class);
-
-        // Mock de CategoriasManager para devolver una categoría específica
-        when(CategoriasManager.getInstancia()).thenReturn(categoriasManagerMock);
-        when(categoriasManagerMock.obtenerCategoriasDeInmueble()).thenReturn(Arrays.asList(categoriaMock));
-        when(reseniaMock.getCategoria()).thenReturn(categoriaMock);
-
-        // Crear instancia de User
-        User usuario = new User("Nombre Completo", "mail@example.com", 123456789, sitioMock);
-
-        // Acción: Llamar al método rankearInmueble
-        usuario.rankearInmueble(reseniaMock, publicacionMock);
-
-        // Verificación: Verificar que se llama a agregarResenia en la publicación si las categorías coinciden
-        verify(publicacionMock).agregarResenia(reseniaMock);
-    }
-*/
-
-
-    //Veces que alquilo unInmueble-- No testear
-    //oberterTtoalAlquileres --NoTestear
-    //obtenerPromedioGeniarl -- No Testar
-    //getDeReservasFuturas ---No Testar
 }

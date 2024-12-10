@@ -39,4 +39,8 @@ public class Resenia {
 	public void setComentario(String comentario) {
 		this.comentario = comentario;
 	}
+	
+	public boolean esDeConcepto(String concepto) {
+		return this.categoria.getConcepto().equals(concepto);
+	}
 }

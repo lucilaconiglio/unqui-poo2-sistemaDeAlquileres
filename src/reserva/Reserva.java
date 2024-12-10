@@ -58,5 +58,13 @@ public class Reserva {
 	public Boolean finalizadaExitosamente() {
 		return estadoReserva.finalizadaExitosamente();
 	}
+	
+	public Boolean esInquilino(Inquilino  inquilino) {
+		return this.inquilino.equals(inquilino);
+	}
+	
+	public Boolean esDespuesDe(LocalDate fecha) {
+		return fecha.isAfter(LocalDate.now());
+	}
 
 }
