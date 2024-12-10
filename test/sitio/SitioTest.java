@@ -12,6 +12,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import categoria.Categoria;
+import politicaCancelacion.PoliticaDeCancelacion;
 import publicacion.Publicacion;
 import reserva.Reserva;
 import reserva.estadoReserva.EstadoCancelada;
@@ -38,6 +39,7 @@ class SitioTest {
     Reserva reservaCanceladaMock;
     Inquilino inquilinoMock;
 
+
     @BeforeEach
     public void setUp() {
         // Inicializa el objeto Sitio y otros objetos necesarios
@@ -55,11 +57,13 @@ class SitioTest {
         reservaPendienteMock = mock(Reserva.class);
         reservaCanceladaMock = mock(Reserva.class);
         inquilinoMock = mock(Inquilino.class);
+
+        
         
         // Mock estado de las reservas
         when(reservaConsolidadaMock.getEstadoReserva()).thenReturn(new EstadoConsolidada());
         when(reservaPendienteMock.getEstadoReserva()).thenReturn(new EstadoPendienteDeAprobacion());
-        when(reservaCanceladaMock.getEstadoReserva()).thenReturn(new EstadoCancelada());
+        when(reservaCanceladaMock.getEstadoReserva()).thenReturn(new EstadoCancelada(100.00));
 
         // Mock inquilino de reserva consolidada
         when(reservaConsolidadaMock.getInquilino()).thenReturn(inquilinoMock);
@@ -158,7 +162,7 @@ class SitioTest {
     
     @Test
     void testPublicacionConSoloReservasCanceladas() {
-        when(reservaPendienteMock.getEstadoReserva()).thenReturn(new EstadoCancelada()); // Configuramos la reserva para que esté cancelada
+        when(reservaPendienteMock.getEstadoReserva()).thenReturn(new EstadoCancelada(100.00)); // Configuramos la reserva para que esté cancelada
         when(publicacionMock1.getReservas()).thenReturn(Arrays.asList(reservaPendienteMock)); // Asignamos la reserva cancelada a la publicación mockeada
 
         sitio.addPublicacion(publicacionMock1);

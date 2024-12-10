@@ -1,10 +1,11 @@
 package reserva;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 
-import formaDePago.FormaDePago;
 import lombok.Getter;
 import lombok.Setter;
+import politicaCancelacion.PoliticaDeCancelacion;
 import reserva.estadoReserva.EstadoPendienteDeAprobacion;
 import reserva.estadoReserva.EstadoReserva;
 import user.inquilino.Inquilino;
@@ -17,14 +18,16 @@ public class Reserva {
 	private LocalDate fechaInicio;
 	private LocalDate fechaFin;
 	private Inquilino inquilino;
-	private FormaDePago formaDePago;
+	private PoliticaDeCancelacion politicaDeCancelacion;
+	private Double valor;
 
-	public Reserva(LocalDate fechaInicio, LocalDate fechaFin, Inquilino inquilino, FormaDePago formaDePago) {
+	public Reserva(LocalDate fechaInicio, LocalDate fechaFin, Inquilino inquilino, PoliticaDeCancelacion politicaDeCancelacion, Double valor) {
 		this.estadoReserva = new EstadoPendienteDeAprobacion();
 		this.fechaInicio = fechaInicio;
 		this.fechaFin = fechaFin;
 		this.inquilino = inquilino;
-		this.formaDePago = formaDePago;
+		this.politicaDeCancelacion = politicaDeCancelacion;
+		this.valor = valor;
 	}
 
 	public void aceptar() {
@@ -65,6 +68,16 @@ public class Reserva {
 	
 	public Boolean esDespuesDe(LocalDate fecha) {
 		return fecha.isAfter(LocalDate.now());
+	}
+	
+	public int getDiasDeEstadia() {
+	    // Calcular la cantidad de días entre las fechas
+	    long dias = ChronoUnit.DAYS.between(fechaInicio, fechaFin);
+	    return (int) dias;
+	}
+	
+	public Double calcularResarcimiento() {
+		return politicaDeCancelacion.calcularResarcimiento(this);
 	}
 
 }

@@ -14,6 +14,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import formaDePago.FormaDePago;
+import politicaCancelacion.PoliticaDeCancelacion;
 import publicacion.Publicacion;
 import reserva.estadoReserva.EstadoCancelada;
 import reserva.estadoReserva.EstadoConsolidada;
@@ -31,22 +32,23 @@ public class ReservaTest {
 	private Reserva reserva; // SUT
 	private LocalDate fechaInicio;
 	private LocalDate fechaFin;
-	private FormaDePago formaDePago;
+    private PoliticaDeCancelacion politicaDeCancelacionMock;
 
+	
 	@BeforeEach 
 	void setUp() {
 		
 		inquilino = mock(Inquilino.class);
 		propietario = mock(Propietario.class);
 		publicacion = mock(Publicacion.class);
-		formaDePago = mock(FormaDePago.class);
+        politicaDeCancelacionMock = mock(PoliticaDeCancelacion.class);
 		
 		when(publicacion.getPropietario()).thenReturn(propietario);
 		
 		
 		fechaInicio = LocalDate.of(2023, 11, 10);
 		fechaFin = LocalDate.of(2023, 11, 20);
-		reserva = new Reserva(fechaInicio, fechaFin, inquilino, formaDePago);
+		reserva = new Reserva(fechaInicio, fechaFin, inquilino, politicaDeCancelacionMock, 800.0);
 		
 		when(publicacion.getReservas()).thenReturn(Arrays.asList(reserva));
 		
@@ -154,7 +156,7 @@ public class ReservaTest {
 	void testConflictoConOtraReservaConConflicto() {
 		LocalDate otraFechaInicio = LocalDate.of(2023, 11, 15);
 		LocalDate otraFechaFin = LocalDate.of(2023, 11, 25);
-		Reserva otraReserva = new Reserva(otraFechaInicio, otraFechaFin, inquilino, formaDePago);
+		Reserva otraReserva = new Reserva(otraFechaInicio, otraFechaFin, inquilino, politicaDeCancelacionMock, 500.00);
 
 		assertTrue(reserva.conflictoCon(otraReserva));
 	}
@@ -163,7 +165,7 @@ public class ReservaTest {
 	void testConflictoConOtraReservaSinConflicto() {
 		LocalDate otraFechaInicio = LocalDate.of(2023, 11, 21);
 		LocalDate otraFechaFin = LocalDate.of(2023, 11, 30);
-		Reserva otraReserva = new Reserva(otraFechaInicio, otraFechaFin, inquilino, formaDePago);
+		Reserva otraReserva = new Reserva(otraFechaInicio, otraFechaFin, inquilino, politicaDeCancelacionMock, 852.00);
 
 		// rechazamos la primer reserva (SUT) para que esta no genere conflicto, mas alla de que tengan 
 		// fechas que conflictuen entre si

@@ -16,7 +16,7 @@ class EstadoCanceladaTest {
 
     @BeforeEach
     void setUp() {
-        estadoCancelada = new EstadoCancelada(); // SUT
+        estadoCancelada = new EstadoCancelada(00.00); // SUT
         reservaMock = mock(Reserva.class); // Mock de Reserva
     }
 

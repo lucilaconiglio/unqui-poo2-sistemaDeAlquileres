@@ -31,14 +31,14 @@ class CancelacionGratuitaTest {
     void testEsFechaHoyDiezDiasAntes() {
         // Configuramos una fecha que es 10 días después de hoy
         LocalDate fechaPrueba = LocalDate.now().plusDays(11);
-        boolean resultado = cancelacionGratuita.esFechaHoyDiezDiasAntes(fechaPrueba);
+        boolean resultado = cancelacionGratuita.esCancelacionGratuita(fechaPrueba);
         
         // Verificamos que el resultado sea True porque la fecha de prueba(hoy) es 10 días antes (o mas)
         assertTrue(resultado);
 
         // Configuramos una fecha que es 8 días mas de hoy
         fechaPrueba = LocalDate.now().plusDays(8);
-        resultado = cancelacionGratuita.esFechaHoyDiezDiasAntes(fechaPrueba);
+        resultado = cancelacionGratuita.esCancelacionGratuita(fechaPrueba);
         
         // Verificamos que el resultado sea False
         assertFalse(resultado);
@@ -50,24 +50,32 @@ class CancelacionGratuitaTest {
         LocalDate fechaInicio = LocalDate.now().plusDays(11);
         when(mockReserva.getFechaInicio()).thenReturn(fechaInicio);
         when(mockPerdiodo.getInicio()).thenReturn(fechaInicio.plusDays(10));
-        when(mockPublicacion.getPrecioBase()).thenReturn(10.00);
-        double resarcimiento = cancelacionGratuita.calcularResarcimiento(mockPublicacion, mockReserva);
+        double resarcimiento = cancelacionGratuita.calcularResarcimiento(mockReserva);
         
         // Verificamos que el resarcimiento sea 0.0
         assertEquals(0.0, resarcimiento);
     }
 
     @Test
-    void testCalcularResarcimientoNoDiezDiasAntes() {
-        // Establecemos una fecha para la reserva que NO es 10 días antes
-        LocalDate fechaInicio = LocalDate.now().plusDays(5); // No es 10 días antes
-        when(mockReserva.getFechaInicio()).thenReturn(fechaInicio);
-        //when(mockPerdiodo.getInicio()).thenReturn(fechaInicio.plusDays(10));
-        when(mockPublicacion.precioPorDia(LocalDate.now())).thenReturn(100.0);
+    void testCalcularResarcimientoNoGratuito() {
+        // Crear un mock de la reserva
+        Reserva mockReserva = mock(Reserva.class);
 
-        double resarcimiento = cancelacionGratuita.calcularResarcimiento(mockPublicacion, mockReserva);
-        
-        // Verificamos que el resarcimiento sea 200.0 (2 días de precio)
-        assertEquals(200.0, resarcimiento);
+        // Configurar la fecha de inicio de la reserva para que esté dentro de los 10 días (por ejemplo, 5 días)
+        LocalDate fechaInicio = LocalDate.now().plusDays(5); // Dentro de los 10 días de antelación
+        when(mockReserva.getFechaInicio()).thenReturn(fechaInicio);
+
+        // Asumir que la reserva tiene 7 días de estadía y un precio total de 1000.0
+        when(mockReserva.getDiasDeEstadia()).thenReturn(7);
+        when(mockReserva.getValor()).thenReturn(1000.0);
+
+
+        // Ejecutamos el cálculo de resarcimiento
+        double resarcimiento = cancelacionGratuita.calcularResarcimiento(mockReserva);
+
+        // Verificamos que el resarcimiento sea el costo de dos días (calculado como 1000.0 / 7 * 2)
+        double valorEsperado = 1000.0 / 7 * 2;
+        assertEquals(valorEsperado, resarcimiento, "El resarcimiento debería ser el valor de dos días de estadía");
     }
+
 }

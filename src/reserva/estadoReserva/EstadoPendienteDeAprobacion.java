@@ -11,13 +11,13 @@ public class EstadoPendienteDeAprobacion implements EstadoReserva{
 
 	@Override
 	public void rechazar(Reserva reserva) {
-		reserva.setEstadoReserva(new EstadoCancelada());
+		reserva.setEstadoReserva(new EstadoCancelada(reserva.calcularResarcimiento()));
 		
 	}
 
 	@Override
 	public void cancelar(Reserva reserva) {
-		reserva.setEstadoReserva(new EstadoCancelada());
+		reserva.setEstadoReserva(new EstadoCancelada(reserva.calcularResarcimiento()));
 	}
 
 	@Override
