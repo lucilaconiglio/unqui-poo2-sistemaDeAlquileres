@@ -11,6 +11,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import publicacion.Publicacion;
+import search.FiltroBase;
 
 public class FiltroPrecioMaxTest {
 
@@ -18,11 +19,15 @@ public class FiltroPrecioMaxTest {
     private Publicacion publicacion1;
     private Publicacion publicacion2;
     private Publicacion publicacion3;
+    private FiltroBase filtroBase;
+
 
     @BeforeEach
     public void setUp() {
         // Inicializamos el filtro con un precio máximo de 500
-        filtroPrecioMax = new FiltroPrecioMax(500.0, LocalDate.of(2024, 11, 1), LocalDate.of(2024, 11, 10));
+        filtroPrecioMax = new FiltroPrecioMax(500.0);
+        filtroBase = new FiltroBase("Cordoba", LocalDate.of(2024, 11, 1), LocalDate.of(2024, 11, 10));
+
 
         // Crear mocks de publicaciones
         publicacion1 = mock(Publicacion.class);
@@ -40,7 +45,7 @@ public class FiltroPrecioMaxTest {
         List<Publicacion> publicaciones = Arrays.asList(publicacion1, publicacion2, publicacion3);
 
         // Aplicamos el filtro
-        List<Publicacion> resultado = filtroPrecioMax.filterPublicaciones(publicaciones);
+        List<Publicacion> resultado = filtroPrecioMax.filterPublicaciones(publicaciones, filtroBase);
 
         // Verificamos que solo las publicaciones con precio <= 500 sean incluidas
         assertEquals(2, resultado.size()); // Esperamos que solo queden publicacion1 y publicacion3

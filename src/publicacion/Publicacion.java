@@ -244,10 +244,11 @@ public class Publicacion implements Rankeable{
 	}
 
 	public boolean esDeCiudad(String ciudad) {
-		return this.ubicacion.esDeCiudad(ciudad);
+		return this.getUbicacion().esDeCiudad(ciudad);
+		
 	}
 	public String getCiudad() {
-		return this.ubicacion.getCiudad();
+		return this.getUbicacion().getCiudad();
 	}
 	
 	public boolean esPropietario(Propietario propietario) {

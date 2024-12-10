@@ -14,7 +14,7 @@ import publicacion.Publicacion;
 import rankeable.Rankeable;
 import reserva.Reserva;
 import reserva.estadoReserva.EstadoConsolidada;
-import search.Search;
+import search.FiltroBase;
 import servicio.Servicio;
 import tipoDeInmueble.TipoDeInmueble;
 import user.User;
@@ -36,9 +36,9 @@ public class Sitio {
 	}
 
 
-	public List<Publicacion> buscarPublicaciones(Search search) {
+	public List<Publicacion> buscarPublicaciones(FiltroBase filtroBase) {
 		// Se filtran las publicaciones según los criterios de búsqueda. 
-		return search.filterPublicaciones(publicaciones);
+		return filtroBase.filterPublicaciones(publicaciones);
 	}
 
 	public void addPublicacion(Publicacion publicacion) {
