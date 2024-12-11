@@ -178,7 +178,6 @@ public class Publicacion implements Rankeable{
         reserva.aceptar(); // Cambiar el estado de la reserva a 'aceptada'
         notificarReservaInmueble();
         vecesAlquilado=+1;
-        System.out.print(vecesAlquilado);
     }
 
     // Cancelar una reserva: Si está aceptada en reservas, cambia su estado a
@@ -198,7 +197,7 @@ public class Publicacion implements Rankeable{
             Reserva siguienteReserva = iterator.next();
 
             // Verificar que la reserva no esté en estado cancelado
-            if (siguienteReserva.getEstadoReserva().estaActiva()) {
+            if (siguienteReserva.estaActiva()) {
                 reservas.add(siguienteReserva); // Moverla a la lista principal
                 iterator.remove(); // Eliminar de las reservas condicionales
                 return true; // Se movió una reserva condicional
@@ -243,6 +242,16 @@ public class Publicacion implements Rankeable{
 					.forEach(s -> s.notificarReservaInmueble(tipoDeInmueble));
 	}
 
+	public boolean esDeCiudad(String ciudad) {
+		return this.getUbicacion().esDeCiudad(ciudad);
+		
+	}
+	public String getCiudad() {
+		return this.getUbicacion().getCiudad();
+	}
 	
+	public boolean esPropietario(Propietario propietario) {
+		return this.propietario.equals(propietario);
+	}
 	
 }

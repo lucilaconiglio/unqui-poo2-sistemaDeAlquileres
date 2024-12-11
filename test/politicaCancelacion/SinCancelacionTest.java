@@ -30,11 +30,11 @@ class SinCancelacionTest {
         when(reserva.getFechaFin()).thenReturn(LocalDate.of(2023, 11, 10));
         
         when(publicacion.precioEntreFechas(any(), any())).thenReturn(200.0); 
+        when(reserva.getValor()).thenReturn(200.0); 
 
-        double resarcimiento = politica.calcularResarcimiento(publicacion, reserva);
+        double resarcimiento = politica.calcularResarcimiento(reserva);
 
         assertEquals(200.0, resarcimiento, "El resarcimiento debe ser igual al precio total entre las fechas.");
         
-        verify(publicacion).precioEntreFechas(reserva.getFechaInicio(), reserva.getFechaFin());
     }
 }

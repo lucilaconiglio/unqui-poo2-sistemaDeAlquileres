@@ -34,7 +34,7 @@ public class Ranking {
 	}
 	
 	public List<Resenia> obtenerReseniasPorCategoria(Categoria categoria){
-		return 	resenias.stream().filter(res-> res.getCategoria().getConcepto().equals(categoria.getConcepto())).toList();
+		return 	resenias.stream().filter(res-> res.esDeConcepto(categoria.getConcepto())).toList();
 	}
 	
 	public List<String> obtenerComentarios(){

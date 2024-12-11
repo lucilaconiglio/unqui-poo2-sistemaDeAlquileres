@@ -11,6 +11,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import publicacion.Publicacion;
+import search.FiltroBase;
 
 public class FiltroCantidadDeHuespedesTest {
 
@@ -18,11 +19,13 @@ public class FiltroCantidadDeHuespedesTest {
     private Publicacion publicacion1;
     private Publicacion publicacion2;
     private Publicacion publicacion3;
+    private FiltroBase filtroBase;
+
 
     @BeforeEach
     public void setUp() {
-        // Configuración del filtro de cantidad de huéspedes
-        filtro = new FiltroCantidadDeHuespedes(LocalDate.of(2024, 11, 1), LocalDate.of(2024, 11, 10), 4);
+        filtroBase = new FiltroBase("Cordoba", LocalDate.of(2024, 11, 1), LocalDate.of(2024, 11, 10));
+        filtro = new FiltroCantidadDeHuespedes(4);
 
         // Crear publicaciones con mocks
         publicacion1 = crearMockPublicacion(3); // Capacidad 3
@@ -41,7 +44,7 @@ public class FiltroCantidadDeHuespedesTest {
         List<Publicacion> publicaciones = Arrays.asList(publicacion1, publicacion2, publicacion3);
 
         // Ejecutamos el filtro
-        List<Publicacion> resultado = filtro.filterPublicaciones(publicaciones);
+        List<Publicacion> resultado = filtro.filterPublicaciones(publicaciones, filtroBase);
 
         // Verificamos que solo las publicaciones con capacidad <= 4 sean incluidas
         assertEquals(2, resultado.size());
@@ -53,11 +56,11 @@ public class FiltroCantidadDeHuespedesTest {
     @Test
     public void testFilterPublicaciones_SoloPublicacionesValidas() {
         // Cambiamos el filtro para que solo permita hasta 2 personas
-        filtro = new FiltroCantidadDeHuespedes(LocalDate.of(2024, 11, 1), LocalDate.of(2024, 11, 10), 2);
+        filtro = new FiltroCantidadDeHuespedes(2);
         List<Publicacion> publicaciones = Arrays.asList(publicacion1, publicacion2, publicacion3);
 
         // Ejecutamos el filtro
-        List<Publicacion> resultado = filtro.filterPublicaciones(publicaciones);
+        List<Publicacion> resultado = filtro.filterPublicaciones(publicaciones, filtroBase);
 
         // Verificamos que ninguna publicacion sea incluida
         assertEquals(0, resultado.size());

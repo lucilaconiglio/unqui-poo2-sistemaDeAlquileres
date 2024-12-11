@@ -12,6 +12,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import categoria.Categoria;
+import politicaCancelacion.PoliticaDeCancelacion;
 import publicacion.Publicacion;
 import reserva.Reserva;
 import reserva.estadoReserva.EstadoCancelada;
@@ -38,6 +39,7 @@ class SitioTest {
     Reserva reservaCanceladaMock;
     Inquilino inquilinoMock;
 
+
     @BeforeEach
     public void setUp() {
         // Inicializa el objeto Sitio y otros objetos necesarios
@@ -55,11 +57,13 @@ class SitioTest {
         reservaPendienteMock = mock(Reserva.class);
         reservaCanceladaMock = mock(Reserva.class);
         inquilinoMock = mock(Inquilino.class);
+
+        
         
         // Mock estado de las reservas
         when(reservaConsolidadaMock.getEstadoReserva()).thenReturn(new EstadoConsolidada());
         when(reservaPendienteMock.getEstadoReserva()).thenReturn(new EstadoPendienteDeAprobacion());
-        when(reservaCanceladaMock.getEstadoReserva()).thenReturn(new EstadoCancelada());
+        when(reservaCanceladaMock.getEstadoReserva()).thenReturn(new EstadoCancelada(100.00));
 
         // Mock inquilino de reserva consolidada
         when(reservaConsolidadaMock.getInquilino()).thenReturn(inquilinoMock);
@@ -118,11 +122,14 @@ class SitioTest {
         sitio.addPublicacion(publicacionMock1);
         sitio.addPublicacion(publicacionMock1);
         sitio.addPublicacion(publicacionMock1);
-        
+      
+        when(reservaConsolidadaMock.estaOcupada()).thenReturn(true);
         when(publicacionMock1.getReservas()).thenReturn(Arrays.asList(reservaConsolidadaMock, reservaCanceladaMock));
+      
         when(publicacionMock2.getReservas()).thenReturn(Arrays.asList(reservaConsolidadaMock));
         when(publicacionMock3.getReservas()).thenReturn(Arrays.asList(reservaConsolidadaMock));
-
+ 
+        
         List<Inquilino> topInquilinos = sitio.topDiezInquilinos();
 
         // Verifica que el inquilino esté en el top 10
@@ -150,12 +157,12 @@ class SitioTest {
         // Verifica publicacionMock2 esté libre 
         assertTrue(inmueblesLibres.contains(publicacionMock2));
         
-        assertEquals(2, inmueblesLibres.size());
+        assertEquals(3, inmueblesLibres.size());
     }
     
     @Test
     void testPublicacionConSoloReservasCanceladas() {
-        when(reservaPendienteMock.getEstadoReserva()).thenReturn(new EstadoCancelada()); // Configuramos la reserva para que esté cancelada
+        when(reservaPendienteMock.getEstadoReserva()).thenReturn(new EstadoCancelada(100.00)); // Configuramos la reserva para que esté cancelada
         when(publicacionMock1.getReservas()).thenReturn(Arrays.asList(reservaPendienteMock)); // Asignamos la reserva cancelada a la publicación mockeada
 
         sitio.addPublicacion(publicacionMock1);
@@ -181,6 +188,7 @@ class SitioTest {
         sitio.addPublicacion(publicacionMock3);
         
         // Configura publicaciones con reservas para tasa de ocupación
+        when(reservaConsolidadaMock.estaOcupada()).thenReturn(true);
         when(publicacionMock1.getReservas()).thenReturn(Arrays.asList(reservaConsolidadaMock)); // Ocupado
         when(publicacionMock2.getReservas()).thenReturn(Arrays.asList(reservaCanceladaMock));   // Libre
         when(publicacionMock3.getReservas()).thenReturn(Arrays.asList(reservaPendienteMock));   // Libre
@@ -210,12 +218,17 @@ class SitioTest {
         
         // Configurar las fechas de inicio de las reservas mockeadas
         when(reservaMock1.getFechaInicio()).thenReturn(fechaFutura1);
+        when(reservaMock1.esDespuesDe(fechaFutura1)).thenReturn(true);
         when(reservaMock2.getFechaInicio()).thenReturn(fechaFutura2);
+        when(reservaMock2.esDespuesDe(fechaFutura2)).thenReturn(true);
         
         // Configurar el inquilino de las reservas
         when(reservaMock1.getInquilino()).thenReturn(inquilinoMock); // Asignar el inquilino a la primera reserva
+        when(reservaMock1.esInquilino(inquilinoMock)).thenReturn(true);
         when(reservaMock2.getInquilino()).thenReturn(inquilinoMock); // Asignar el inquilino a la segunda reserva
+        when(reservaMock2.esInquilino(inquilinoMock)).thenReturn(true);
         
+    
         // Configurar las publicaciones para devolver las reservas correspondientes
         when(publicacionMock1.getReservas()).thenReturn(Arrays.asList(reservaMock1));
         when(publicacionMock2.getReservas()).thenReturn(Arrays.asList(reservaMock2));
@@ -225,7 +238,7 @@ class SitioTest {
         sitio.addPublicacion(publicacionMock2);
         
         // Crear la lista de reservas futuras que se espera obtener
-        List<Reserva> reservasFuturas = Arrays.asList(reservaMock1, reservaMock2);
+        List<Reserva> reservasFuturas = Arrays.asList(reservaMock1,reservaMock2);
         
         // Acción: Llamamos al método que estamos probando
         List<Reserva> resultado = sitio.obtenerTodasLasReservasFuturas(inquilinoMock);
@@ -238,28 +251,31 @@ class SitioTest {
     void testObtenerReservasDeInquilinoEnCiudad() {
         // Configuración de los mocks
         Inquilino inquilinoMock = mock(Inquilino.class);
-        String ciudad = "Buenos Aires";
+        //String ciudad = "Buenos Aires";
         Reserva reservaMock1 = mock(Reserva.class);
         Reserva reservaMock2 = mock(Reserva.class);
         Publicacion publicacionMock = mock(Publicacion.class);
 
         // Mock de Ubicacion
         Ubicacion ubicacionMock = mock(Ubicacion.class);
-        when(ubicacionMock.getCiudad()).thenReturn(ciudad); // Simulamos que la ciudad es Buenos Aires
+        when(ubicacionMock.getCiudad()).thenReturn("Buenos Aires"); // Simulamos que la ciudad es Buenos Aires
 
         // Configurar las reservas para devolver el inquilinoMock
         when(reservaMock1.getInquilino()).thenReturn(inquilinoMock);
+        when(reservaMock1.esInquilino(inquilinoMock)).thenReturn(true);
         when(reservaMock2.getInquilino()).thenReturn(inquilinoMock);
+        when(reservaMock2.esInquilino(inquilinoMock)).thenReturn(true);
 
         // Configurar el mock de Publicacion para que devuelva el mock de Ubicacion
         when(publicacionMock.getUbicacion()).thenReturn(ubicacionMock); // Aseguramos que getUbicacion devuelve ubicacionMock
+        when(publicacionMock.esDeCiudad("Buenos Aires")).thenReturn(true);
         when(publicacionMock.getReservas()).thenReturn(Arrays.asList(reservaMock1, reservaMock2)); // Reservas mockeadas
 
         // Añadir la publicación al Sitio
         sitio.addPublicacion(publicacionMock); // Aquí agregamos la publicación al Sitio
 
         // Acción: llamar al método que estamos probando
-        List<Reserva> resultado = sitio.obtenerReservasDeInquilinoEnCiudad(ciudad, inquilinoMock);
+        List<Reserva> resultado = sitio.obtenerReservasDeInquilinoEnCiudad("Buenos Aires", inquilinoMock);
 
         // Verificación: esperamos que el resultado contenga ambas reservas
         assertEquals(2, resultado.size()); // Verificamos que la lista de reservas tenga dos elementos
@@ -267,6 +283,7 @@ class SitioTest {
         assertTrue(resultado.contains(reservaMock2)); // Verificamos que contenga reservaMock2
 
     }
+    
  
     @Test
     void testObtenerCiudadesDondeInquilinoTieneReserva() {
@@ -275,7 +292,9 @@ class SitioTest {
         // Crear publicaciones mockeadas
         Publicacion publicacionMock1 = mock(Publicacion.class);
         Publicacion publicacionMock2 = mock(Publicacion.class);
-
+       
+        when(publicacionMock1.getCiudad()).thenReturn("Córdoba");
+        when(publicacionMock2.getCiudad()).thenReturn("Buenos Aires");
         // Crear reservas mockeadas
         Reserva reservaMock1 = mock(Reserva.class);
         Reserva reservaMock2 = mock(Reserva.class);
@@ -285,25 +304,31 @@ class SitioTest {
         Ubicacion ubicacionMock2 = mock(Ubicacion.class);
 
         // Configurar las ubicaciones para devolver ciudades
-        when(ubicacionMock1.getCiudad()).thenReturn("Buenos Aires");
+       when(ubicacionMock1.getCiudad()).thenReturn("Buenos Aires");
+        when(ubicacionMock1.esDeCiudad("Buenos Aires")).thenReturn(true);
         when(ubicacionMock2.getCiudad()).thenReturn("Córdoba");
+        when(ubicacionMock2.esDeCiudad("Córdoba")).thenReturn(true);
 
         // Configurar las reservas para devolver el inquilino y las ubicaciones correspondientes
-        when(reservaMock1.getInquilino()).thenReturn(inquilinoMock);
-        when(reservaMock2.getInquilino()).thenReturn(inquilinoMock);
-
+     //   when(reservaMock1.getInquilino()).thenReturn(inquilinoMock);
+        when(reservaMock1.esInquilino(inquilinoMock)).thenReturn(true);
+     //   when(reservaMock2.getInquilino()).thenReturn(inquilinoMock);
+        when(reservaMock2.esInquilino(inquilinoMock)).thenReturn(true);
+        
         // Configurar las publicaciones para devolver las reservas y las ubicaciones
         when(publicacionMock1.getReservas()).thenReturn(Arrays.asList(reservaMock1));
         when(publicacionMock2.getReservas()).thenReturn(Arrays.asList(reservaMock2));
         when(publicacionMock1.getUbicacion()).thenReturn(ubicacionMock1);
         when(publicacionMock2.getUbicacion()).thenReturn(ubicacionMock2);
+      
+   
 
         // Añadir publicaciones al sitio
         sitio.addPublicacion(publicacionMock1);
         sitio.addPublicacion(publicacionMock2);
 
         // Lista de ciudades que esperamos como resultado
-        List<String> ciudadesConReserva = Arrays.asList("Buenos Aires", "Córdoba");
+        List<String> ciudadesConReserva = Arrays.asList("Córdoba","Buenos Aires");
 
         // Acción: Llamamos al método que estamos probando
         List<String> resultado = sitio.obtenerCiudadesDondeInquilinoTieneReserva(inquilinoMock);
@@ -320,7 +345,9 @@ class SitioTest {
 
         // Configuración de las reservas y el inquilino mockeado
         when(reservaMock1.getInquilino()).thenReturn(inquilinoMock);
+        when(reservaMock1.esInquilino(inquilinoMock)).thenReturn(true);
         when(reservaMock2.getInquilino()).thenReturn(inquilinoMock);
+        when(reservaMock2.esInquilino(inquilinoMock)).thenReturn(true);
 
         // Añadir reservas a las publicaciones
         Publicacion publicacionMock1 = mock(Publicacion.class);
@@ -371,8 +398,12 @@ class SitioTest {
 
         // Configuramos el comportamiento de las publicaciones
         when(publicacionMock1.getPropietario()).thenReturn(propietarioMock);
+        when(publicacionMock1.esPropietario(propietarioMock)).thenReturn(true);
         when(publicacionMock2.getPropietario()).thenReturn(propietarioMock);
+        when(publicacionMock2.esPropietario(propietarioMock)).thenReturn(true);
         when(publicacionMock3.getPropietario()).thenReturn(propietarioMock); // Mockeamos getPropietario para publicacionMock3
+        when(publicacionMock3.esPropietario(propietarioMock)).thenReturn(true);
+        
         when(publicacionMock1.getVecesAlquilado()).thenReturn(3);  // Esta publicación fue alquilada 3 veces
         when(publicacionMock2.getVecesAlquilado()).thenReturn(2);  // Esta publicación fue alquilada 2 veces
         when(publicacionMock3.getVecesAlquilado()).thenReturn(1);  // Esta publicación fue alquilada 1 vez (agregado un valor para publicacionMock3)
@@ -392,11 +423,14 @@ class SitioTest {
         assertEquals(6, vecesAlquilado);
 
         // Verificar que se haya llamado a getPropietario() y getVecesAlquilado() en las publicaciones
-        verify(publicacionMock1).getPropietario();
+       // verify(publicacionMock1).getPropietario();
+        verify(publicacionMock1).esPropietario(propietarioMock);
         verify(publicacionMock1).getVecesAlquilado();
-        verify(publicacionMock2).getPropietario();
+        //verify(publicacionMock2).getPropietario();
+        verify(publicacionMock2).esPropietario(propietarioMock);
         verify(publicacionMock2).getVecesAlquilado();
-        verify(publicacionMock3).getPropietario();
+        //verify(publicacionMock3).getPropietario();
+        verify(publicacionMock3).esPropietario(propietarioMock);
         verify(publicacionMock3).getVecesAlquilado();
     }
 
@@ -410,9 +444,12 @@ class SitioTest {
 
         // Configuramos el comportamiento de las publicaciones
         when(publicacionMock1.getPropietario()).thenReturn(propietarioMock);
+        when(publicacionMock1.esPropietario(propietarioMock)).thenReturn(true);
         when(publicacionMock2.getPropietario()).thenReturn(propietarioMock);
+        when(publicacionMock2.esPropietario(propietarioMock)).thenReturn(true);
         when(publicacionMock3.getPropietario()).thenReturn(propietarioMock); // Aseguramos que el propietario es el mismo
-
+        when(publicacionMock3.esPropietario(propietarioMock)).thenReturn(true);
+        
         when(publicacionMock1.getVecesAlquilado()).thenReturn(3);  // Publicación alquilada 3 veces
         when(publicacionMock2.getVecesAlquilado()).thenReturn(0);  // Publicación no alquilada
         when(publicacionMock3.getVecesAlquilado()).thenReturn(1);  // Publicación alquilada 1 vez
@@ -435,11 +472,14 @@ class SitioTest {
         assertFalse(resultado.contains(publicacionMock2)); // No debe contener publicacionMock2
 
         // Verificar que se haya llamado a getPropietario() y getVecesAlquilado() en las publicaciones
-        verify(publicacionMock1).getPropietario();
+       // verify(publicacionMock1).getPropietario();
+        verify(publicacionMock1).esPropietario(propietarioMock);
         verify(publicacionMock1).getVecesAlquilado();
-        verify(publicacionMock2).getPropietario();
+       // verify(publicacionMock2).getPropietario();
+        verify(publicacionMock2).esPropietario(propietarioMock);
         verify(publicacionMock2).getVecesAlquilado();
-        verify(publicacionMock3).getPropietario();
+        //verify(publicacionMock3).getPropietario();
+        verify(publicacionMock3).esPropietario(propietarioMock);
         verify(publicacionMock3).getVecesAlquilado();
     }
 
