@@ -39,11 +39,7 @@ public class User implements Propietario, Inquilino {
 		return Period.between(fechaRegistro, LocalDate.now()).getYears();
 	}
 
-	@Override
-	public void darDeAltaPublicacion(Publicacion publicacion) {
-		sitio.addPublicacion(publicacion);
 
-	}
 	// RANKING
 
 	@Override
