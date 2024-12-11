@@ -14,5 +14,5 @@ public interface Propietario extends Rankeable{
 	
 	public void rankearInquilino(Resenia resenia, Inquilino inquilino, Reserva reserva);
 	public int getAntiguedad();
-	public void darDeAltaPublicacion(Publicacion publicacion);
+
 }

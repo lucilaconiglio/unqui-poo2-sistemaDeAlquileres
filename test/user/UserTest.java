@@ -100,12 +100,6 @@ class UserTest {
 	}
 	
 
-	@Test
-	void elPropietarioPuedeRealizarUnaPublicacion() {
-		propietario.darDeAltaPublicacion(publicacionMock);
-		
-		assertEquals(1, sitioSpy.getPublicaciones().size() );
-	}
 	
     @Test
     void testGetReseniasDelUsuario() {
