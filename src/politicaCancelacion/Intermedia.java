@@ -8,28 +8,35 @@ import reserva.Reserva;
 public class Intermedia implements PoliticaDeCancelacion {
 
     @Override
-    public double calcularResarcimiento(Publicacion publi, Reserva reserva) {
+    public double calcularResarcimiento( Reserva reserva) {
         LocalDate fechaActual = LocalDate.now();
         LocalDate fechaInicioReserva = reserva.getFechaInicio();
-        double precioTotal = publi.precioEntreFechas(fechaInicioReserva, reserva.getFechaFin());
-
-        if (esVeinteDiasAntes(fechaActual, fechaInicioReserva)) {
-            return 0.0;
-        } else if (estaEntreDiecinueveYDiezDiasAntes(fechaActual, fechaInicioReserva)) {
-            return precioTotal / 2;
+        double precioTotal = reserva.getValor();
+        if (esConAnticipacion(fechaActual, fechaInicioReserva)) {
+            return 0.0; // Cancelación gratuita hasta 20 días antes
+        } else if (esCancelacionIntermedia(fechaActual, fechaInicioReserva)) {
+            return precioTotal / 2; // 50 % del precio total
         } else {
-            return precioTotal;
+            return precioTotal; // 100 % del precio total
         }
     }
 
-    private boolean esVeinteDiasAntes(LocalDate fechaActual, LocalDate fechaInicioReserva) {
-        return fechaActual.isEqual(fechaInicioReserva.minusDays(20));
+    private boolean esConAnticipacion(LocalDate fechaActual, LocalDate fechaInicioReserva) {
+
+    	// Cancelación gratuita hasta 20 días antes, inclusive el día límite
+        return !fechaActual.isAfter(fechaInicioReserva.minusDays(20));
+        
+        // Cancelación gratuita hasta 20 días antes
+        //return fechaActual.isBefore(fechaInicioReserva.minusDays(20)); // ??
     }
 
-    private boolean estaEntreDiecinueveYDiezDiasAntes(LocalDate fechaActual, LocalDate fechaInicioReserva) {
+    private boolean esCancelacionIntermedia(LocalDate fechaActual, LocalDate fechaInicioReserva) {
+        // Cancelación intermedia: entre 19 y 10 días antes (inclusive)
         LocalDate fecha19DiasAntes = fechaInicioReserva.minusDays(19);
         LocalDate fecha10DiasAntes = fechaInicioReserva.minusDays(10);
-        return (fechaActual.isAfter(fecha19DiasAntes) && fechaActual.isBefore(fecha10DiasAntes)) ||
-               fechaActual.isEqual(fecha19DiasAntes) || fechaActual.isEqual(fecha10DiasAntes);
+        return (fechaActual.isEqual(fecha19DiasAntes) || fechaActual.isEqual(fecha10DiasAntes)) ||
+               (fechaActual.isAfter(fecha19DiasAntes) && fechaActual.isBefore(fecha10DiasAntes));
     }
+
+
 }

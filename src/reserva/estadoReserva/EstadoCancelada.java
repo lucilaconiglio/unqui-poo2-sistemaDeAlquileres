@@ -1,9 +1,18 @@
 package reserva.estadoReserva;
 
+import lombok.Getter;
+import politicaCancelacion.PoliticaDeCancelacion;
 import reserva.Reserva;
 
+@Getter
 public class EstadoCancelada implements EstadoReserva {
 
+	private double resarcimiento;
+	
+	public EstadoCancelada(double resarcimiento){
+		this.resarcimiento = resarcimiento; 
+	}
+	
 	@Override
 	public void aceptar(Reserva reserva) {
 		// TODO Auto-generated method stub
@@ -43,7 +52,5 @@ public class EstadoCancelada implements EstadoReserva {
 		return false;
 	}
 
-	
-	
 
 }

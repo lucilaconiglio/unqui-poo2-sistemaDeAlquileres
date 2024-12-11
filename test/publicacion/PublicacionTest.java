@@ -426,8 +426,8 @@ class PublicacionTest {
 
         // La reservaMock1 fue cancelada,  y reservaMock2 debería pasar a reservas activas
         // Verifica que reservaMock2 ya no esté en reservas condicionales
-        assertTrue(publicacion.getReservasCondicionales().contains(reservaMock2)); 
-        assertFalse(publicacion.getReservas().contains(reservaMock2)); // reservaMock1 debe pasar a reservas activas
+        assertFalse(publicacion.getReservasCondicionales().contains(reservaMock2)); 
+        assertTrue(publicacion.getReservas().contains(reservaMock2)); // reservaMock1 debe pasar a reservas activas
 
    }
     @Test
@@ -450,11 +450,11 @@ class PublicacionTest {
         publicacion.rechazarReserva(reservaMock1); // Llamamos a rechazarReserva para cambiar su estado a cancelado
     
         // Verifica que la reservaMock2 haya sido procesada y movida a reservas activas
-        assertTrue(publicacion.getReservasCondicionales().contains(reservaMock2)); // reservaMock2 no debe estar en reservas condicionales
+        assertFalse(publicacion.getReservasCondicionales().contains(reservaMock2)); // reservaMock2 no debe estar en reservas condicionales
        
         // Verifica que reservaMock2 haya pasado de condicionales a reservas activas
-        assertTrue(publicacion.getReservasCondicionales().contains(reservaMock2)); // reservaMock2 ya no debe estar en condicionales
-        assertFalse(publicacion.getReservas().contains(reservaMock2)); // reservaMock2 debe pasar a reservas activas
+        assertFalse(publicacion.getReservasCondicionales().contains(reservaMock2)); // reservaMock2 ya no debe estar en condicionales
+        assertTrue(publicacion.getReservas().contains(reservaMock2)); // reservaMock2 debe pasar a reservas activas
     }
     
     @Test
