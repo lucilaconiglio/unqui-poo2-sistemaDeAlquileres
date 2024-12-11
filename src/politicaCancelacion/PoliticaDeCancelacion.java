@@ -5,7 +5,7 @@ import reserva.Reserva;
 
 public interface PoliticaDeCancelacion {
 	
-	public double calcularResarcimiento(Reserva reserva);
+	public double calcularResarcimiento( Reserva reserva);
 
 
 }

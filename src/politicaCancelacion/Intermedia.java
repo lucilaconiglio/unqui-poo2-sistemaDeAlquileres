@@ -8,11 +8,10 @@ import reserva.Reserva;
 public class Intermedia implements PoliticaDeCancelacion {
 
     @Override
-    public double calcularResarcimiento(Reserva reserva) {
+    public double calcularResarcimiento( Reserva reserva) {
         LocalDate fechaActual = LocalDate.now();
         LocalDate fechaInicioReserva = reserva.getFechaInicio();
         double precioTotal = reserva.getValor();
-
         if (esConAnticipacion(fechaActual, fechaInicioReserva)) {
             return 0.0; // Cancelación gratuita hasta 20 días antes
         } else if (esCancelacionIntermedia(fechaActual, fechaInicioReserva)) {
@@ -23,8 +22,12 @@ public class Intermedia implements PoliticaDeCancelacion {
     }
 
     private boolean esConAnticipacion(LocalDate fechaActual, LocalDate fechaInicioReserva) {
+
+    	// Cancelación gratuita hasta 20 días antes, inclusive el día límite
+        return !fechaActual.isAfter(fechaInicioReserva.minusDays(20));
+        
         // Cancelación gratuita hasta 20 días antes
-        return fechaActual.isBefore(fechaInicioReserva.minusDays(20));
+        //return fechaActual.isBefore(fechaInicioReserva.minusDays(20)); // ??
     }
 
     private boolean esCancelacionIntermedia(LocalDate fechaActual, LocalDate fechaInicioReserva) {
